@@ -507,9 +507,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b156c0cd9de58499dce5fbeb9df1c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Loading: {fileID: 1496575107}
   slider: {fileID: 1136594018}
   wave: {fileID: 922868106}
+  m_Loading: {fileID: 1496575107}
   m_NormalCurve:
     serializedVersion: 2
     m_Curve:
@@ -578,7 +578,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46071a03b45858241a72d99124f325b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loadingAnimation: {fileID: 1603414077}
+  m_MinLoadingDuration: 5
+  loadingAni: {fileID: 1603414077}
 --- !u!1 &1949364081
 GameObject:
   m_ObjectHideFlags: 0

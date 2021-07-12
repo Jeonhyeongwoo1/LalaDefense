@@ -5,11 +5,25 @@ using UnityEngine.Events;
 
 public class ScenarioLoading : MonoBehaviour, IScenario
 {
-    public LoadingAnimation loadingAnimation;
+    [Range(0, 5), SerializeField] float m_MinLoadingDuration = 4f;
+
+    public LoadingAnimation loadingAni;
+
+    private object[] models =
+    {
+        nameof(SceneDirector),
+        nameof(Loading)
+    };
+
+    private object[] plugs =
+    {
+        nameof(SceneDirector),
+        nameof(Loading)
+    };
 
     public void ScenarioPrepare(UnityAction done)
     {
-        done?.Invoke();
+        loadingAni.ScaleUpText(() => done?.Invoke());
     }
 
     public void ScenarioStandbyCamera(UnityAction done)
@@ -19,20 +33,9 @@ public class ScenarioLoading : MonoBehaviour, IScenario
 
     public void ScenarioStart(UnityAction done)
     {
-        loadingAnimation.StartLoadingAnimation();
+        StartCoroutine(ElapsedTime());
+        StartCoroutine(Loading());
         done?.Invoke();
-    //    StartCoroutine(DelayCall(3f, GotoIntro));
-    }
-
-    IEnumerator DelayCall(float time, UnityAction done)
-    {
-        yield return new WaitForSeconds(time);
-        done?.Invoke();
-    }
-
-    public void GotoIntro()
-    {
-        ScenarioDirector.Instance.OnLoadSceneAsync(nameof(ScenarioIntro));
     }
 
     public void ScenarioStopCamera(UnityAction done)
@@ -45,6 +48,68 @@ public class ScenarioLoading : MonoBehaviour, IScenario
         done?.Invoke();
     }
 
+    IEnumerator LoadingModels()
+    {
+        foreach (object v in models)
+        {
+            yield return LoadingSceneAsync(nameof(v));
+        }
+    }
+
+    IEnumerator LoadingPlugs()
+    {
+        foreach (object v in plugs)
+        {
+            yield return LoadingSceneAsync(nameof(v));
+        }
+    }
+
+    IEnumerator LoadingSceneAsync(string name, UnityAction done = null)
+    {
+        bool isDone = false;
+        SceneDirector.Instance.OnLoadSceneAsync(name, () => isDone = true);
+        while (isDone) { yield return null; }
+        done?.Invoke();
+    }
+
+    IEnumerator DelayCall(float time, UnityAction done)
+    {
+        yield return new WaitForSeconds(time);
+        done?.Invoke();
+    }
+
+    float m_ElapsedLoadingTime = 0;
+    IEnumerator ElapsedTime()
+    {
+        while (m_ElapsedLoadingTime < m_MinLoadingDuration)
+        {
+            m_ElapsedLoadingTime += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    //Temporary
+    IEnumerator Loading()
+    {
+        AnimationCurve ac = loadingAni.m_NormalCurve;
+        float axisX = 0f;
+
+        while (m_ElapsedLoadingTime < m_MinLoadingDuration)
+        {
+            loadingAni.slider.value = Mathf.Lerp(0, 1, ac.Evaluate(m_ElapsedLoadingTime / m_MinLoadingDuration));
+            axisX = Mathf.Lerp(0, m_ElapsedLoadingTime, ac.Evaluate(m_ElapsedLoadingTime / m_MinLoadingDuration));
+            loadingAni.wave.uvRect = new Rect(new Vector2(axisX, 0), Vector2.one);
+            yield return null;
+        }
+
+        // Go to Intro
+    }
+
+    public void GotoIntro()
+    {
+        ScenarioDirector.Instance.OnLoadSceneAsync(nameof(ScenarioIntro));
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +119,6 @@ public class ScenarioLoading : MonoBehaviour, IScenario
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

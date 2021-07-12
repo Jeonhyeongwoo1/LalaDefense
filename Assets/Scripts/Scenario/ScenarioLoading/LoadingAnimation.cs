@@ -6,20 +6,14 @@ using UnityEngine.UI;
 
 public class LoadingAnimation : MonoBehaviour
 {
-    [SerializeField] Transform m_Loading;
-    [SerializeField] Slider slider;
-    [SerializeField] RawImage wave;
-    [SerializeField] AnimationCurve m_NormalCurve;
+    public Slider slider;
+    public RawImage wave;
+    public Transform m_Loading;
+    public AnimationCurve m_NormalCurve;
 
-    public void StartLoadingAnimation()
+    public void ScaleUpText(UnityAction done)
     {
-        StartCoroutine(StartAnimation());
-    }
-
-    IEnumerator StartAnimation()
-    {
-        yield return LoadingImageAni();
-        yield return LoadingTextAni();
+        StartCoroutine(LoadingImageAni(done));
     }
 
     IEnumerator LoadingTextAni()
@@ -38,7 +32,7 @@ public class LoadingAnimation : MonoBehaviour
         }
     }
 
-    IEnumerator LoadingImageAni()
+    IEnumerator LoadingImageAni(UnityAction done)
     {
         float duration = 0.3f;
         float elapsed = 0;
@@ -51,5 +45,7 @@ public class LoadingAnimation : MonoBehaviour
             m_Loading.localScale = bgScale;
             yield return null;
         }
+
+        done?.Invoke();
     }
 }

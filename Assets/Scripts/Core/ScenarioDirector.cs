@@ -45,7 +45,8 @@ public class ScenarioDirector : Singleton<ScenarioDirector>
 {
     [SerializeField] string m_ScneraioName;
 
-    IScenario m_CurScenario;
+    IScenario m_AcitveScenario;
+    IScenario m_PendingScenario;
 
     public void Log(string content)
     {
@@ -54,17 +55,19 @@ public class ScenarioDirector : Singleton<ScenarioDirector>
 
     public void OnLoaded(IScenario scenario, string name)
     {
-        if (m_CurScenario == null)
+        if (m_AcitveScenario == null)
         {
-            m_CurScenario = scenario;
+            m_AcitveScenario = scenario;
             m_ScneraioName = name;
             scenario.ScenarioPrepare(() => StandbyCamera(scenario));
             return;
         }
 
         m_ScneraioName = name;
-        UnLoad(m_CurScenario);
+        m_PendingScenario = m_AcitveScenario;
+        m_AcitveScenario = null;
         OnLoaded(scenario, name);
+        UnLoad(m_PendingScenario);
     }
 
     void StandbyCamera(IScenario scenario)
@@ -113,7 +116,7 @@ public class ScenarioDirector : Singleton<ScenarioDirector>
         if (scenario != null)
         {
             Log("Scenario Stop :" + m_ScneraioName);
-            m_CurScenario = null;
+            m_AcitveScenario = null;
             UnloadSceneAsync(m_ScneraioName);
             return;
         }
@@ -126,9 +129,9 @@ public class ScenarioDirector : Singleton<ScenarioDirector>
 
     public void OnLoadSceneAsync(string scenarioName)
     {
-        if(m_CurScenario != null)
+        if(m_AcitveScenario != null)
         {
-            UnLoad(m_CurScenario);
+            UnLoad(m_AcitveScenario);
         }
 
         SceneManager.LoadSceneAsync(scenarioName, LoadSceneMode.Additive);
