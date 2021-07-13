@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class ScenarioHome : MonoBehaviour, IScenario
 {
-
+    public string scenarioName => typeof(ScenarioHome).Name;
     public void ScenarioPrepare(UnityAction done)
     {
         done?.Invoke();
@@ -34,12 +34,12 @@ public class ScenarioHome : MonoBehaviour, IScenario
     // Start is called before the first frame update
     void Start()
     {
-        ScenarioDirector.Instance.OnLoaded(this, nameof(ScenarioHome));
+        ScenarioDirector.Instance.OnLoaded(this);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

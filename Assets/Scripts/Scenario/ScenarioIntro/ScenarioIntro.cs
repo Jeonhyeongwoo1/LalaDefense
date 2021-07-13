@@ -5,7 +5,9 @@ using UnityEngine.Events;
 
 public class ScenarioIntro : MonoBehaviour, IScenario
 {
-    
+    public string scenarioName => typeof(ScenarioIntro).Name;
+    public IntroAni introAni;
+
     public void ScenarioPrepare(UnityAction done)
     {
         done?.Invoke();
@@ -19,7 +21,6 @@ public class ScenarioIntro : MonoBehaviour, IScenario
     public void ScenarioStart(UnityAction done)
     {
         done?.Invoke();
-        StartCoroutine(DelayCall(3f, GotoHome));
     }
 
     public void ScenarioStopCamera(UnityAction done)
@@ -46,7 +47,7 @@ public class ScenarioIntro : MonoBehaviour, IScenario
     // Start is called before the first frame update
     void Start()
     {
-        ScenarioDirector.Instance.OnLoaded(this, nameof(ScenarioIntro));
+        ScenarioDirector.Instance.OnLoaded(this);
     }
 
     // Update is called once per frame

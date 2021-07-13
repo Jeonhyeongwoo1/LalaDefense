@@ -10,7 +10,7 @@ public class LalaStarter : MonoBehaviour
     void Start()
     {
         //blockSkybox.FadeOut(1, null);
-        LoadScenarioLoading();
+        //LoadScenarioLoading();
     }
 
     void LoadScenarioLoading()

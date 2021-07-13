@@ -5,9 +5,10 @@ using UnityEngine.Events;
 
 public class ScenarioLoading : MonoBehaviour, IScenario
 {
-    [Range(0, 5), SerializeField] float m_MinLoadingDuration = 4f;
-
+    public string scenarioName => typeof(ScenarioLoading).Name;
     public LoadingAnimation loadingAni;
+
+    [Range(0, 5), SerializeField] float m_MinLoadingDuration = 4f;
 
     private object[] models =
     {
@@ -103,6 +104,7 @@ public class ScenarioLoading : MonoBehaviour, IScenario
         }
 
         // Go to Intro
+        GotoIntro();
     }
 
     public void GotoIntro()
@@ -113,7 +115,7 @@ public class ScenarioLoading : MonoBehaviour, IScenario
     // Start is called before the first frame update
     void Start()
     {
-        ScenarioDirector.Instance.OnLoaded(this, nameof(ScenarioLoading));
+        ScenarioDirector.Instance.OnLoaded(this);
     }
 
     // Update is called once per frame
