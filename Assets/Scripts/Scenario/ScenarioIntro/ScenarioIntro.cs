@@ -6,8 +6,7 @@ using UnityEngine.Events;
 public class ScenarioIntro : MonoBehaviour, IScenario
 {
     public string scenarioName => typeof(ScenarioIntro).Name;
-    public IntroAni introAni;
-
+    
     public void ScenarioPrepare(UnityAction done)
     {
         done?.Invoke();
@@ -41,7 +40,7 @@ public class ScenarioIntro : MonoBehaviour, IScenario
 
     void GotoHome()
     {
-        //ScenarioDirector.Instace.OnLoadSceneAsync(nameof(ScenarioHome));
+        ScenarioDirector.Instance.OnLoadSceneAsync(nameof(ScenarioHome));
     }
 
     // Start is called before the first frame update
