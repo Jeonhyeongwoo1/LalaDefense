@@ -17,4 +17,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Scenario/ScenarioHome.unity
     guid: 13e69dc0d1530b4409fc16991a9b46e0
+  - enabled: 1
+    path: Assets/Scenes/Model/HomeModel.unity
+    guid: f62bfc109bc14df4dbe00dcc8b7c9f2b
+  - enabled: 1
+    path: Assets/Scenes/Scenario/ScenarioPlay.unity
+    guid: 8994d10eb3644e94c8cb455e325a45af
   m_configObjects: {}

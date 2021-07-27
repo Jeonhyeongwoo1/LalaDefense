@@ -10,30 +10,27 @@ public class BlockSkybox : MonoBehaviour
 
     public void FadeOut(float duration = 1, UnityAction done = null)
     {
-        if (!gameObject.activeSelf) { return; }
-        StartCoroutine(Fade(false, duration, () => { done?.Invoke(); gameObject.SetActive(false); }));
+        StartCoroutine(CoUtilize.Lerp((v) => canvasGroup.alpha = v, 1, 0, duration, () =>
+        {
+            done?.Invoke();
+            canvasGroup.gameObject.SetActive(false);
+        }, curve));
     }
 
     public void FadeIn(float duration = 1, UnityAction done = null)
     {
-        gameObject.SetActive(true);
-        StartCoroutine(Fade(true, duration, done));
+        canvasGroup.gameObject.SetActive(true);
+        StartCoroutine(CoUtilize.Lerp((v) => canvasGroup.alpha = v, 0, 1, duration, done, curve));
     }
 
-    IEnumerator Fade(bool isFadeIn, float duration, UnityAction done)
+    public void Fade(float duration = 1, UnityAction done = null)
     {
-        float start = isFadeIn ? 0 : 1;
-        float end = isFadeIn ? 1 : 0;
-        float elapsed = 0;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            canvasGroup.alpha = Mathf.Lerp(start, end, curve.Evaluate(elapsed / duration));
-            yield return null;
-        }
-
-        done?.Invoke();
+        FadeIn(duration, () => FadeOut(duration,
+                                () =>
+                                    {
+                                        done?.Invoke();
+                                        canvasGroup.gameObject.SetActive(false);
+                                    }));
     }
 
 }

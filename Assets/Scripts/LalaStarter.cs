@@ -6,6 +6,11 @@ public class LalaStarter : MonoBehaviour
 {
     public BlockSkybox blockSkybox;
     
+    public static BlockSkybox GetBlockSkybox()
+    {
+        return FindObjectOfType<BlockSkybox>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {

@@ -9,6 +9,7 @@ public class ScenarioLoading : MonoBehaviour, IScenario
     public LoadingAnimation loadingAni;
 
     [Range(0, 5), SerializeField] float m_MinLoadingDuration = 4f;
+    [SerializeField] float fadeDuration = 2f;
 
     private object[] models =
     {
@@ -109,7 +110,8 @@ public class ScenarioLoading : MonoBehaviour, IScenario
 
     public void GotoIntro()
     {
-        ScenarioDirector.Instance.OnLoadSceneAsync(nameof(ScenarioIntro));
+        BlockSkybox skybox = LalaStarter.GetBlockSkybox();
+        skybox.FadeIn(fadeDuration, () => ScenarioDirector.Instance.OnLoadSceneAsync(nameof(ScenarioIntro)));
     }
 
     // Start is called before the first frame update
