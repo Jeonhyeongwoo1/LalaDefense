@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class ScenarioPlay : MonoBehaviour, IScenario
 {
-    public string scenarioName => typeof(ScnearioTemplate).Name;
+    public string scenarioName => typeof(ScenarioPlay).Name;
 
     public void ScenarioPrepare(UnityAction done)
     {

@@ -44,7 +44,7 @@ public class Node : MonoBehaviour
             Material[] materials = v.GetComponent<MeshRenderer>().materials;
             materials[0] = magicCircle;
             v.GetComponent<MeshRenderer>().materials = materials;
-        //    v.gameObject.SetActive(false);
+            v.gameObject.SetActive(true);
         });
     }
 

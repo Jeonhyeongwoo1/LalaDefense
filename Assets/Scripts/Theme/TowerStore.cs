@@ -27,17 +27,16 @@ public class TowerStore : BaseTheme, IPlug
     [SerializeField] AnimationCurve m_CloseCircle;
     [SerializeField] List<TowerStoreItem> m_Items = new List<TowerStoreItem>();
 
-    Ray ray;
-    RaycastHit hit;
+    GameObject m_TowerCreation;
 
     public void OnClickItem(GameObject prefab, float price)
     {
         print("tower : " + prefab + "Price : " + price);
         CanBuild = true;
-        
+
         Terrain t = FindObjectOfType<Terrain>();
         t.nodes.gameObject.SetActive(true);
-        SaveItem(prefab, price);
+        StartCoroutine(CheckingMousePoint(prefab, price));
     }
 
     public override void Open(UnityAction done)
@@ -53,6 +52,18 @@ public class TowerStore : BaseTheme, IPlug
     public void OpenCircleAsync(UnityAction done)
     {
         StartCoroutine(CoUtilize.VLerp((v) => m_CircleBtn.transform.localScale = v, Vector3.zero, Vector3.one, 0.3f, done, curve));
+    }
+
+    void CreateTower(RaycastHit hit, GameObject tower, float price)
+    {
+        if (m_TowerCreation == null)
+        {
+            m_TowerCreation = GameObject.FindGameObjectWithTag("Towers");
+        }
+
+        TowerManager manager = m_TowerCreation.GetComponent<TowerManager>();
+        manager.CreatTower(tower.transform, hit.transform);
+        CanBuild = false;
     }
 
     void OpenCircleBtn()
@@ -78,6 +89,32 @@ public class TowerStore : BaseTheme, IPlug
         m_CircleBtn.onClick.AddListener(CloseCircleBtn);
     }
 
+    IEnumerator CheckingMousePoint(GameObject tower, float price)
+    {
+        RaycastHit hit;
+        bool isHit = false;
+        while (!isHit)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+                {
+                    if (!CanBuild) { yield break; }
+                    if (hit.transform.tag == "Node")
+                    {
+                        CreateTower(hit, tower, price);
+                        isHit = true;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+
     [ContextMenu("Open")]
     public void Test1()
     {
@@ -88,51 +125,6 @@ public class TowerStore : BaseTheme, IPlug
     public void Test2()
     {
         Close(null);
-    }
-
-    GameObject m_TowerItem;
-    GameObject m_TowerCreation;
-    float m_Price;
-
-    public void SaveItem(GameObject tower, float price)
-    {
-        m_TowerItem = tower;
-        m_Price = price;
-    }
-
-    void CreateTower(RaycastHit hit)
-    {
-        if (m_TowerCreation == null)
-        {
-            m_TowerCreation = GameObject.FindGameObjectWithTag("Towers");
-        }
-
-        //Node
-        Terrain t = FindObjectOfType<Terrain>();
-        t.SelectNode(hit.transform);
-
-        GameObject tower = Instantiate(m_TowerItem, t.nodes.GetBuildPosition(), Quaternion.identity, m_TowerCreation.transform);
-        CanBuild = false;
-        m_TowerItem = null;
-        m_Price = 0f;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-            {
-                if (!CanBuild) { return; }
-                if (hit.transform.tag == "Node")
-                {
-                    CreateTower(hit);
-                }
-            }
-        }
     }
 
 }
