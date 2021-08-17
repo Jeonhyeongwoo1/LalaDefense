@@ -13,14 +13,14 @@ public class ScenarioLoading : MonoBehaviour, IScenario
 
     private object[] models =
     {
-        nameof(SceneDirector),
-        nameof(Loading)
+        nameof(Terrain),
+        nameof(HomeModel)
     };
 
     private object[] plugs =
     {
-        nameof(SceneDirector),
-        nameof(Loading)
+        nameof(Theme),
+        nameof(Popup)
     };
 
     public void ScenarioPrepare(UnityAction done)
@@ -52,24 +52,24 @@ public class ScenarioLoading : MonoBehaviour, IScenario
 
     IEnumerator LoadingModels()
     {
-        foreach (object v in models)
+        foreach (IModel v in models)
         {
-            yield return LoadingSceneAsync(nameof(v));
+            yield return LoadingSceneAsync<IModel>(v);
         }
     }
 
     IEnumerator LoadingPlugs()
     {
-        foreach (object v in plugs)
+        foreach (IPlug v in plugs)
         {
-            yield return LoadingSceneAsync(nameof(v));
+            yield return LoadingSceneAsync<IPlug>(v);
         }
     }
 
-    IEnumerator LoadingSceneAsync(string name, UnityAction done = null)
+    IEnumerator LoadingSceneAsync<T>(object name, UnityAction done = null) where T : IPlayable
     {
         bool isDone = false;
-        SceneDirector.Instance.OnLoadSceneAsync(name, () => isDone = true);
+        // SceneDirector<T>.Instance.OnLoadSceneAsync(name, () => isDone = true);
         while (isDone) { yield return null; }
         done?.Invoke();
     }
@@ -111,13 +111,13 @@ public class ScenarioLoading : MonoBehaviour, IScenario
     public void GotoIntro()
     {
         BlockSkybox skybox = LalaStarter.GetBlockSkybox();
-        skybox.FadeIn(fadeDuration, () => ScenarioDirector.Instance.OnLoadSceneAsync(nameof(ScenarioIntro)));
+        skybox.FadeIn(fadeDuration, () => Core.Instance.scenario.OnLoadSceneAsync(nameof(ScenarioIntro)));
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        ScenarioDirector.Instance.OnLoaded(this);
+        Core.Instance.scenario.OnLoaded(this);
     }
 
     // Update is called once per frame

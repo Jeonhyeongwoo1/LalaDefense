@@ -15,11 +15,18 @@ public class Bomb : MonoBehaviour
     public float gravity = 9.8f;
 
     public float hitDist = 1f;
-    Transform m_Target;
+    [SerializeField] Enemy m_Enemy;
 
-    public void Seek(Transform target)
+    float m_Damage;
+
+    public void Seek(Enemy target)
     {
-        m_Target = target;
+        m_Enemy = target;
+    }
+
+    public void Init(float damage)
+    {
+        m_Damage = damage;
     }
 
     // Start is called before the first frame update
@@ -41,11 +48,11 @@ public class Bomb : MonoBehaviour
                 RaycastHit raycastHit;
                 while (true)
                 {
-                    Vector3 dir = m_Target.position - transform.position;
+                    Vector3 dir = m_Enemy.transform.position - transform.position;
                     if (Physics.Raycast(transform.position, dir.normalized, out raycastHit, hitDist))
                     {
                         //hit
-                        if (raycastHit.transform == m_Target)
+                        if (raycastHit.transform == m_Enemy)
                         {
                             // 데미징...
                             Destroy(gameObject);
@@ -53,16 +60,16 @@ public class Bomb : MonoBehaviour
                     }
 
                     transform.Translate(dir.normalized * m_BulletSpeed, Space.World);
-                    transform.LookAt(m_Target);
+                    transform.LookAt(m_Enemy.transform);
 
                     yield return null;
                 }
             case BombType.BOMB:
-                
+
                 float elapse_time = 0;
 
                 // Calculate distance to target
-                float target_Distance = Vector3.Distance(transform.position, m_Target.position);
+                float target_Distance = Vector3.Distance(transform.position, m_Enemy.transform.position);
 
                 // Calculate the velocity needed to throw the object to the target at specified angle.
                 float projectile_Velocity = target_Distance / (Mathf.Sin(2 * firingAngle * Mathf.Deg2Rad) / gravity);
@@ -76,7 +83,7 @@ public class Bomb : MonoBehaviour
                 while (elapse_time < flightDuration)
                 {
                     // Calculate distance to target
-                    target_Distance = Vector3.Distance(transform.position, m_Target.position);
+                    target_Distance = Vector3.Distance(transform.position, m_Enemy.transform.position);
 
                     // Calculate the velocity needed to throw the object to the target at specified angle.
                     projectile_Velocity = target_Distance / (Mathf.Sin(2 * firingAngle * Mathf.Deg2Rad) / gravity);
@@ -89,11 +96,11 @@ public class Bomb : MonoBehaviour
 
                     print(flightDuration);
                     // Rotate projectile to face the target.
-                    transform.rotation = Quaternion.LookRotation(m_Target.position - transform.position);
+                    transform.rotation = Quaternion.LookRotation(m_Enemy.transform.position - transform.position);
                     transform.Translate(0, (Vy - (gravity * elapse_time)) * Time.deltaTime, Vx * Time.deltaTime);
-                    elapse_time += Time.deltaTime; 
+                    elapse_time += Time.deltaTime;
                     //elapse_time += Time.deltaTime;
-                    transform.LookAt(m_Target);
+                    transform.LookAt(m_Enemy.transform);
                     yield return null;
                 }
                 break;
@@ -106,6 +113,31 @@ public class Bomb : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+        //타겟이 사라지면 없어지도록..
+        if (m_Enemy == null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        switch (m_BombType)
+        {
+            case BombType.BULLET:
+                RaycastHit raycastHit;
+                Vector3 dir = m_Enemy.transform.position - transform.position;
+                if (Physics.Raycast(transform.position, dir.normalized, out raycastHit, hitDist))
+                {
+                    //hit
+                    if (raycastHit.transform == m_Enemy.skinnedMeshRenderer)
+                    {
+                        m_Enemy.TakeDamage(m_Damage);
+                        Destroy(gameObject);
+                    }
+                }
+
+                transform.Translate(dir.normalized * m_BulletSpeed, Space.World);
+                transform.LookAt(m_Enemy.transform);
+                break;
+        }
     }
 }

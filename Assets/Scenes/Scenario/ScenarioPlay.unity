@@ -217,6 +217,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &737802288
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 737802289}
+  - component: {fileID: 737802290}
+  m_Layer: 0
+  m_Name: Enemies
+  m_TagString: Enemies
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &737802289
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737802288}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1647347618}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &737802290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 737802288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8555f8a7901b25841aadf7bd27de02e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemies:
+  - {fileID: 918206621, guid: e2ce315c37e32fd4b9d2fd8f2d56a7d0, type: 3}
+  - {fileID: 145822284, guid: 33eba0da32885b84ebf38245df0735fa, type: 3}
+  - {fileID: 59053945, guid: f397a44c833ad65409eba4bce5ea62ed, type: 3}
+  - {fileID: 1230801745, guid: 45f36e2270151a542be4982f9f1dd581, type: 3}
+  - {fileID: 365663113, guid: fb6e154907ded46479e5d7ff1c7ef748, type: 3}
+  - {fileID: 439030808, guid: 3e08eaa99fbf41647adc835cdda0472a, type: 3}
+  - {fileID: 702614976, guid: ebf2cc118768d314988702254deb07a7, type: 3}
+  - {fileID: 1290493571, guid: e5bf32a70c2e58f4f9ec61dad9659a4b, type: 3}
+  - {fileID: 1660645531, guid: a81cfdb3f3b757345a955fb9947163c8, type: 3}
+  - {fileID: 342796986, guid: ad121b684e3934947a2d412b4202d8fd, type: 3}
+  aliveEnemyCount: 0
+  aliveEnemies: []
+  m_SpawnTime: 1
+  testEnemy: {fileID: 1748489546896114, guid: fb6e154907ded46479e5d7ff1c7ef748, type: 3}
 --- !u!1 &1294572131
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,7 +318,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dabfc45a407dd874684cc4596c93b1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towers: []
 --- !u!1 &1647347617
 GameObject:
   m_ObjectHideFlags: 0
@@ -291,6 +348,7 @@ Transform:
   m_Children:
   - {fileID: 1897145336}
   - {fileID: 1294572132}
+  - {fileID: 737802289}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -306,6 +364,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5ad9445b3c82e140a7651f201e99f18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyManager: {fileID: 737802290}
+  towerManager: {fileID: 1294572133}
 --- !u!1 &1897145335
 GameObject:
   m_ObjectHideFlags: 0

@@ -89,7 +89,7 @@ public class ScenarioDirector : Singleton<ScenarioDirector>
 
     void ReadyScenario(IScenario scenario)
     {
-        Log("Scenario Ready : " + scenario.scenarioName);
+        Log("Scenario Ready Complete : " + scenario.scenarioName);
     }
 
     void UnLoad(IScenario scenario)

@@ -55,13 +55,13 @@ public class ScenarioIntro : MonoBehaviour, IScenario
     public void GotoHome()
     {
         BlockSkybox skybox = LalaStarter.GetBlockSkybox();
-        skybox.FadeIn(2, () => ScenarioDirector.Instance.OnLoadSceneAsync(nameof(ScenarioHome)));
+        skybox.FadeIn(2, () => Core.Instance.scenario.OnLoadSceneAsync(nameof(ScenarioHome)));
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        ScenarioDirector.Instance.OnLoaded(this);
+        Core.Instance.scenario.OnLoaded(this);
     }
 
     // Update is called once per frame

@@ -508,29 +508,58 @@ MonoBehaviour:
       level: 1
       price: 50
       attackInfo:
-        speed: 0
-        damage: 0
-        attackRange: 2
-        specialAttack: 
+        range: 15
+        speed: 0.5
+        damage: 50
+        boomRange: 0
+        specialAttack: None
     - towerPrefab: {fileID: 239660977579191947, guid: e0b488c3af2af7b46b9a8e5b71e80e47, type: 3}
       level: 2
       price: 100
       attackInfo:
-        speed: 0
-        damage: 0
-        attackRange: 2
-        specialAttack: 
+        range: 15
+        speed: 0.5
+        damage: 70
+        boomRange: 0
+        specialAttack: None
     - towerPrefab: {fileID: 4918312701166663463, guid: 85374f05c1ffaa444ba2563286fc6015, type: 3}
       level: 3
       price: 200
       attackInfo:
-        speed: 0
-        damage: 0
-        attackRange: 2
-        specialAttack: 
+        range: 15
+        speed: 0.3
+        damage: 100
+        boomRange: 0
+        specialAttack: None
   createEffect: {fileID: 2572039024578808563, guid: 7a52eac1fe9477b41b1ac74ca9e9ff71, type: 3}
   deleteEffect: {fileID: 8331385481643737470, guid: 2914e92e8aa2e524c9ac542b61207a86, type: 3}
   projectile: {fileID: 0}
   bombPoint: {fileID: 0}
-  bomb: {fileID: 0}
+  bomb: {fileID: 7999128059185510973, guid: 2d302c8ef07f21a44bc61467d5d1ca11, type: 3}
   currentLevel: 0
+  CreateDuration: 0.2
+  DeleteDuration: 0.5
+  m_Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

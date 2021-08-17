@@ -5,6 +5,7 @@ using UnityEngine;
 public class Terrain : MonoBehaviour, IModel
 {
     public Node nodes;
+    public WayPoint wayPoint;
 
     public void SelectNode(Transform node)
     {
@@ -13,9 +14,4 @@ public class Terrain : MonoBehaviour, IModel
         nodes.gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

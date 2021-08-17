@@ -1,0 +1,25 @@
+{
+    "index": 1,
+    "userMoney": 200,
+    "userHeart": 10,
+    "roundInfo": [
+        {
+            "index": 1,
+            "type": "Normal",
+            "monsterName": "Bat",
+            "monsterHealth": 100,
+            "monsterMoney": 30,
+            "monsterSpeed": 1,
+            "monsterCount": 10
+        },
+        {
+            "index": 2,
+            "type": "Normal",
+            "monsterName": "Bat",
+            "monsterHealth": 100,
+            "monsterMoney": 30,
+            "monsterSpeed": 1,
+            "monsterCount": 10
+        }
+    ]
+}

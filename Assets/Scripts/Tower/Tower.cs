@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 public enum TowerType
 {
@@ -15,9 +16,10 @@ public enum TowerType
 [Serializable]
 public class AttackInfo
 {
+    public float range; //공격 범위
     public float speed;
     public float damage;
-    public float attackRange; //폭탄 경우에만
+    public float boomRange; //폭탄 경우에만
     public string specialAttack;
 }
 
@@ -38,7 +40,7 @@ public class TowerInfo
     public TowerLevel[] towerLevels; // 1 ~ 3
 }
 
-public abstract class Tower : MonoBehaviour
+public abstract class Tower : MonoBehaviour, IPointerClickHandler
 {
     //타워 정보, 공격, 대기상태 생성될때 삭제될때 애니메이션
     public enum TowerState { Attack, Standby }
@@ -55,11 +57,14 @@ public abstract class Tower : MonoBehaviour
     public abstract void Create(UnityAction done = null);
     public abstract void Delete(UnityAction done = null);
 
+    protected Enemy Target;
+    protected GameObject Enemies;
+
     [SerializeField, Range(0, 1)]
     protected float CreateDuration;
     [SerializeField, Range(0, 1)]
     protected float DeleteDuration;
-    
+
     public virtual void Start()
     {
         projectile = GetChild(transform, nameof(projectile));
@@ -85,6 +90,65 @@ public abstract class Tower : MonoBehaviour
         Destroy(currentTower);
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Theme theme = FindObjectOfType<Theme>();
+        TowerUpgrade towerUpgrade = theme.towerUpgrade;
+
+        if (towerUpgrade.state == TowerUpgrade.State.Open)
+        {
+            towerUpgrade.Close(null);
+        }
+
+        towerUpgrade.transform.position = transform.position + new Vector3(0, 6f, 1f); //offset
+        towerUpgrade.Setup(towerInfo.towerLevels[currentLevel].level, towerInfo.towerLevels[currentLevel].price, this);
+        towerUpgrade.Open(null);
+    }
+
+    protected void UpdateTarget()
+    {
+        if (!Enemies)
+        {
+            Enemies = GameObject.FindGameObjectWithTag("Enemies");
+        }
+
+        Enemy[] enemies = null;
+        if (Enemies.GetComponent<EnemyManager>().aliveEnemies.Count != 0)
+        {
+            enemies = Enemies.GetComponent<EnemyManager>().aliveEnemies.ToArray();
+        }
+
+        if (enemies == null) { return; }
+
+        float shortnestDist = Mathf.Infinity;
+        Transform nearnestEnemy = null;
+
+        foreach (var e in enemies)
+        {
+            if (e.isDie) { continue; }
+
+            float distToEnemy = Vector3.Distance(transform.position, e.transform.position);
+
+            if (shortnestDist > distToEnemy)
+            {
+                shortnestDist = distToEnemy;
+                nearnestEnemy = e.transform;
+            }
+        }
+
+        float range = GetCurLevelAttackInfo().range;
+        if (nearnestEnemy != null && shortnestDist < range)
+        {
+            Target = nearnestEnemy.GetComponent<Enemy>();
+            towerState = TowerState.Attack;
+        }
+        else
+        {
+            Target = null;
+            towerState = TowerState.Standby;
+        }
+    }
+
     protected void CreateEffectObj(GameObject effect, UnityAction done = null)
     {
         GameObject e = Instantiate(effect, transform.position, effect.transform.rotation, transform);
@@ -105,6 +169,10 @@ public abstract class Tower : MonoBehaviour
         return null;
     }
 
+    protected AttackInfo GetCurLevelAttackInfo()
+    {
+        return towerInfo.towerLevels[currentLevel].attackInfo;
+    }
 
     IEnumerator ProceedingEffect(ParticleSystem p, UnityAction done)
     {

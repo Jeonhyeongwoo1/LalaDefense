@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
+using UnityEngine.EventSystems;
 
 public class Mortar : Tower
 {
@@ -17,6 +18,7 @@ public class Mortar : Tower
 
     public Transform target;
 
+   
     //곡선형태로 그린다.
     [ContextMenu("Attack")]
     public override void Attack()
@@ -30,7 +32,7 @@ public class Mortar : Tower
         {
             GameObject go = Instantiate(bomb.gameObject, bombPoint.position, Quaternion.identity);
             Bomb b = go.GetComponent<Bomb>();
-            b.Seek(target);
+           // b.Seek(target);
             b.Attack();
             yield return new WaitForSeconds(0.5f);
         }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LalaStarter : MonoBehaviour
 {
@@ -14,8 +15,15 @@ public class LalaStarter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+       // LoadCore();
+
         //blockSkybox.FadeOut(1, null);
         //LoadScenarioLoading();
+    }
+
+    void LoadCore()
+    {
+        SceneManager.LoadScene(nameof(Core), LoadSceneMode.Additive);
     }
 
     void LoadScenarioLoading()
