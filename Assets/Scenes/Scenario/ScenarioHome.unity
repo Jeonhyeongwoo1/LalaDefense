@@ -856,6 +856,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Start: {fileID: 8398090218970704026}
+  m_HomeCam: {fileID: 35457172}
 --- !u!1 &2012912838
 GameObject:
   m_ObjectHideFlags: 0

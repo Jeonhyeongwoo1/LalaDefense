@@ -33,8 +33,12 @@ public class ArrowEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     void Effect()
     {
-        StartCoroutine(Moving());
+        if (gameObject.activeSelf)
+        {
+            StartCoroutine(Moving());
+        }
     }
+
 
     IEnumerator Moving()
     {
@@ -45,6 +49,15 @@ public class ArrowEffect : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             transform.localPosition = new Vector3(transform.localPosition.x, Mathf.Repeat(elapsed * m_Speed, m_AxisY), 0);
             yield return null;
         }
+    }
+
+    /// <summary>
+    /// This function is called when the behaviour becomes disabled or inactive.
+    /// </summary>
+    void OnDisable()
+    {
+        StopAllCoroutines();
+        CancelInvoke();
     }
 
 }

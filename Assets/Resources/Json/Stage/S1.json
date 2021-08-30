@@ -1,25 +1,27 @@
 {
-    "index": 1,
+    "stageNum": 1,
     "userMoney": 200,
     "userHeart": 10,
     "roundInfo": [
         {
             "index": 1,
-            "type": "Normal",
-            "monsterName": "Bat",
-            "monsterHealth": 100,
-            "monsterMoney": 30,
-            "monsterSpeed": 1,
-            "monsterCount": 10
+            "score": 50,
+            "enemyCount": 10,
+            "enemyLevel": "Normal",
+            "enemyType": "Golem",
+            "enemyHealth": 100,
+            "enemyRewardMoney": 30,
+            "enemySpeed": 3
         },
         {
             "index": 2,
-            "type": "Normal",
-            "monsterName": "Bat",
-            "monsterHealth": 100,
-            "monsterMoney": 30,
-            "monsterSpeed": 1,
-            "monsterCount": 10
+            "score": 70,
+            "enemyCount": 10,
+            "enemyLevel": "Normal",
+            "enemyType": "Golem",
+            "enemyHealth": 100,
+            "enemyRewardMoney": 30,
+            "enemySpeed": 3
         }
     ]
 }

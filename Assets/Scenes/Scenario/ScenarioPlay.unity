@@ -271,7 +271,6 @@ MonoBehaviour:
   - {fileID: 1290493571, guid: e5bf32a70c2e58f4f9ec61dad9659a4b, type: 3}
   - {fileID: 1660645531, guid: a81cfdb3f3b757345a955fb9947163c8, type: 3}
   - {fileID: 342796986, guid: ad121b684e3934947a2d412b4202d8fd, type: 3}
-  aliveEnemyCount: 0
   aliveEnemies: []
   m_SpawnTime: 1
   testEnemy: {fileID: 1748489546896114, guid: fb6e154907ded46479e5d7ff1c7ef748, type: 3}
@@ -366,6 +365,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyManager: {fileID: 737802290}
   towerManager: {fileID: 1294572133}
+  mainCam: {fileID: 1897145337}
+  stageIndex: 1
 --- !u!1 &1897145335
 GameObject:
   m_ObjectHideFlags: 0

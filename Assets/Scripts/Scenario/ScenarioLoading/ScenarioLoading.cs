@@ -10,21 +10,23 @@ public class ScenarioLoading : MonoBehaviour, IScenario
 
     [Range(0, 5), SerializeField] float m_MinLoadingDuration = 4f;
     [SerializeField] float fadeDuration = 2f;
+    float m_ElapsedLoadingTime = 0;
 
     private object[] models =
     {
-        nameof(Terrain),
-        nameof(HomeModel)
+        typeof(HomeModel),
+        typeof(Terrain)
     };
 
     private object[] plugs =
     {
-        nameof(Theme),
-        nameof(Popup)
+        typeof(Theme),
+        typeof(Popup)
     };
 
     public void ScenarioPrepare(UnityAction done)
     {
+        QualitySettings.SetQualityLevel(0);
         loadingAni.ScaleUpText(() => done?.Invoke());
     }
 
@@ -37,6 +39,8 @@ public class ScenarioLoading : MonoBehaviour, IScenario
     {
         StartCoroutine(ElapsedTime());
         StartCoroutine(Loading());
+        StartCoroutine(LoadingModels());
+        StartCoroutine(LoadingPlugs());
         done?.Invoke();
     }
 
@@ -52,24 +56,32 @@ public class ScenarioLoading : MonoBehaviour, IScenario
 
     IEnumerator LoadingModels()
     {
-        foreach (IModel v in models)
+        foreach (object v in models)
         {
-            yield return LoadingSceneAsync<IModel>(v);
+            yield return LoadingModelSceneAsync<IModel>(v);
         }
     }
 
     IEnumerator LoadingPlugs()
     {
-        foreach (IPlug v in plugs)
+        foreach (object v in plugs)
         {
-            yield return LoadingSceneAsync<IPlug>(v);
+            yield return LoadingPlugsSceneAsync<IPlugable>(v);
         }
     }
 
-    IEnumerator LoadingSceneAsync<T>(object name, UnityAction done = null) where T : IPlayable
+    IEnumerator LoadingModelSceneAsync<IModel>(object name, UnityAction done = null)
     {
         bool isDone = false;
-        // SceneDirector<T>.Instance.OnLoadSceneAsync(name, () => isDone = true);
+        Core.models.OnLoadSceneAsync(name.ToString(), () => isDone = true);
+        while (isDone) { yield return null; }
+        done?.Invoke();
+    }
+
+    IEnumerator LoadingPlugsSceneAsync<IPlugable>(object name, UnityAction done = null)
+    {
+        bool isDone = false;
+        Core.plugs.OnLoadSceneAsync(name.ToString(), () => isDone = true);
         while (isDone) { yield return null; }
         done?.Invoke();
     }
@@ -80,7 +92,6 @@ public class ScenarioLoading : MonoBehaviour, IScenario
         done?.Invoke();
     }
 
-    float m_ElapsedLoadingTime = 0;
     IEnumerator ElapsedTime()
     {
         while (m_ElapsedLoadingTime < m_MinLoadingDuration)
@@ -111,18 +122,13 @@ public class ScenarioLoading : MonoBehaviour, IScenario
     public void GotoIntro()
     {
         BlockSkybox skybox = LalaStarter.GetBlockSkybox();
-        skybox.FadeIn(fadeDuration, () => Core.Instance.scenario.OnLoadSceneAsync(nameof(ScenarioIntro)));
+        skybox.FadeIn(fadeDuration, () => Core.scenario.OnLoadSceneAsync(nameof(ScenarioIntro)));
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        Core.Instance.scenario.OnLoaded(this);
+        Core.Ensure(() => Core.scenario.OnLoaded(this));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

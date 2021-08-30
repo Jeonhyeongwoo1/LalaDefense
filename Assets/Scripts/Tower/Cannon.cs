@@ -7,8 +7,6 @@ using UnityEngine.EventSystems;
 public class Cannon : Tower
 {
     [SerializeField] AnimationCurve m_Curve;
-    [SerializeField, Range(0, 3)] float m_StandbySpeed = 0;
-    [SerializeField] float m_StandbyMultiplier = 0;
     
     float m_Elapsed = 0;
 

@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class LalaStarter : MonoBehaviour
 {
     public BlockSkybox blockSkybox;
-    
+
     public static BlockSkybox GetBlockSkybox()
     {
         return FindObjectOfType<BlockSkybox>();
@@ -15,20 +16,23 @@ public class LalaStarter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       // LoadCore();
+        // LoadCore();
 
         //blockSkybox.FadeOut(1, null);
         //LoadScenarioLoading();
     }
 
-    void LoadCore()
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    void Awake()
     {
-        SceneManager.LoadScene(nameof(Core), LoadSceneMode.Additive);
+        Core.Ensure(LoadScenarioLoading);
     }
-
+    
     void LoadScenarioLoading()
     {
-        ScenarioDirector.Instance.OnLoadSceneAsync(nameof(ScenarioLoading));
+        //Core.scenario.OnLoadSceneAsync(nameof(ScenarioLoading));
     }
 
 }

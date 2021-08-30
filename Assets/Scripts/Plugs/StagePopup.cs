@@ -8,6 +8,7 @@ public class StagePopup : BasePopup
 {
     public StageNavigation stageNavigation;
     public StageReady stageReadyPopup;
+    public HomeConfirmPopup homeConfirmPopup;
     public List<StageList> stageList = new List<StageList>();
 
     [SerializeField] MonsterImageMoving monsterImage;
@@ -25,10 +26,10 @@ public class StagePopup : BasePopup
 
     public override void Open(UnityAction done)
     {
-        StartCoroutine(CoUtilize.VLerp((v) => m_Background.localScale = v, Vector3.zero, Vector3.one, 0.2f, () => Opend(done), m_Curve));
+        StartCoroutine(CoUtilize.VLerp((v) => m_Background.localScale = v, Vector3.zero, Vector3.one, 0.2f, () => Opened(done), m_Curve));
     }
 
-    void Opend(UnityAction done)
+    void Opened(UnityAction done)
     {
         monsterImage.StartMonsterImageAni();
         done?.Invoke();
@@ -36,6 +37,7 @@ public class StagePopup : BasePopup
 
     public override void Close(UnityAction done)
     {
+        Core.plugs.GetPlugable<Popup>().RemoveOpenedPopup(this);
         monsterImage.Close();
         gameObject.SetActive(false);
     }
@@ -43,9 +45,8 @@ public class StagePopup : BasePopup
     public void OnClickStageItem(int itemIndex)
     {
         Debug.Log("Stage Popup Open. Item Index : " + itemIndex);
-
         Stage stage = StagePlayer.Load(itemIndex);
-        StagePlayer.Instance.stage = stage;
+        Core.gameManager.stagePlayer.SetStage(stage);
         stageReadyPopup.SetStageInfo(itemIndex.ToString(), stage.userHeart);
         stageReadyPopup.Open(null);
     }
@@ -136,7 +137,12 @@ public class StagePopup : BasePopup
         SetStageListPosition();
     }
 
-    void GoHome() { }
+    void GoHome()
+    {
+        if (Core.scenario.GetCurScenario().scenarioName == nameof(ScenarioHome)) { return; }
+
+        homeConfirmPopup.Open(null);
+    }
 
     void Start()
     {

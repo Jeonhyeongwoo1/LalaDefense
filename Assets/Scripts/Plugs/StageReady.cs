@@ -1,12 +1,15 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class StageReady : BasePopup
 {
+    public StagePopup stagePopup;
     public GameObject screenDim;
     public Transform popup;
-    
+
     [SerializeField] RollingNumber rollingNumber;
     [SerializeField] Button m_Close;
     [SerializeField] Button m_Start;
@@ -30,6 +33,11 @@ public class StageReady : BasePopup
 
     public override void Open(UnityAction done)
     {
+        if (!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+
         screenDim.SetActive(true);
         popup.gameObject.SetActive(true);
 
@@ -57,12 +65,23 @@ public class StageReady : BasePopup
         screenDim.SetActive(false);
     }
 
+    //수정해야함.
     void OnClickStart()
     {
-        ScenarioDirector.Instance.OnLoadSceneAsync(nameof(ScenarioPlay));
+        if (Core.scenario.GetCurScenario().scenarioName != nameof(ScenarioPlay))
+        {
+            Core.scenario.OnLoadSceneAsync(nameof(ScenarioPlay));
+        }
+        else
+        {
+            Core.gameManager.GameRestart();
+        }
+
+        stagePopup.Close(null);
         gameObject.SetActive(false);
-        transform.parent.parent.gameObject.SetActive(false); //StagePopup
     }
+
+    
 
     // Start is called before the first frame update
     void Start()

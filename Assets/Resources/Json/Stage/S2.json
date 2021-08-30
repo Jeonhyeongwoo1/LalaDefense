@@ -1,0 +1,27 @@
+{
+    "stageNum": 2,
+    "userMoney": 200,
+    "userHeart": 10,
+    "roundInfo": [
+        {
+            "index": 1,
+            "score": 50,
+            "enemyCount": 10,
+            "enemyLevel": "Normal",
+            "enemyType": "Golem",
+            "enemyHealth": 100,
+            "enemyRewardMoney": 30,
+            "enemySpeed": 3
+        },
+        {
+            "index": 2,
+            "score": 70,
+            "enemyCount": 10,
+            "enemyLevel": "Normal",
+            "enemyType": "Golem",
+            "enemyHealth": 100,
+            "enemyRewardMoney": 30,
+            "enemySpeed": 3
+        }
+    ]
+}

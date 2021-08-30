@@ -61,7 +61,7 @@ public class Mortar : Tower
 
     public override void Delete(UnityAction done = null)
     {
-
+        StartCoroutine(DeletingTower(done));
     }
 
     // Start is called before the first frame update

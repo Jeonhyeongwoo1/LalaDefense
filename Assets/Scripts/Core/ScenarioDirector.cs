@@ -44,7 +44,7 @@ public class ScnearioTemplate : MonoBehaviour, IScenario
     }
 }
 
-public class ScenarioDirector : Singleton<ScenarioDirector>
+public class ScenarioDirector : MonoBehaviour
 {
     IScenario m_AcitveScenario;
     IScenario m_ClosingScenario;
@@ -59,6 +59,7 @@ public class ScenarioDirector : Singleton<ScenarioDirector>
         if (m_AcitveScenario == null)
         {
             m_AcitveScenario = scenario;
+            Log("Scenario Prepare : " + scenario.scenarioName);
             scenario.ScenarioPrepare(() => StandbyCamera(scenario));
             return;
         }
@@ -66,7 +67,6 @@ public class ScenarioDirector : Singleton<ScenarioDirector>
         m_ClosingScenario = m_AcitveScenario;
         m_AcitveScenario = null;
         OnLoaded(scenario);
-        UnLoad(m_ClosingScenario);
     }
 
     void StandbyCamera(IScenario scenario)
@@ -74,22 +74,28 @@ public class ScenarioDirector : Singleton<ScenarioDirector>
         if (scenario != null)
         {
             Log("Standby Camera : " + scenario.scenarioName);
-            scenario.ScenarioStandbyCamera(() => ScneraioStart(scenario));
+            scenario.ScenarioStandbyCamera(() => ScenarioStart(scenario));
         }
     }
 
-    void ScneraioStart(IScenario scenario)
+    void ScenarioStart(IScenario scenario)
     {
         if (scenario != null)
         {
             Log("Scneraio Start : " + scenario.scenarioName);
             scenario.ScenarioStart(() => ReadyScenario(scenario));
         }
+
+        if (m_ClosingScenario != null)
+        {
+            UnLoad(m_ClosingScenario);
+        }
     }
 
     void ReadyScenario(IScenario scenario)
     {
         Log("Scenario Ready Complete : " + scenario.scenarioName);
+        m_AcitveScenario = scenario;
     }
 
     void UnLoad(IScenario scenario)
@@ -97,11 +103,11 @@ public class ScenarioDirector : Singleton<ScenarioDirector>
         if(scenario != null)
         {
             Log("Scenario Pending Unload : " + scenario.scenarioName);
-            scenario.ScenarioStopCamera(() => StopCamera(scenario));
+            scenario.ScenarioStopCamera(() => StopedCamera(scenario));
         }
     }
 
-    void StopCamera(IScenario scenario)
+    void StopedCamera(IScenario scenario)
     {
         if (scenario != null)
         {
@@ -115,7 +121,7 @@ public class ScenarioDirector : Singleton<ScenarioDirector>
         if (scenario != null)
         {
             Log("Scenario Stop :" + scenario.scenarioName);
-            m_AcitveScenario = null;
+            m_ClosingScenario = null;
             UnloadSceneAsync(scenario.scenarioName);
             return;
         }
@@ -128,23 +134,14 @@ public class ScenarioDirector : Singleton<ScenarioDirector>
 
     public void OnLoadSceneAsync(string scenarioName)
     {
-        if(m_AcitveScenario != null)
-        {
-            UnLoad(m_AcitveScenario);
-        }
+        // if(m_AcitveScenario != null)
+        // {
+        //     UnLoad(m_AcitveScenario);
+        // }
 
         SceneManager.LoadSceneAsync(scenarioName, LoadSceneMode.Additive);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
+    public IScenario GetCurScenario() => m_AcitveScenario;
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

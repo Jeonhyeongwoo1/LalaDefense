@@ -21,6 +21,7 @@ public class PausePopup : BasePopup
         m_QuitPopup.SetActive(true);
     }
 
+    //게임종료
     void ShutGameDown()
     {
         Application.Quit();
@@ -33,7 +34,7 @@ public class PausePopup : BasePopup
 
     void OnRestart()
     {
-
+        Close(() => Core.gameManager.GameRestart());
     }
 
     void OnConitnue()
@@ -43,18 +44,19 @@ public class PausePopup : BasePopup
 
     public override void Open(UnityAction done)
     {
-        StartCoroutine(CoUtilize.VLerp((v) => pause.localScale = v, Vector3.zero, Vector3.one, 0.2f, () => Opend(done), m_Curve));
+        StartCoroutine(CoUtilize.VLerp((v) => pause.localScale = v, Vector3.zero, Vector3.one, 0.2f, () => Opened(done), m_Curve));
     }
 
-    void Opend(UnityAction done)
+    void Opened(UnityAction done)
     {
         done?.Invoke();
-        Time.timeScale = 0;
+        Core.gameManager.GamePause(true);
     }
 
     public override void Close(UnityAction done)
     {
-        Time.timeScale = 1;
+        Core.plugs.GetPlugable<Popup>().RemoveOpenedPopup(this);
+        Core.gameManager.GamePause(false);
         done?.Invoke();
         gameObject.SetActive(false);
     }

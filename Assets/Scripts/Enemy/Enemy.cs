@@ -21,6 +21,8 @@ public enum EnemyType
 [Serializable]
 public class EnemyInfo
 {
+    public enum Level { Normal, Boss, Bonus }
+    public Level level; 
     public EnemyType enemyType;
     public float speed;
     public float health;
@@ -41,11 +43,11 @@ public class Enemy : MonoBehaviour
     Animator m_Animator;
     Transform m_Target;
     int m_WavePointIndex = 0;
-    
+
     // Start is called before the first frame update
     void Start()
-    {
-        Terrain terrain = FindObjectOfType<Terrain>();
+    { 
+        Terrain terrain = Core.models.GetModel<Terrain>();
         m_WayPoints.AddRange(terrain.wayPoint.wayPoints);
         m_Target = m_WayPoints[0];
         m_Animator = GetComponent<Animator>();
@@ -112,6 +114,17 @@ public class Enemy : MonoBehaviour
             EnemyManager e = transform.parent.GetComponent<EnemyManager>();
             e.aliveEnemyCount--;
             e.aliveEnemies.Remove(this);
+
+            if (m_CurHealth <= 0) //Whwn it was attacked by Tower..
+            {
+                Theme theme = Core.plugs.GetPlugable<Theme>();
+                UserInfoUI userInfoUI = theme.GetTheme<UserInfoUI>();
+                float score = Core.gameManager.roundPlayer.roundCurScore;
+                float money = Core.gameManager.roundPlayer.monsterCurRewardMoney;
+                userInfoUI.score += score;
+                userInfoUI.money += money;
+            }
+
             Destroy(gameObject);
         }
     }
@@ -134,6 +147,11 @@ public class Enemy : MonoBehaviour
         m_Target = m_WayPoints[m_WavePointIndex];
     }
 
-    void EndPath() { ActionDie(); }
+    void EndPath()
+    {
+        Theme theme = Core.plugs.GetPlugable<Theme>();
+        theme.GetTheme<UserInfoUI>().heart--;
+        ActionDie();
+    }
 
 }

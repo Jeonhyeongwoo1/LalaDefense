@@ -8,76 +8,128 @@ using System;
 public class Round
 {
     public int index;
-    public string monsterName;
-    public string type;
-    public int monsterHealth;
-    public int monsterMoney;
-    public int monsterSpeed;
-    public int monsterCount;
+    public int score;
+    public int enemyCount;
+    public string enemyLevel;
+    public string enemyType;
+    public float enemyHealth;
+    public float enemyRewardMoney;
+    public float enemySpeed;
+
 }
 
 [Serializable]
 public class Stage
 {
-    public int index;
+    public int stageNum;
     public int userMoney;
     public int userHeart;
     public Round[] roundInfo;
 }
 
-public class StagePlayer : Singleton<StagePlayer>
+public class StagePlayer : MonoBehaviour
 {
     public enum StageState { None, Ready, Play, Done }
 
-    public Stage stage;
     public RoundPlayer roundPlayer;
 
+    [SerializeField] Stage m_Stage;
     [SerializeField] StageState m_StageState = StageState.None;
-    UnityAction m_DoneEvent;
 
-    public void SetState(StageState stage) => m_StageState = stage;
-    public StageState GetState() => m_StageState;
+    EnemyManager m_EnemyManager = null;
+    TowerManager m_TowerManager = null;
+    UnityAction m_DoneEvent = null;
 
     void Log(string content)
     {
         Debug.Log(content);
     }
 
-    public void RestartStage()
+    public void SetStage(Stage stage) => m_Stage = stage;
+    public Stage GetStage() => m_Stage;
+
+    public void SetState(StageState stage) => m_StageState = stage;
+    public StageState GetState() => m_StageState;
+
+    public void GameOverStage()
     {
-        PlayStage();
+        m_StageState = StageState.Done;
+        m_EnemyManager.DestroyEnemy();
+        m_TowerManager.DestroyImmediateAllTower();
+        roundPlayer.GameOverRound();
     }
 
-    public void ReadyStage(EnemyManager enemyManager, UnityAction done)
+    public void OnRestartStage()
     {
-        Log("Ready Stage");
-        m_StageState = StageState.Ready;
-        m_DoneEvent = done;
+        m_EnemyManager.DestroyEnemy();
+        m_TowerManager.DestroyImmediateAllTower();
+        roundPlayer.RestartReadyRound();
 
-        Theme theme = FindObjectOfType<Theme>();
-        theme.towerStore.gameObject.SetActive(true);
-        UserInfoUI userInfo = theme.userInfoUI;
-        userInfo.gameObject.SetActive(true);
-        userInfo.SetUserInfo(stage.userHeart, stage.userMoney);
+        OnPlayStage();
+    }
+
+    public void OnNextStageReady(Stage stage)
+    {
+        Log("Next Stage Ready");
+
+        m_Stage = stage;
+        Theme theme = Core.plugs.GetPlugable<Theme>();
+        theme.GetTheme<UserInfoUI>()?.SetUserInfo(m_Stage.userHeart, m_Stage.userMoney, 0);
 
         List<Round> round = new List<Round>();
-        round.AddRange(stage.roundInfo);
+        round.AddRange(m_Stage.roundInfo);
+        roundPlayer.ReadyRound(m_EnemyManager, round);
+
+        Terrain terrain = Core.models.GetModel<Terrain>();
+        terrain.nodes.ActiveAllNodes(true);
+
+        m_EnemyManager.DestroyEnemy();
+        m_TowerManager.DestroyImmediateAllTower();
+
+        OnPlayStage();
+    }
+
+    public void OnReadyStage(EnemyManager enemyManager, TowerManager towerManager, UnityAction done)
+    {
+        Log("Ready Stage");
+
+        m_StageState = StageState.Ready;
+        m_DoneEvent = done;
+        m_EnemyManager = enemyManager;
+        m_TowerManager = towerManager;
+
+        Theme theme = Core.plugs.GetPlugable<Theme>();
+        theme.Open<TowerStore>();
+        UserInfoUI userInfo = theme.GetTheme<UserInfoUI>();
+        userInfo.SetUserInfo(m_Stage.userHeart, m_Stage.userMoney, 0);
+        theme.Open<UserInfoUI>();
+        theme.Open<Menu>();
+
+        List<Round> round = new List<Round>();
+        round.AddRange(m_Stage.roundInfo);
         roundPlayer.ReadyRound(enemyManager, round);
 
-        PlayStage();
+        OnPlayStage();
     }
 
-    void PlayStage()
+    void OnPlayStage()
     {
-        Log("Play Stage");
+        Log("Play Stage Num : " + m_Stage.stageNum);
         m_StageState = StageState.Play;
-        roundPlayer.PlayRound(StageDone);
+        roundPlayer.PlayRound(OnStageDone);
     }
 
-    void StageDone()
+    void OnStageDone()
     {
-        Log("Stage Done Index : " + stage.index);
+        Log("Stage Done. Stage Num : " + m_Stage.stageNum);
         m_StageState = StageState.Done;
+        OnStageCompleted();
+    }
+
+    void OnStageCompleted()
+    {
+        Popup popup = Core.plugs.GetPlugable<Popup>();
+        popup.Open<CompletePopup>();
         m_DoneEvent?.Invoke();
     }
 
@@ -103,9 +155,18 @@ public class StagePlayer : Singleton<StagePlayer>
         return stage;
     }
 
-    void Start()
+    /// <summary>
+    /// Awake is called when the script instance is being loaded.
+    /// </summary>
+    void Awake()
     {
-        roundPlayer = RoundPlayer.Instance;
+        if (roundPlayer == null)
+        {
+            GameObject go = new GameObject("RoundPlayer");
+            go.transform.SetParent(transform);
+            go.AddComponent<RoundPlayer>();
+            roundPlayer = go.GetComponent<RoundPlayer>();
+        }
     }
 
 }

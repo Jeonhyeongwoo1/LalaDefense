@@ -8,6 +8,7 @@ public class TowerUpgrade : BaseTheme
 {
     public enum State { Open, Close }
     public State state;
+    public Vector3 offset = new Vector3(0, 6, 1);
 
     [SerializeField, Range(0, 1)] float m_Ratio = 0.7f;
     [SerializeField] Button m_UpgradeBtn;
@@ -26,7 +27,9 @@ public class TowerUpgrade : BaseTheme
 
     public override void Close(UnityAction done)
     {
+        Core.plugs.GetPlugable<Theme>()?.RemoveOpenedTheme(this);
         state = State.Close;
+        done?.Invoke();
         gameObject.SetActive(false);
     }
 
@@ -40,13 +43,44 @@ public class TowerUpgrade : BaseTheme
 
     public void Upgrade()
     {
+        Theme theme = Core.plugs.GetPlugable<Theme>();
+        float userMoney = theme.GetTheme<UserInfoUI>().money;
+
+        if (userMoney <= 0) { return; }
+
+        float price = m_TargetTower.towerInfo.towerLevels[m_TargetTower.currentLevel].price;
+
+        if (userMoney < price)
+        {
+            //Open Popup
+            Popup popup = Core.plugs.GetPlugable<Popup>();
+            popup.Open<NotifyPopup>();
+            popup?.GetPopup<NotifyPopup>().SetContent("돈이 부족합니다. !!");
+            return;
+        }
+
+        Debug.Log("Upgrade Tower :" + m_TargetTower.name);
+
         m_TargetTower.UpgradeTower();
+        //Price 
+        theme.GetTheme<UserInfoUI>().money -= price;
         Close(null);
     }
 
     public void Sell()
     {
-        m_TargetTower.Delete();
+        if (m_TargetTower == null) { return; }
+
+        Debug.Log("Sell Tower : " + m_TargetTower.name);
+
+        float price = m_TargetTower.towerInfo.towerLevels[m_TargetTower.currentLevel].price;
+        float sell = price * m_Ratio;
+        Theme theme = Core.plugs.GetPlugable<Theme>();
+        theme.GetTheme<UserInfoUI>().money += sell;
+
+        TowerManager t = m_TargetTower.transform.parent.GetComponent<TowerManager>();
+        t.DeleteTower(m_TargetTower);
+
         Close(null);
     }
 

@@ -9,88 +9,87 @@ public interface IPlayable
 
 }
 
-public class SceneDirector<XType> : Singleton<SceneDirector<XType>> where XType : IPlayable
+public class SceneDirector<XType> : MonoBehaviour where XType : IPlayable
 {
-    private List<XType> XTypes = new List<XType>();
     public UnityAction<Scene, LoadSceneMode> sceneLoaded;
 
-    bool HasXType(XType type)
+    public void Ensure<T>(UnityAction done = null) where T : XType
     {
-        XType x = XTypes.Find((v) => type.Equals(v));
-        return x != null ? true : false;
+        string name = typeof(T).ToString();
+
+        Scene scene = SceneManager.GetSceneByName(name);
+        if (scene.isLoaded) { return; }
+
+        StartCoroutine(LoadingSceneAsync(name, done));
     }
 
-    public XType GetType(XType type) { return XTypes.Find((v) => type.Equals(v)); }
-
-    public void Ensure(object scene, UnityAction done = null)
+    public void OnLoadSceneAsync(string sceneName, UnityAction done)
     {
-        // bool isXType = scene is IPlayable;
-        // if (!isXType) { return; }
+        Scene scene = SceneManager.GetSceneByName(sceneName);
+        if (scene.isLoaded) { return; }
 
-        if (HasXType((XType) scene)) { return; }
-     
-        StartCoroutine(LoadingSceneAsync(nameof(scene), done));
-    }
-
-    public void OnLoadSceneAsync(object sceneName, UnityAction done)
-    {
         StartCoroutine(LoadingSceneAsync(sceneName, done));
     }
 
-    public void UnloadSceneAsync(object sceneName, UnityAction done)
+    public void UnloadSceneAsync(string sceneName, UnityAction done)
     {
+        Scene scene = SceneManager.GetSceneByName(sceneName);
+        if (!scene.isLoaded) { return; }
+
         StartCoroutine(UnloadingSceneAsync(sceneName, done));
     }
 
-    public void ProgressLoadSceneAsync(object sceneName, UnityAction<float> progress, UnityAction done)
+    public void ProgressLoadSceneAsync(string sceneName, UnityAction<float> progress, UnityAction done)
     {
+        Scene scene = SceneManager.GetSceneByName(sceneName);
+        if (scene.isLoaded) { return; }
+        
         StartCoroutine(ProgressLoadingSceneAsync(sceneName, done, (v) => progress.Invoke(v)));
     }
 
-    public void ProgressUnloadSceneAsync(object sceneName, UnityAction<float> progress, UnityAction done)
+    public void ProgressUnloadSceneAsync(string sceneName, UnityAction<float> progress, UnityAction done)
     {
+        Scene scene = SceneManager.GetSceneByName(sceneName);
+        if (!scene.isLoaded) { return; }
+
         StartCoroutine(ProgressLoadingSceneAsync(sceneName, done, (v) => progress.Invoke(v)));
     }
 
     // 0.9 up
-    IEnumerator ProgressUnLoadingSceneAsync(object sceneName, UnityAction done, UnityAction<float> progress)
+    IEnumerator ProgressUnLoadingSceneAsync(string sceneName, UnityAction done, UnityAction<float> progress)
     {
-        AsyncOperation asyncOperation = SceneManager.UnloadSceneAsync(nameof(sceneName));
+        AsyncOperation asyncOperation = SceneManager.UnloadSceneAsync(sceneName);
         while (!asyncOperation.isDone)
         {
             progress.Invoke(asyncOperation.progress);
             yield return null;
         }
-        XTypes.Add((XType)sceneName);
         done?.Invoke();
     }
 
     // 0.9 up
-    IEnumerator ProgressLoadingSceneAsync(object sceneName, UnityAction done, UnityAction<float> progress)
+    IEnumerator ProgressLoadingSceneAsync(string sceneName, UnityAction done, UnityAction<float> progress)
     {
-        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(nameof(sceneName), LoadSceneMode.Additive);
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         while (!asyncOperation.isDone)
         {
             progress.Invoke(asyncOperation.progress);
             yield return null;
         }
-        XTypes.Remove((XType)sceneName);
         done?.Invoke();
     }
 
-    IEnumerator LoadingSceneAsync(object sceneName, UnityAction done)
+    IEnumerator LoadingSceneAsync(string sceneName, UnityAction done)
     {
-        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(nameof(sceneName), LoadSceneMode.Additive);
+        AsyncOperation asyncOperation = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         while (!asyncOperation.isDone) { yield return null; }
-        XTypes.Add((XType)sceneName);
         done?.Invoke();
     }
 
-    IEnumerator UnloadingSceneAsync(object sceneName, UnityAction done)
+    IEnumerator UnloadingSceneAsync(string sceneName, UnityAction done)
     {
-        AsyncOperation asyncOperation = SceneManager.UnloadSceneAsync(nameof(sceneName));
+        AsyncOperation asyncOperation = SceneManager.UnloadSceneAsync(sceneName);
         while (!asyncOperation.isDone) { yield return null; }
-        XTypes.Remove((XType)sceneName);
         done?.Invoke();
     }
 

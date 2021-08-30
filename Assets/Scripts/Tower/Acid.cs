@@ -27,7 +27,7 @@ public class Acid : Tower
         m_Turret.LookAt(Target.transform);
 
         m_Beam.enabled = true;
-        m_BeamEffect.gameObject.SetActive(true);
+        if (m_BeamEffect != null) m_BeamEffect.gameObject.SetActive(true);
 
         //Vector3 point = Target.skinnedMeshRenderer.GetComponent<Renderer>().bounds.ClosestPointOnBounds(bombPoint.position);
 
@@ -43,8 +43,8 @@ public class Acid : Tower
     public override void Standby()
     {
         if (m_Turret == null) { m_Turret = GetChild(transform, "Turret"); }
+        if (m_BeamEffect != null) { m_BeamEffect.gameObject.SetActive(false); }
 
-        m_BeamEffect.gameObject.SetActive(false);
         m_Beam.enabled = false;
 
         if (m_Turret.transform.localEulerAngles.x != 0) m_Turret.localEulerAngles = new Vector3(0, m_Turret.localEulerAngles.y, m_Turret.localEulerAngles.z);
@@ -59,6 +59,7 @@ public class Acid : Tower
 
     public override void Delete(UnityAction done = null)
     {
+        print("TEST");
         StartCoroutine(DeletingTower(done));
     }
 

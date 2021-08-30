@@ -86,23 +86,22 @@ public abstract class Tower : MonoBehaviour, IPointerClickHandler
         GameObject g = Instantiate(upgradeTower, transform.position, Quaternion.identity, transform);
         projectile = GetChild(g.transform, nameof(projectile));
         bombPoint = GetChild(g.transform, nameof(bombPoint));
-
         Destroy(currentTower);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Theme theme = FindObjectOfType<Theme>();
-        TowerUpgrade towerUpgrade = theme.towerUpgrade;
+        Theme theme = Core.plugs.GetPlugable<Theme>();
+        TowerUpgrade towerUpgrade = theme.GetTheme<TowerUpgrade>();
 
         if (towerUpgrade.state == TowerUpgrade.State.Open)
         {
-            towerUpgrade.Close(null);
+            theme.Close<TowerUpgrade>();
         }
 
-        towerUpgrade.transform.position = transform.position + new Vector3(0, 6f, 1f); //offset
+        towerUpgrade.transform.position = transform.position + towerUpgrade.offset;
         towerUpgrade.Setup(towerInfo.towerLevels[currentLevel].level, towerInfo.towerLevels[currentLevel].price, this);
-        towerUpgrade.Open(null);
+        theme.Open<TowerUpgrade>();
     }
 
     protected void UpdateTarget()

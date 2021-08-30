@@ -37,7 +37,7 @@ public class TowerManager : MonoBehaviour
 
     public void CreatTower(Transform tower, Transform node)
     {
-        Terrain terrain = FindObjectOfType<Terrain>();
+        Terrain terrain = Core.models.GetModel<Terrain>();
         terrain.SelectNode(node);
 
         GameObject t = Instantiate(tower.gameObject, terrain.nodes.GetBuildPosition(), Quaternion.identity, transform);
@@ -45,6 +45,16 @@ public class TowerManager : MonoBehaviour
         tr.Create();
         towers.Add(tr, node);
         onlyTowers.Add(tr);
+    }
+
+    public void DestroyImmediateAllTower()
+    {
+        if (onlyTowers == null) { return; }
+        if (onlyTowers.Count == 0) { return; }
+
+        onlyTowers.ForEach((v) => Destroy(v.gameObject));
+        towers.Clear();
+        onlyTowers.Clear();
     }
 
     public void DeleteTower(Tower tower)

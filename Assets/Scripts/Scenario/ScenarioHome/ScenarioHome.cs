@@ -2,27 +2,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Cinemachine;
 using UnityEngine.UI;
 
 public class ScenarioHome : MonoBehaviour, IScenario
 {
     public string scenarioName => typeof(ScenarioHome).Name;
     [SerializeField] Button m_Start;
+    [SerializeField] CinemachineVirtualCamera m_HomeCam;
+
+    bool IsLive(CinemachineVirtualCamera cam) => CinemachineCore.Instance.IsLive(cam) && !CinemachineCore.Instance.GetActiveBrain(0).IsBlending;
 
     public void ScenarioPrepare(UnityAction done)
     {
-        BlockSkybox skybox = LalaStarter.GetBlockSkybox();
-        skybox.FadeOut(2, () => done?.Invoke());
+        QualitySettings.SetQualityLevel(0);
+        Core.models.DefaultLoadModels();
+        m_Start.onClick.AddListener(OnGameStart);
+        done?.Invoke();
     }
 
     public void ScenarioStandbyCamera(UnityAction done)
     {
-        done?.Invoke();
+        StartCoroutine(CameraTransistion(m_HomeCam, done));
     }
 
     public void ScenarioStart(UnityAction done)
     {
-        StartCoroutine(CoUtilize.VLerp((v) => m_Start.transform.localScale = v, Vector3.zero, Vector3.one, 0.3f, () => done?.Invoke(), null));
+        Core.models.GetModel<Terrain>()?.Close(null);
+        BlockSkybox skybox = LalaStarter.GetBlockSkybox();
+        skybox.FadeOut(1, () =>
+        {
+            OpenStartBtn();
+            done?.Invoke();
+        });
+
     }
 
     public void ScenarioStopCamera(UnityAction done)
@@ -32,33 +45,30 @@ public class ScenarioHome : MonoBehaviour, IScenario
 
     public void ScenarioStop(UnityAction done)
     {
-        StartCoroutine(CoUtilize.VLerp((v) => m_Start.transform.localScale = v, Vector3.one, Vector3.zero, 0.3f, () => done?.Invoke()));
+        done?.Invoke();
     }
 
     void OnGameStart()
     {
-        Popup popup = FindObjectOfType<Popup>();
-        popup.stagePopup.gameObject.SetActive(true);
-        popup.stagePopup.Open(null);
-        //Core.Instance.scenario.OnLoadSceneAsync(nameof(ScenarioPlay));
+        Popup popup = Core.plugs.GetPlugable<Popup>();
+        popup.Open<StagePopup>();
+        m_Start.gameObject.SetActive(false);
+    }
+
+    void OpenStartBtn()
+    {
+        StartCoroutine(CoUtilize.VLerp((v) => m_Start.transform.localScale = v, Vector3.zero, Vector3.one, 0.3f));
+    }
+
+    IEnumerator CameraTransistion(CinemachineVirtualCamera cam, UnityAction done)
+    {
+        while (!IsLive(cam)) { yield return null; }
+        done?.Invoke();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        ScenarioDirector.Instance.OnLoaded(this);
-//        Core.Instance.scenario.OnLoaded(this);
-        m_Start.onClick.AddListener(OnGameStart);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(Input.GetKey(KeyCode.Escape))
-        {
-            Popup popup = FindObjectOfType<Popup>();
-            popup.pausePopup.gameObject.SetActive(true);
-            popup.pausePopup.Open(null);
-        }
+        Core.Ensure(() => Core.scenario.OnLoaded(this));
     }
 }
