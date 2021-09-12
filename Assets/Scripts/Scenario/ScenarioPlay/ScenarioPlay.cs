@@ -21,6 +21,7 @@ public class ScenarioPlay : MonoBehaviour, IScenario
         QualitySettings.SetQualityLevel(0);
         Core.models.DefaultLoadModels();
         LalaStarter.GetBlockSkybox()?.SetAlpha(0);
+        enemyManager.SetMainCam(mainCam);
         done?.Invoke();
     }
 
@@ -65,12 +66,6 @@ public class ScenarioPlay : MonoBehaviour, IScenario
         cam.enabled = true;
         while (!IsLive(cam)) { yield return null; }
         done?.Invoke();
-    }
-
-    IEnumerator BlendingCamera(UnityAction done)
-    {
-        while (CinemachineCore.Instance.GetActiveBrain(0).IsBlending) { yield return null; }
-        done.Invoke();
     }
 
 }

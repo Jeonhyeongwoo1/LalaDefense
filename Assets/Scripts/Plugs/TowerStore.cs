@@ -21,7 +21,7 @@ public class TowerStore : BaseTheme
     [SerializeField] AnimationCurve m_CloseCircle;
     [SerializeField] List<TowerStoreItem> m_Items = new List<TowerStoreItem>();
 
-    GameObject m_TowerCreation;
+    GameObject m_TowerManager;
 
     public void OnClickItem(GameObject prefab, float price)
     {
@@ -53,9 +53,9 @@ public class TowerStore : BaseTheme
 
     void CreateTower(RaycastHit hit, GameObject tower, float price)
     {
-        if (m_TowerCreation == null)
+        if (m_TowerManager == null)
         {
-            m_TowerCreation = GameObject.FindGameObjectWithTag("Towers");
+            m_TowerManager = GameObject.FindGameObjectWithTag("Towers");
         }
 
         Theme theme = Core.plugs.GetPlugable<Theme>();
@@ -73,13 +73,22 @@ public class TowerStore : BaseTheme
         Debug.Log("Create Tower :" + tower.name);
 
         userInfoUI.money -= price;
-        TowerManager manager = m_TowerCreation.GetComponent<TowerManager>();
-        manager.CreatTower(tower.transform, hit.transform);
+        TowerManager manager = m_TowerManager.GetComponent<TowerManager>();
+        manager.CreateTower(tower.transform, hit.transform);
         CanBuild = false;
     }
 
     void CloseTowerStore(UnityAction done)
     {
+        StopCoroutine("CheckingMousePoint");
+        
+        Terrain t = Core.models.GetModel<Terrain>();
+        if (t.nodes.gameObject.activeSelf)
+        {
+            t.nodes.gameObject.SetActive(false);
+        }
+       
+        
         StartCoroutine(CoUtilize.VLerp((v) => m_TowerStoreUI.localScale = v, Vector2.one, Vector2.up, 0.3f, done, curve));
     }
 
@@ -134,19 +143,6 @@ public class TowerStore : BaseTheme
 
             yield return null;
         }
-    }
-
-
-    [ContextMenu("Open")]
-    public void Test1()
-    {
-        Open(null);
-    }
-
-    [ContextMenu("Close")]
-    public void Test2()
-    {
-        Close(null);
     }
 
 }

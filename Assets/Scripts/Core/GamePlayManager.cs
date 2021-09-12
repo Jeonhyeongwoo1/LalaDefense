@@ -7,9 +7,22 @@ public class GamePlayManager : MonoBehaviour
     public StagePlayer stagePlayer;
     public RoundPlayer roundPlayer => stagePlayer?.roundPlayer;
 
+    public bool bossAppearAniPlaying
+    {
+        get;
+        set;
+    }
+
     public void Log(string content)
     {
         Debug.Log(content);
+    }
+
+    public void StartSelectedGame(Stage stage)
+    {
+        Log("Start Seleced Game" + stage.stageNum);
+
+        stagePlayer.OnNextStageReady(stage);
     }
 
     public void OnNextGame()
@@ -44,7 +57,6 @@ public class GamePlayManager : MonoBehaviour
         Popup popup = Core.plugs.GetPlugable<Popup>();
         popup.Open<LosePopup>();
     }
-
 
     public void GamePause(bool isPause)
     {

@@ -6,52 +6,70 @@ using UnityEngine.EventSystems;
 
 public class Cannon : Tower
 {
-    [SerializeField] AnimationCurve m_Curve;
-    
+    ParticleSystem muzzleEffect;
     float m_Elapsed = 0;
+    Shot m_AliveShot = null;
 
     public override void Attack()
     {
         if (Target == null) { return; }
+        
+        turret.LookAt(Target.transform);
 
-        projectile.LookAt(Target.transform);
+        if (muzzleEffect.isPlaying) { muzzleEffect.Stop(); }
 
         m_Elapsed += Time.deltaTime;
         if (m_Elapsed >= GetCurLevelAttackInfo().speed)
         {
             m_Elapsed = 0;
-            GameObject go = Instantiate(bomb.gameObject, bombPoint.position, Quaternion.identity);
-            Bomb b = go.GetComponent<Bomb>();
+            GameObject go = Instantiate(shot.gameObject, bombPoint.position, Quaternion.identity, shots);
+            Shot b = go.GetComponent<Shot>();
+            m_AliveShot = b;
             b.Seek(Target);
-            b.Init(GetCurLevelAttackInfo().damage);
+            b.Init(GetCurLevelAttackInfo());
+            b.Attack(AttackComplete);
+            muzzleEffect.Play();
         }
-        
     }
 
     public override void Standby()
     {
-        //조금 부자연스러운것 같음
-        if (projectile.localEulerAngles != Vector3.zero)
+        if (muzzleEffect.isPlaying) { muzzleEffect.Stop(); }
+        if (turret.localEulerAngles != Vector3.zero)
         {
-            projectile.localEulerAngles = new Vector3(0, 0, 0);
+            turret.localEulerAngles = Vector3.Slerp(turret.localEulerAngles, Vector3.zero, Time.deltaTime * 3);
         }
     }
-    
+
     public override void Create(UnityAction done = null)
     {
-        StartCoroutine(CoUtilize.VLerp((v) => transform.localScale = v, Vector3.zero, Vector3.one, CreateDuration, done, m_Curve));
-        CreateEffectObj(createEffect);
+        base.Create(done);
     }
 
     public override void Delete(UnityAction done = null)
     {
-        StartCoroutine(DeletingTower(done));
+        base.Delete(done);
     }
 
-    public override void Start()
+    public override void Init(Transform curTower)
     {
-        base.Start();
+        turret = GetChild(curTower, nameof(turret));
+        projectile = GetChild(curTower, nameof(projectile));
+        bombPoint = GetChild(curTower, nameof(bombPoint));
+        muzzleEffect = GetChild(curTower, nameof(muzzleEffect))?.GetComponent<ParticleSystem>();
+    }
+
+    void Start()
+    {
         InvokeRepeating("UpdateTarget", 0, 0.5f);
+    }
+
+    void AttackComplete()
+    {
+        if (m_AliveShot != null)
+        {
+            Destroy(m_AliveShot.gameObject);
+        }
     }
 
     /// <summary>
@@ -67,37 +85,6 @@ public class Cannon : Tower
         {
             Attack();
         }
-    }
-
-    //[SerializeField] float m_Radius;
-    /// <summary>
-    /// Callback to draw gizmos that are pickable and always drawn.
-    /// </summary>
-    // void OnDrawGizmos()
-    // {
-    //     Gizmos.color = Color.red;
-    //     Gizmos.DrawWireSphere(transform.position, m_Radius);
-    // }
-
-    [ContextMenu("Upgrade")]
-    public void UpgradeTowers()
-    {
-       UpgradeTower();
-    }
-
-    [ContextMenu("Attack")]
-    public void Test2()
-    {
-        GameObject go = Instantiate(bomb.gameObject, bombPoint.position, Quaternion.identity);
-        Bomb b = go.GetComponent<Bomb>();
-      //  b.Seek(target.transform);
-    }
-
-    [ContextMenu("Delete")]
-    public void Test()
-    {
-        TowerManager t = transform.parent.GetComponent<TowerManager>();
-        StartCoroutine(DeletingTower(() => t.DeletedTower(this)));
     }
 
 }

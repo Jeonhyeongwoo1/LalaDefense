@@ -42,38 +42,40 @@ public class TowerInfo
 
 public abstract class Tower : MonoBehaviour, IPointerClickHandler
 {
-    //타워 정보, 공격, 대기상태 생성될때 삭제될때 애니메이션
-    public enum TowerState { Attack, Standby }
-    public TowerState towerState;
+    public enum TowerState { None, Creating, Upgrading, Standby, Attack, Deleting }
+    public TowerState towerState = TowerState.None;
     public TowerInfo towerInfo;
-    public GameObject createEffect; //prefabs
+    public GameObject createEffect;
     public GameObject deleteEffect;
     public Transform projectile; //발사체
     public Transform bombPoint; //발사 지점
-    public Bomb bomb;
-    public int currentLevel = 0;
+    public Transform turret;
+    public Shot shot;
+    public int currentLevel = 0; // 0~2 index
+
+    public Enemy Target;
+    public Transform shots;
+    protected GameObject Enemies;
+    [SerializeField, Range(0, 1)] protected float CreateDuration;
+    [SerializeField, Range(0, 1)] protected float DeleteDuration;
+    [SerializeField] protected AnimationCurve Curve;
+
     public abstract void Attack();
     public abstract void Standby();
-    public abstract void Create(UnityAction done = null);
-    public abstract void Delete(UnityAction done = null);
-
-    protected Enemy Target;
-    protected GameObject Enemies;
-
-    [SerializeField, Range(0, 1)]
-    protected float CreateDuration;
-    [SerializeField, Range(0, 1)]
-    protected float DeleteDuration;
-
-    public virtual void Start()
-    {
-        projectile = GetChild(transform, nameof(projectile));
-        bombPoint = GetChild(transform, nameof(bombPoint));
-    }
+    public abstract void Init(Transform tr);
 
     public virtual void UpgradeTower()
     {
-        // 1 ~ 3
+        if(towerState == TowerState.Creating || towerState == TowerState.Deleting)
+        {
+            Popup popup = Core.plugs.GetPlugable<Popup>();
+            popup?.GetPopup<NotifyPopup>().SetContent("타워 생성중..");
+            popup.Open<NotifyPopup>();
+            return;
+        }
+
+        towerState = TowerState.Upgrading;
+        // 0 ~ 2
         if (currentLevel == towerInfo.towerLevels.Length)
         {
             Debug.Log("Max Upgrade!!");
@@ -84,9 +86,28 @@ public abstract class Tower : MonoBehaviour, IPointerClickHandler
         GameObject upgradeTower = towerInfo.towerLevels[++currentLevel].towerPrefab;
 
         GameObject g = Instantiate(upgradeTower, transform.position, Quaternion.identity, transform);
-        projectile = GetChild(g.transform, nameof(projectile));
-        bombPoint = GetChild(g.transform, nameof(bombPoint));
+        Init(g.transform);
+
         Destroy(currentTower);
+        towerState = TowerState.Standby;
+    }
+
+    public virtual void Create(UnityAction done = null)
+    {
+        towerState = TowerState.Creating;
+        GameObject defaultTower = towerInfo.towerLevels[0].towerPrefab;
+        Transform g = Instantiate(defaultTower.transform, transform.position, Quaternion.identity);
+        g.SetParent(transform);
+        Init(g);
+        StartCoroutine(CoUtilize.VLerp((v) => g.localScale = v, Vector3.zero, Vector3.one, CreateDuration, done, Curve));
+
+        CreateEffectObj(createEffect, TowerCreated);
+    }
+
+    public virtual void Delete(UnityAction done = null)
+    {
+        towerState = TowerState.Deleting;
+        StartCoroutine(DeletingTower(done));
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -106,6 +127,9 @@ public abstract class Tower : MonoBehaviour, IPointerClickHandler
 
     protected void UpdateTarget()
     {
+        if (Core.gameManager.bossAppearAniPlaying) { return; }
+        if (towerState == TowerState.Creating || towerState == TowerState.Upgrading) { return; }
+
         if (!Enemies)
         {
             Enemies = GameObject.FindGameObjectWithTag("Enemies");
@@ -175,6 +199,12 @@ public abstract class Tower : MonoBehaviour, IPointerClickHandler
 
     IEnumerator ProceedingEffect(ParticleSystem p, UnityAction done)
     {
+        if(p == null)
+        {
+            done?.Invoke();
+            yield break;
+        }
+
         if (!p.isPlaying) { p.Play(); }
         while (!p.isStopped) { yield return null; }
 
@@ -203,4 +233,5 @@ public abstract class Tower : MonoBehaviour, IPointerClickHandler
         });
     }
 
+    void TowerCreated() { towerState = TowerState.Standby; }
 }

@@ -5,6 +5,7 @@ using System;
 
 public class Node : MonoBehaviour
 {
+    public bool isActiveAllNode;
     public Material magicCircle;
     public List<Transform> nodes = new List<Transform>();
     [SerializeField] Vector3 m_PositionOffset;
@@ -31,6 +32,7 @@ public class Node : MonoBehaviour
     public void ActiveAllNodes(bool active)
     {
         nodes.ForEach((v) => v.gameObject.SetActive(active));
+        isActiveAllNode = active;
     }
 
     // Start is called before the first frame update
@@ -48,10 +50,4 @@ public class Node : MonoBehaviour
         });
     }
 
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

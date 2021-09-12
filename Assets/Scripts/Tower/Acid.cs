@@ -6,14 +6,8 @@ using UnityEngine.EventSystems;
 
 public class Acid : Tower
 {
-    [SerializeField] AnimationCurve m_Curve;
-    [SerializeField] Transform m_Turret;
     [SerializeField] float m_StandbySpeed = 1f;
     [SerializeField] float m_StandbyMultiplier = 1f;
-    [SerializeField] LineRenderer m_Beam;
-    [SerializeField] Transform m_BeamEffect;
-    [SerializeField] Vector3 m_BeamEffectOffset;
-    float m_AttackAxisX = 22f;
 
     public override void UpgradeTower()
     {
@@ -22,52 +16,50 @@ public class Acid : Tower
 
     public override void Attack()
     {
-        if(m_Turret == null) { m_Turret = GetChild(transform, "Turret"); }
+        if (Target == null) { return; }
 
-        m_Turret.LookAt(Target.transform);
+        turret.LookAt(Target.transform);
+        shot.Seek(Target);
+        shot.Attack();
 
-        m_Beam.enabled = true;
-        if (m_BeamEffect != null) m_BeamEffect.gameObject.SetActive(true);
-
-        //Vector3 point = Target.skinnedMeshRenderer.GetComponent<Renderer>().bounds.ClosestPointOnBounds(bombPoint.position);
-
-        Vector3 center = Target.skinnedMeshRenderer.GetComponent<Renderer>().bounds.center;
-        m_Beam.SetPosition(0, bombPoint.position);
-        m_Beam.SetPosition(1, center);
-
-        Vector3 dir = bombPoint.position - Target.transform.position;
-        m_BeamEffect.rotation = Quaternion.LookRotation(dir);
-        m_BeamEffect.position = Target.transform.position;
     }
 
     public override void Standby()
     {
-        if (m_Turret == null) { m_Turret = GetChild(transform, "Turret"); }
-        if (m_BeamEffect != null) { m_BeamEffect.gameObject.SetActive(false); }
+        shot.Standby();
 
-        m_Beam.enabled = false;
+        if (turret.transform.localEulerAngles.x != 0)
+        {
+            turret.localEulerAngles = new Vector3(0, turret.localEulerAngles.y, turret.localEulerAngles.z);
+        }
 
-        if (m_Turret.transform.localEulerAngles.x != 0) m_Turret.localEulerAngles = new Vector3(0, m_Turret.localEulerAngles.y, m_Turret.localEulerAngles.z);
-        m_Turret.localEulerAngles += new Vector3(0, m_StandbySpeed * m_StandbyMultiplier, 0);
+        turret.localEulerAngles += new Vector3(0, m_StandbySpeed * m_StandbyMultiplier, 0);
     }
 
     public override void Create(UnityAction done = null)
     {
-        StartCoroutine(CoUtilize.VLerp((v) => transform.localScale = v, Vector3.zero, Vector3.one, CreateDuration, done, m_Curve));
-        CreateEffectObj(createEffect);
+        base.Create(done);
     }
 
     public override void Delete(UnityAction done = null)
     {
-        print("TEST");
-        StartCoroutine(DeletingTower(done));
+        base.Delete(done);
+    }
+
+    public override void Init(Transform curTower)
+    {
+        turret = GetChild(curTower, nameof(turret));
+        projectile = GetChild(curTower, nameof(projectile));
+        bombPoint = GetChild(curTower, nameof(bombPoint));
+        shot = GetChild(curTower, "Laser").GetComponent<Laser>();
+        shot?.Init(GetCurLevelAttackInfo(), bombPoint);
+        shot?.gameObject.SetActive(false);
+
     }
 
     // Start is called before the first frame update
-    public override void Start()
+    void Start()
     {
-        base.Start();
-        m_Turret = GetChild(transform, "Turret");
         InvokeRepeating("UpdateTarget", 0, 0.5f);
     }
 

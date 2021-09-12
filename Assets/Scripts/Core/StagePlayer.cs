@@ -79,6 +79,7 @@ public class StagePlayer : MonoBehaviour
         List<Round> round = new List<Round>();
         round.AddRange(m_Stage.roundInfo);
         roundPlayer.ReadyRound(m_EnemyManager, round);
+        roundPlayer.GameOverRound();
 
         Terrain terrain = Core.models.GetModel<Terrain>();
         terrain.nodes.ActiveAllNodes(true);

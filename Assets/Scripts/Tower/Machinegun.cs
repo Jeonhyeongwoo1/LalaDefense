@@ -6,50 +6,70 @@ using UnityEngine.EventSystems;
 
 public class Machinegun : Tower
 {
-    [SerializeField] AnimationCurve m_Curve;
-
+    ParticleSystem muzzleEffect;
     float m_Elapsed = 0;
-    
+    Shot m_AliveShot = null;
+
     public override void Attack()
     {
         if (Target == null) { return; }
 
-        projectile.LookAt(Target.transform);
+        turret.LookAt(Target.transform);
+
+        if (muzzleEffect.isPlaying) { muzzleEffect.Stop(); }
 
         m_Elapsed += Time.deltaTime;
-        if(m_Elapsed >= GetCurLevelAttackInfo().speed)
+        if (m_Elapsed >= GetCurLevelAttackInfo().speed)
         {
             m_Elapsed = 0;
-            GameObject go = Instantiate(bomb.gameObject, bombPoint.position, Quaternion.identity);
-            Bomb b = go.GetComponent<Bomb>();
+            GameObject go = Instantiate(shot.gameObject, bombPoint.position, Quaternion.identity, shots);
+            Shot b = go.GetComponent<Shot>();
+            m_AliveShot = b;
             b.Seek(Target);
-            b.Init(GetCurLevelAttackInfo().damage);
+            b.Init(GetCurLevelAttackInfo());
+            b.Attack(AttackComplete);
+            muzzleEffect.Play();
         }
     }
 
-    public override void Standby() 
+    public override void Standby()
     {
-        if (projectile.localEulerAngles != Vector3.zero)
+        if (muzzleEffect.isPlaying) { muzzleEffect.Stop(); }
+        if (turret.localEulerAngles != Vector3.zero)
         {
-            projectile.localEulerAngles = Vector3.zero;
+            turret.localEulerAngles = Vector3.Slerp(turret.localEulerAngles, Vector3.zero, Time.deltaTime * 3);
         }
     }
 
     public override void Create(UnityAction done = null)
     {
-        StartCoroutine(CoUtilize.VLerp((v) => transform.localScale = v, Vector3.zero, Vector3.one, CreateDuration, done, m_Curve));
-        CreateEffectObj(createEffect);
+        base.Create(done);
     }
 
     public override void Delete(UnityAction done = null)
     {
-        StartCoroutine(DeletingTower(done));
+        base.Delete(done);
+    }
+
+    public override void Init(Transform curTower)
+    {
+        turret = GetChild(curTower, nameof(turret));
+        projectile = GetChild(curTower, nameof(projectile));
+        bombPoint = GetChild(curTower, nameof(bombPoint));
+        muzzleEffect = GetChild(curTower, nameof(muzzleEffect))?.GetComponent<ParticleSystem>();
+    }
+
+    void AttackComplete()
+    {
+        if (m_AliveShot != null)
+        {
+            Destroy(m_AliveShot.gameObject);
+        }
     }
 
     // Start is called before the first frame update
-    public override void Start()
+    void Start()
     {
-        base.Start();
         InvokeRepeating("UpdateTarget", 0f, 0.5f);
     }
 

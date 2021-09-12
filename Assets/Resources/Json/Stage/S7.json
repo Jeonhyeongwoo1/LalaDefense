@@ -1,0 +1,37 @@
+{
+    "stageNum": 7,
+    "userMoney": 10000,
+    "userHeart": 10,
+    "roundInfo": [
+        {
+            "index": 1,
+            "score": 70,
+            "enemyCount": 10,
+            "enemyLevel": "Normal",
+            "enemyType": "Golem",
+            "enemyHealth": 2000,
+            "enemyRewardMoney": 30,
+            "enemySpeed": 3
+        },
+        {
+            "index": 2,
+            "score": 70,
+            "enemyCount": 10,
+            "enemyLevel": "Normal",
+            "enemyType": "Golem",
+            "enemyHealth": 2000,
+            "enemyRewardMoney": 30,
+            "enemySpeed": 3
+        },
+        {
+            "index": 3,
+            "score": 50,
+            "enemyCount": 1,
+            "enemyLevel": "Boss",
+            "enemyType": "BOrc",
+            "enemyHealth": 10000,
+            "enemyRewardMoney": 30,
+            "enemySpeed": 3
+        }
+    ]
+}

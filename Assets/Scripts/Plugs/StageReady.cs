@@ -22,13 +22,13 @@ public class StageReady : BasePopup
 
     [SerializeField] AnimationCurve m_Curve;
 
-    int m_Life = 5;
+    Stage m_Stage;
 
-    public void SetStageInfo(string stage, int life, string missionContent = null)
+    public void SetStageInfo(Stage stage)
     {
-        m_Life = life;
-        m_StageTitle.text = "STAGE " + stage;
-        m_MissionContent.text = missionContent == null ? m_MissionContent.text : missionContent;
+        m_Stage = stage;
+        m_StageTitle.text = "STAGE " + stage.stageNum;
+        // m_MissionContent.text = missionContent == null ? m_MissionContent.text : missionContent;
     }
 
     public override void Open(UnityAction done)
@@ -47,7 +47,7 @@ public class StageReady : BasePopup
         StartCoroutine(CoUtilize.Lerp((v) => popup.localPosition = new Vector3(0, v, 0),
                         popup.localPosition.y, 0, m_OpenDuration, null, m_Curve));
         StartCoroutine(CoUtilize.Lerp((v) => popup.GetComponent<CanvasGroup>().alpha = v,
-                        0, 1, m_OpenDuration, () => rollingNumber.StartRolling(m_Life), m_Curve));
+                        0, 1, m_OpenDuration, () => rollingNumber.StartRolling(m_Stage.userHeart), m_Curve));
 
     }
 
@@ -68,20 +68,22 @@ public class StageReady : BasePopup
     //수정해야함.
     void OnClickStart()
     {
+
         if (Core.scenario.GetCurScenario().scenarioName != nameof(ScenarioPlay))
         {
+            Core.gameManager.stagePlayer.SetStage(m_Stage);
             Core.scenario.OnLoadSceneAsync(nameof(ScenarioPlay));
         }
         else
         {
-            Core.gameManager.GameRestart();
+            Core.gameManager.StartSelectedGame(m_Stage);
         }
 
         stagePopup.Close(null);
         gameObject.SetActive(false);
     }
 
-    
+
 
     // Start is called before the first frame update
     void Start()

@@ -7,67 +7,58 @@ using UnityEngine.EventSystems;
 
 public class Mortar : Tower
 {
-    [SerializeField] AnimationCurve m_Curve;
     [SerializeField] float m_Speed = 1;
-    [SerializeField] string m_StandbyObjName = "Turret";
     [SerializeField] float m_axisXPlusMoving = 20;
     [SerializeField] float m_axisXMinusMoving = -100;
-    
-    Transform m_Turret;
+
     bool arrow = true;
-
-    public Transform target;
-
-   
-    //곡선형태로 그린다.
-    [ContextMenu("Attack")]
-    public override void Attack()
-    {
-       StartCoroutine(SSS());
-    }
-
-    IEnumerator SSS()
-    {
-        for(int i = 0; i< 10; i++)
-        {
-            GameObject go = Instantiate(bomb.gameObject, bombPoint.position, Quaternion.identity);
-            Bomb b = go.GetComponent<Bomb>();
-           // b.Seek(target);
-            b.Attack();
-            yield return new WaitForSeconds(0.5f);
-        }
-       
-    }
 
     public override void Standby()
     {
-        if (!m_Turret) { m_Turret = GetChild(transform, m_StandbyObjName); }
 
-        float x = TransformUtils.GetInspectorRotation(m_Turret).x;
+        float x = TransformUtils.GetInspectorRotation(turret).x;
 
         if (x > m_axisXPlusMoving) { arrow = false; }
         if (x < m_axisXMinusMoving) { arrow = true; }
 
-        m_Turret.Rotate((arrow ? Vector3.right : -Vector3.right) * Time.deltaTime * m_Speed);
-
+        turret.Rotate((arrow ? Vector3.right : -Vector3.right) * Time.deltaTime * m_Speed);
     }
 
-   
+    bool isFire = false;
+    public override void Attack()
+    {
+        if (!isFire)
+        {
+            isFire = true;
+            GameObject go = Instantiate(shot.gameObject, bombPoint.position, Quaternion.identity);
+            Shot b = go.GetComponent<Shot>();
+            Bomb bullet = b.GetComponent<Bomb>();
+            bullet.Seek(Target);
+            bullet.Init(GetCurLevelAttackInfo(), bombPoint);
+            bullet.Shoot(() => isFire = false);
+        }
+    }
+
+    public override void Init(Transform curTower)
+    {
+        turret = GetChild(curTower, nameof(turret));
+        projectile = GetChild(curTower, nameof(projectile));
+        bombPoint = GetChild(curTower, nameof(bombPoint));
+    }
+
     public override void Create(UnityAction done = null)
     {
-        StartCoroutine(CoUtilize.VLerp((v) => transform.localScale = v, Vector3.zero, Vector3.one, CreateDuration, done, m_Curve));
-        CreateEffectObj(createEffect);
+        base.Create(done);
     }
 
     public override void Delete(UnityAction done = null)
     {
-        StartCoroutine(DeletingTower(done));
+        base.Delete(done);
     }
 
-    // Start is called before the first frame update
-    public override void Start()
+    void Start()
     {
-        base.Start();
+        InvokeRepeating("UpdateTarget", 0, 0.5f);
     }
 
     // Update is called once per frame
@@ -76,6 +67,10 @@ public class Mortar : Tower
         if (towerState == TowerState.Standby)
         {
             Standby();
+        }
+        else if (towerState == TowerState.Attack)
+        {
+            Attack();
         }
     }
 }

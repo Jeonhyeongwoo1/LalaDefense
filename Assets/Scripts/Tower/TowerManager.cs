@@ -5,17 +5,20 @@ using UnityEngine.Events;
 
 public class TowerManager : MonoBehaviour
 {
-    Dictionary<Tower, Transform> towers = new Dictionary<Tower, Transform>();
-    List<Tower> onlyTowers = new List<Tower>();//일단 혹시 몰라서 생성 필요없으면 삭제
+    public Transform shots;
+    [SerializeField] Transform[] towerParents;
+
+    Dictionary<Tower, Transform> activeTowers = new Dictionary<Tower, Transform>();
+    List<Tower> onlyTowers = new List<Tower>();
 
     public Transform GetNode(Tower tower)
     {
-        return towers.TryGetValue(tower, out Transform node) ? node : null;
+        return activeTowers.TryGetValue(tower, out Transform node) ? node : null;
     }
 
-    public Tower GetTower(string towerName)
+    public Tower GetActiveTower(string towerName)
     {
-        foreach (var t in towers)
+        foreach (var t in activeTowers)
         {
             if (t.Key.name == towerName) { return t.Key; }
         }
@@ -23,9 +26,9 @@ public class TowerManager : MonoBehaviour
         return null;
     }
 
-    public Tower GetTower(Tower tower)
+    public Tower GetActiveTower(Tower tower)
     {
-        foreach (var t in towers)
+        foreach (var t in activeTowers)
         {
             if (t.Key == tower) { return t.Key; }
         }
@@ -33,17 +36,32 @@ public class TowerManager : MonoBehaviour
         return null;
     }
 
-    public void AddTower(Tower tower, Transform node) => towers.Add(tower, node);
+    public Transform GetTowerParent(Transform tower)
+    {
+        foreach(Transform tr in towerParents)
+        {
+            if(tr.name == tower.name)
+            {
+                return tr;
+            }
+        }
 
-    public void CreatTower(Transform tower, Transform node)
+        return null;
+    }
+
+    public void AddTower(Tower tower, Transform node) => activeTowers.Add(tower, node);
+
+    public void CreateTower(Transform tower, Transform node)
     {
         Terrain terrain = Core.models.GetModel<Terrain>();
         terrain.SelectNode(node);
 
-        GameObject t = Instantiate(tower.gameObject, terrain.nodes.GetBuildPosition(), Quaternion.identity, transform);
+        Transform t = Instantiate(tower, terrain.nodes.GetBuildPosition(), Quaternion.identity, transform);
         Tower tr = t.GetComponent<Tower>();
+        tr.transform.SetParent(GetTowerParent(tower.transform));
         tr.Create();
-        towers.Add(tr, node);
+        tr.shots = shots;
+        activeTowers.Add(tr, node);
         onlyTowers.Add(tr);
     }
 
@@ -53,7 +71,7 @@ public class TowerManager : MonoBehaviour
         if (onlyTowers.Count == 0) { return; }
 
         onlyTowers.ForEach((v) => Destroy(v.gameObject));
-        towers.Clear();
+        activeTowers.Clear();
         onlyTowers.Clear();
     }
 
@@ -62,15 +80,19 @@ public class TowerManager : MonoBehaviour
         tower.Delete(() => DeletedTower(tower));
     }
 
-    public void DeletedTower(Tower tower)
+    public void UpgradeTower(Tower tower)
+    {
+        tower.UpgradeTower();
+    }
+
+    void DeletedTower(Tower tower)
     {
         //노드를 원상복귀 한다.
         Transform node = GetNode(tower);
         node.gameObject.SetActive(true);
 
-        towers.Remove(tower);
+        activeTowers.Remove(tower);
         onlyTowers.Remove(tower);
-
     }
 
 }

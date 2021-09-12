@@ -46,8 +46,7 @@ public class StagePopup : BasePopup
     {
         Debug.Log("Stage Popup Open. Item Index : " + itemIndex);
         Stage stage = StagePlayer.Load(itemIndex);
-        Core.gameManager.stagePlayer.SetStage(stage);
-        stageReadyPopup.SetStageInfo(itemIndex.ToString(), stage.userHeart);
+        stageReadyPopup.SetStageInfo(stage);
         stageReadyPopup.Open(null);
     }
 
