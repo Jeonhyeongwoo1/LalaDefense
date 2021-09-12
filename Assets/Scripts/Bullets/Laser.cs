@@ -34,7 +34,7 @@ public class Laser : Shot
         m_BeamEffect.rotation = Quaternion.LookRotation(dir);
         m_BeamEffect.position = m_Beam.GetPosition(1) + m_BeamEffectOffset;
 
-        enemy.TakeDamage(info.damage);
+        enemy.TakeDamage(info.damage, info.specialAttack, info.specialAttackInfo);
 
     }
 

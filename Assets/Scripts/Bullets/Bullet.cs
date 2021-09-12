@@ -68,7 +68,7 @@ public class Bullet : Shot
                 //hit
                 if (raycastHit.transform == enemy.skinnedMeshRenderer)
                 {
-                    enemy.TakeDamage(info.damage);
+                    enemy.TakeDamage(info.damage, info.specialAttack, info.specialAttackInfo);
                     HitEffectOn();
                     done?.Invoke();
                     Destroy(gameObject);

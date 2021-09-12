@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 8722446103899281409}
   m_LocalRotation: {x: 0, y: -0.009817356, z: 0, w: 0.99995184}
   m_LocalPosition: {x: 30.929, y: 5.796, z: 19.258}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2769996005052326963}
   m_Father: {fileID: 0}
@@ -95,7 +95,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1624630479500182375
 MonoBehaviour:
@@ -114,7 +114,7 @@ MonoBehaviour:
   m_BombLevel3: {fileID: 2100000, guid: 299166cc9328e484ba27f7c6c60bcc79, type: 2}
   m_HitEffect: {fileID: 8483456904871782954, guid: 3e80cdf027951b44c8b8a04b952da871, type: 3}
   m_Scale: {x: 0.5, y: 0.5, z: 0.5}
-  m_AliveDuration: 3
+  m_AliveDuration: 1.5
   hitDist: 1
 --- !u!1 &9146191668045965247
 GameObject:

@@ -56,7 +56,8 @@ MonoBehaviour:
         speed: 3
         damage: 100
         boomRange: 0
-        specialAttack: Bomb
+        specialAttack: Electric
+        specialAttackInfo: D:3,A:1
     - towerPrefab: {fileID: 6910068797966652585, guid: 140517b3f26238748a1557324a3aa5c8, type: 3}
       level: 2
       price: 350
@@ -65,7 +66,8 @@ MonoBehaviour:
         speed: 3
         damage: 100
         boomRange: 0
-        specialAttack: Bomb
+        specialAttack: Electric
+        specialAttackInfo: D:5,A:2
     - towerPrefab: {fileID: 2974158869754678446, guid: a798a6f4668619341ac82a2562c508c1, type: 3}
       level: 3
       price: 450
@@ -74,7 +76,8 @@ MonoBehaviour:
         speed: 3
         damage: 100
         boomRange: 0
-        specialAttack: Bomb
+        specialAttack: Electric
+        specialAttackInfo: D:5,A:5
   createEffect: {fileID: 2572039024578808563, guid: 7a52eac1fe9477b41b1ac74ca9e9ff71, type: 3}
   deleteEffect: {fileID: 8331385481643737470, guid: 2914e92e8aa2e524c9ac542b61207a86, type: 3}
   projectile: {fileID: 0}
@@ -112,4 +115,3 @@ MonoBehaviour:
     m_RotationOrder: 4
   m_Animator: {fileID: 0}
   m_Crystal: {fileID: 0}
-  m_HitEffect: {fileID: 8483456904871782954, guid: 3e80cdf027951b44c8b8a04b952da871, type: 3}

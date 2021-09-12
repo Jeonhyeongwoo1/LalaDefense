@@ -57,6 +57,7 @@ MonoBehaviour:
         damage: 2
         boomRange: 0
         specialAttack: Slow
+        specialAttackInfo: 10
     - towerPrefab: {fileID: 4635482324537543427, guid: 4b0c057cfc60a7245a5d7a8d0a08b528, type: 3}
       level: 2
       price: 350
@@ -66,6 +67,7 @@ MonoBehaviour:
         damage: 3
         boomRange: 0
         specialAttack: Slow
+        specialAttackInfo: 30
     - towerPrefab: {fileID: 9139393157793236339, guid: fbea15be5ef461b4eafbb2f20159e4eb, type: 3}
       level: 3
       price: 450
@@ -75,6 +77,7 @@ MonoBehaviour:
         damage: 4
         boomRange: 0
         specialAttack: Slow
+        specialAttackInfo: 50
   createEffect: {fileID: 2572039024578808563, guid: 7a52eac1fe9477b41b1ac74ca9e9ff71, type: 3}
   deleteEffect: {fileID: 8331385481643737470, guid: 2914e92e8aa2e524c9ac542b61207a86, type: 3}
   projectile: {fileID: 0}

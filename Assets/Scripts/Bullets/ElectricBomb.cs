@@ -99,14 +99,14 @@ public class ElectricBomb : Shot
                 //hit
                 if (m_RaycastHit.transform == enemy.skinnedMeshRenderer)
                 {
-                    enemy.TakeDamage(info.damage);
+                    enemy.TakeDamage(info.damage, info.specialAttack, info.specialAttackInfo);
                     HitEffectOn();
                     done?.Invoke();
                     Destroy(gameObject);
                 }
             }
 
-            transform.Translate(dir.normalized * 1, Space.World);
+            transform.Translate(dir.normalized * 2, Space.World);
             transform.LookAt(enemy.transform);
             yield return null;
         }

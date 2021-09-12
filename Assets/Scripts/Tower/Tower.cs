@@ -21,6 +21,7 @@ public class AttackInfo
     public float damage;
     public float boomRange; //폭탄 경우에만
     public string specialAttack;
+    public string specialAttackInfo;
 }
 
 [Serializable]

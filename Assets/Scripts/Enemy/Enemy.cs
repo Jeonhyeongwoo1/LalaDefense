@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.Events;
 
 public enum EnemyType
 {
@@ -45,10 +46,16 @@ public class Enemy : MonoBehaviour
     [SerializeField] float m_CurHealth = 0;
     [SerializeField] List<Transform> m_WayPoints = new List<Transform>();
 
+    //데미지를 입었을 때
+    [SerializeField] float m_Checkinghealth = 0;
+    [SerializeField] float m_RealTimeSpeed = 0;
+
     Animator m_Animator;
     Transform m_Target;
     int m_WavePointIndex = 0;
-    float m_Checkinghealth = 0;
+
+    bool isbeingStunAttacked = false;
+    bool isbeingElectricAttacked = false;
 
     public void SetAnimator(string name, bool value)
     {
@@ -66,7 +73,7 @@ public class Enemy : MonoBehaviour
 
     public Vector3 GetBodyTransform() => skinnedMeshRenderer.position;
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, string specialAttack = null, string specialAttackInfo = null)
     {
         if (enemyStatus == Status.Normal)
         {
@@ -76,11 +83,134 @@ public class Enemy : MonoBehaviour
         m_CurHealth -= amount;
         m_HealthBar.fillAmount -= amount / enemyInfo.health;
 
+        if (!string.IsNullOrEmpty(specialAttackInfo) && !string.IsNullOrEmpty(specialAttackInfo))
+        {
+            GotSpecialAttack(specialAttack, specialAttackInfo);
+        }
 
         if (m_CurHealth <= 0)
         {
             ActionDie();
         }
+    }
+
+    void GotSpecialAttack(string specialAttack, string specialAttackInfo)
+    {
+
+        switch (specialAttack)
+        {
+            case "Slow":
+                if (specialAttackInfo == null) { Debug.Log("Input Sepcial Attack Info"); break; }
+                try
+                {
+                    if (isbeingStunAttacked) { break; }
+                    m_RealTimeSpeed = enemyInfo.speed * (1 - (float.Parse(specialAttackInfo) / 100)); // 0.1 0.15 speed = specialAttackInfo / 100
+                }
+                catch (Exception e)
+                {
+                    Debug.Log("Error : " + e);
+                    //orignally
+                }
+                break;
+            case "Electric":
+                if (specialAttackInfo == null) { Debug.Log("Input Sepcial Attack Info"); break; }
+
+                if (!isbeingElectricAttacked) //중첩 불가
+                {
+                    isbeingElectricAttacked = true;
+                    StartCoroutine(IsBeingElectricAttacked(specialAttackInfo, () => isbeingElectricAttacked = false));
+                }
+                break;
+            case "Stun":
+                if (specialAttackInfo == null) { Debug.Log("Input Sepcial Attack Info"); break; }
+
+                if (!isbeingStunAttacked) //중첩 불가
+                {
+                    isbeingStunAttacked = true;
+                    StartCoroutine(IsBeingStunAttakced(specialAttackInfo, () => isbeingStunAttacked = false));
+                }
+                break;
+                
+        }
+    }
+
+    IEnumerator IsBeingStunAttakced(string specialAttackInfo, UnityAction done = null)
+    {
+        //D : 3, W : 30
+        //D : Duration, W : weight
+        float elapsed = 0;
+        char separator = ',';
+        string[] sp = specialAttackInfo.Split(separator);
+        string d = sp[0].Substring(sp[0].IndexOf(":") + 1);
+        string w = sp[1].Substring(sp[1].IndexOf(":") + 1);
+        float duration = 0;
+        int wegiht = 0;
+        Dictionary<string, int> random = new Dictionary<string, int>();
+
+        try
+        {
+            duration = float.Parse(d);
+            wegiht = int.Parse(w);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Error : " + e);
+            yield break;
+        }
+        random.Add("Stun", wegiht);
+        random.Add("None", 100 - wegiht);
+        
+        string value = WeightedRandomizer.TakeOne(random);
+        if(value == "None")
+        {
+            done?.Invoke();
+            yield break;
+        }
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            m_RealTimeSpeed = 0;
+            yield return null;
+        }
+
+        done?.Invoke();
+        m_RealTimeSpeed = enemyInfo.speed;
+    }
+
+    IEnumerator IsBeingElectricAttacked(string specialAttackInfo, UnityAction done = null)
+    {
+        //D:3,A:2
+        //D: Duration A: AttackDmanage
+        float elapsed = 0;
+        char separator = ',';
+        string[] sp = specialAttackInfo.Split(separator);
+        string d = sp[0].Substring(sp[0].IndexOf(":") + 1);
+        string a = sp[1].Substring(sp[1].IndexOf(":") + 1);
+        float duration = 0;
+        float attackDamage = 0;
+
+        try
+        {
+            duration = float.Parse(d);
+            attackDamage = float.Parse(a);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Error : " + e);
+            duration = 0;
+            attackDamage = 0;
+            yield break;
+        }
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            TakeDamage(attackDamage);
+            yield return null;
+        }
+
+        done?.Invoke();
     }
 
     IEnumerator CheckingStatus()
@@ -103,17 +233,21 @@ public class Enemy : MonoBehaviour
             else if (enemyStatus == Status.beingAttacked)
             {
                 elapsed += Time.deltaTime;
+                //2초가 지난 후에 공격을 받고 있는지 확인
                 if (elapsed >= 2)
                 {
                     elapsed = 0;
-                    if(m_Checkinghealth == m_CurHealth)
+                    if (m_Checkinghealth == m_CurHealth) //공격을 받지않는 상태..
                     {
                         enemyStatus = Status.Normal;
                         ChangeRenderersColor(renderers, defaultColor);
-                    } 
-                   
-                }
 
+                        if (m_RealTimeSpeed != enemyInfo.speed)
+                        {
+                            m_RealTimeSpeed = enemyInfo.speed;
+                        }
+                    }
+                }
             }
 
             yield return null;
@@ -224,6 +358,7 @@ public class Enemy : MonoBehaviour
         m_Target = m_WayPoints[0];
         m_Animator = GetComponent<Animator>();
         m_CurHealth = enemyInfo.health;
+        m_RealTimeSpeed = enemyInfo.speed;
         enemyStatus = Status.Normal;
 
         if (enemyInfo.level == EnemyInfo.Level.Normal)
@@ -231,7 +366,7 @@ public class Enemy : MonoBehaviour
             string fwd = enemyInfo.enemyType == EnemyType.Bat || enemyInfo.enemyType == EnemyType.Dragon ? "FlyFWD" : "WalkFWD";
             m_Animator.SetBool(fwd, true);
         }
-        
+
         InvokeRepeating("CheckHealth", 0, 1f);
         StartCoroutine(CheckingStatus());
     }
@@ -267,7 +402,7 @@ public class Enemy : MonoBehaviour
                 break;
         }
 
-        transform.Translate(dir.normalized * enemyInfo.speed * Time.deltaTime, Space.World);
+        transform.Translate(dir.normalized * m_RealTimeSpeed * Time.deltaTime, Space.World);
 
         if (Vector3.Distance(transform.position, m_Target.position) <= m_Distance)
         {

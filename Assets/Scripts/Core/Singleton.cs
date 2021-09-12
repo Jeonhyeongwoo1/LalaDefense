@@ -14,7 +14,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             if (!s_Instance)
             {
                 s_Instance = (T)FindObjectOfType(typeof(T));
-                if (s_Instance && Application.isPlaying) { s_Instance.gameObject.name += " (Singleton)"; }
             }
 
             return s_Instance;
