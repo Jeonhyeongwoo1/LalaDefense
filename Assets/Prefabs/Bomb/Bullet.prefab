@@ -108,11 +108,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4f65631f7eb9764e8b0c8b14ad731d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BulletSpeed: 2
+  m_AliveDuration: 1.5
   m_BombSpeed: 2
-  m_BombType: 0
-  m_FlightDuration: 3
-  firingAngle: 20
-  gravity: 9.8
-  hitDist: 1.8
-  m_Enemy: {fileID: 0}
+  m_HitEffect: {fileID: 5544495236064565785, guid: 6e74339cfd423e940925d4f2a7c8c98d, type: 3}
