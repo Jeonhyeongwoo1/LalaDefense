@@ -10,6 +10,7 @@ public class StageReady : BasePopup
     public GameObject screenDim;
     public Transform popup;
 
+    [SerializeField] MissionContent missionContent;
     [SerializeField] RollingNumber rollingNumber;
     [SerializeField] Button m_Close;
     [SerializeField] Button m_Start;
@@ -28,7 +29,6 @@ public class StageReady : BasePopup
     {
         m_Stage = stage;
         m_StageTitle.text = "STAGE " + stage.stageNum;
-        // m_MissionContent.text = missionContent == null ? m_MissionContent.text : missionContent;
     }
 
     public override void Open(UnityAction done)
@@ -47,8 +47,15 @@ public class StageReady : BasePopup
         StartCoroutine(CoUtilize.Lerp((v) => popup.localPosition = new Vector3(0, v, 0),
                         popup.localPosition.y, 0, m_OpenDuration, null, m_Curve));
         StartCoroutine(CoUtilize.Lerp((v) => popup.GetComponent<CanvasGroup>().alpha = v,
-                        0, 1, m_OpenDuration, () => rollingNumber.StartRolling(m_Stage.userHeart), m_Curve));
+                        0, 1, m_OpenDuration, () => Opened(done), m_Curve));
+    }
 
+    void Opened(UnityAction done)
+    {
+        missionContent.Set(m_Stage.mission);
+        rollingNumber.StartRolling(m_Stage.userHeart);
+
+        done?.Invoke();
     }
 
     public override void Close(UnityAction done)
@@ -62,6 +69,8 @@ public class StageReady : BasePopup
 
     void Closed()
     {
+        missionContent.DestoryMissionContents();
+        missionContent.StopAllCoroutines();
         screenDim.SetActive(false);
     }
 

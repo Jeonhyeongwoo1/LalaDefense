@@ -8,8 +8,8 @@ public class Crystal : Tower
 {
     [SerializeField] Animator m_Animator;
     [SerializeField] Transform m_Crystal;
-    Shot m_AliveShot = null;
     bool m_IsAttacking = false;
+    Shot m_AliveShot = null;
 
     public override void UpgradeTower()
     {
@@ -18,7 +18,8 @@ public class Crystal : Tower
         m_IsAttacking = false;
         if(m_AliveShot != null)
         {
-            Destroy(m_AliveShot.gameObject);
+            m_AliveShot.GetComponent<ElectricBomb>().ResetState();
+            GetComponent<ObjectPool>()?.Return(m_AliveShot.transform);
         }
     }
 
@@ -34,23 +35,23 @@ public class Crystal : Tower
         while(!m_IsAttacking)
         {
             m_IsAttacking = true;
-            GameObject go = Instantiate(shot.gameObject, bombPoint.position, Quaternion.identity, shots);
+            GameObject go = GetComponent<ObjectPool>().Get(shots, bombPoint.position)?.gameObject;
+            if (go == null) { return; }
+
             Shot b = go.GetComponent<Shot>();
             m_AliveShot = b;
             b.GetComponent<ElectricBomb>()?.SetBombLevel(currentLevel);
             b.Seek(Target);
-            b.Init(GetCurLevelAttackInfo());
-            b.Attack(AttackComplete);
+            b.Init(GetCurLevelAttackInfo(), bombPoint, shots);
+            b.Attack(()=> AttackComplete(b.transform));
         }
     }
 
-    void AttackComplete()
+    void AttackComplete(Transform shot)
     {
         m_IsAttacking = false;
-        if (m_AliveShot != null)
-        {
-            Destroy(m_AliveShot.gameObject);
-        }
+        shot.GetComponent<ElectricBomb>().ResetState();
+        GetComponent<ObjectPool>()?.Return(shot);
     }
 
     public override void Standby()
@@ -70,12 +71,15 @@ public class Crystal : Tower
 
     public override void Delete(UnityAction done = null)
     {
+        DestroyShot();
         base.Delete(done);
+    }
 
-        if(m_AliveShot != null)
-        {
-            Destroy(m_AliveShot.gameObject);
-        }
+    public override void DestroyImmediate(UnityAction done = null)
+    {
+        towerState = TowerState.Deleting;
+        DestroyShot();
+        DestroyImmediate(gameObject);
     }
 
     public override void Init(Transform curTower)
@@ -84,6 +88,12 @@ public class Crystal : Tower
         projectile = GetChild(curTower, nameof(projectile));
         bombPoint = GetChild(curTower, nameof(bombPoint));
         m_Animator = GetChild(transform, nameof(projectile))?.GetComponent<Animator>();
+
+        ObjectPool pool = GetComponent<ObjectPool>();
+        if (pool.GetCount() == 0)
+        {
+            pool.Initialize(shots, 2);
+        }
     }
 
     // Start is called before the first frame update

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2329662241533483937}
   - component: {fileID: -2952908536671903963}
+  - component: {fileID: 2401931248719527414}
   m_Layer: 0
   m_Name: Cannon
   m_TagString: Untagged
@@ -54,30 +55,30 @@ MonoBehaviour:
       attackInfo:
         range: 15
         speed: 1.5
-        damage: 100
-        boomRange: 0
+        damage: 30
+        boomRange: 2
         specialAttack: Stun
-        specialAttackInfo: D:3,W:50
+        specialAttackInfo: D:1.5,W:20
     - towerPrefab: {fileID: 8512238337351510609, guid: 727a0362817064d4498e41989e241189, type: 3}
       level: 2
       price: 250
       attackInfo:
         range: 15
         speed: 1.5
-        damage: 130
-        boomRange: 0
+        damage: 50
+        boomRange: 2
         specialAttack: Stun
-        specialAttackInfo: D:3,W:70
+        specialAttackInfo: D:1.5,W:20
     - towerPrefab: {fileID: 1628107044720467884, guid: fa81294d53ab38842bf8e15d0097e201, type: 3}
       level: 3
       price: 350
       attackInfo:
         range: 15
         speed: 1.5
-        damage: 150
-        boomRange: 0
+        damage: 100
+        boomRange: 2
         specialAttack: Stun
-        specialAttackInfo: D:3,W:100
+        specialAttackInfo: D:2,W:30
   createEffect: {fileID: 2572039024578808563, guid: 7a52eac1fe9477b41b1ac74ca9e9ff71, type: 3}
   deleteEffect: {fileID: 8331385481643737470, guid: 2914e92e8aa2e524c9ac542b61207a86, type: 3}
   projectile: {fileID: 0}
@@ -87,6 +88,7 @@ MonoBehaviour:
   currentLevel: 0
   Target: {fileID: 0}
   shots: {fileID: 0}
+  towerSprite: {fileID: 21300000, guid: 9c282668ef1c1d8469437bb5db07f02b, type: 3}
   CreateDuration: 0.2
   DeleteDuration: 0.5
   Curve:
@@ -113,3 +115,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2401931248719527414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5095046556879223261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2861dd58f7f56254fb51ff194fbf777e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Poolingobj: {fileID: 6460157643212831905, guid: 404ef8f7137c33741aa7fe181c758570, type: 3}

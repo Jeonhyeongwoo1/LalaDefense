@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2476269921960121775}
   - component: {fileID: 4976415532599676994}
+  - component: {fileID: 174173918697868459}
   m_Layer: 0
   m_Name: Crystal
   m_TagString: Untagged
@@ -52,32 +53,32 @@ MonoBehaviour:
       level: 1
       price: 250
       attackInfo:
-        range: 15
+        range: 20
         speed: 3
         damage: 100
         boomRange: 0
         specialAttack: Electric
-        specialAttackInfo: D:3,A:1
+        specialAttackInfo: D:3,A:0.1
     - towerPrefab: {fileID: 6910068797966652585, guid: 140517b3f26238748a1557324a3aa5c8, type: 3}
       level: 2
       price: 350
       attackInfo:
-        range: 15
+        range: 22
         speed: 3
-        damage: 100
+        damage: 150
         boomRange: 0
         specialAttack: Electric
-        specialAttackInfo: D:5,A:2
+        specialAttackInfo: D:5,A:1
     - towerPrefab: {fileID: 2974158869754678446, guid: a798a6f4668619341ac82a2562c508c1, type: 3}
       level: 3
       price: 450
       attackInfo:
-        range: 15
+        range: 25
         speed: 3
-        damage: 100
+        damage: 400
         boomRange: 0
         specialAttack: Electric
-        specialAttackInfo: D:5,A:5
+        specialAttackInfo: D:5,A:1.5
   createEffect: {fileID: 2572039024578808563, guid: 7a52eac1fe9477b41b1ac74ca9e9ff71, type: 3}
   deleteEffect: {fileID: 8331385481643737470, guid: 2914e92e8aa2e524c9ac542b61207a86, type: 3}
   projectile: {fileID: 0}
@@ -87,6 +88,7 @@ MonoBehaviour:
   currentLevel: 0
   Target: {fileID: 0}
   shots: {fileID: 0}
+  towerSprite: {fileID: 21300000, guid: 14f1668357cffbf469dfd9bad0fe62c4, type: 3}
   CreateDuration: 0.2
   DeleteDuration: 0.5
   Curve:
@@ -115,3 +117,16 @@ MonoBehaviour:
     m_RotationOrder: 4
   m_Animator: {fileID: 0}
   m_Crystal: {fileID: 0}
+--- !u!114 &174173918697868459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878649923115859674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2861dd58f7f56254fb51ff194fbf777e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Poolingobj: {fileID: 8722446103899281409, guid: 0d0a1a7f88bdfd041ac2a56b03bc7c5c, type: 3}

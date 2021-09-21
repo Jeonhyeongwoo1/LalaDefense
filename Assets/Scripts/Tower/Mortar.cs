@@ -39,6 +39,12 @@ public class Mortar : Tower
         }
     }
 
+    public override void DestroyImmediate(UnityAction done = null)
+    {
+        towerState = TowerState.Deleting;
+        DestroyImmediate(gameObject);
+    }
+
     public override void Init(Transform curTower)
     {
         turret = GetChild(curTower, nameof(turret));

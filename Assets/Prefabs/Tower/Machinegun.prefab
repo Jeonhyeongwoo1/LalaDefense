@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1491543574617544166}
   - component: {fileID: 7564233923999403213}
+  - component: {fileID: -169870308481751378}
   m_Layer: 0
   m_Name: Machinegun
   m_TagString: Untagged
@@ -54,27 +55,30 @@ MonoBehaviour:
       attackInfo:
         range: 15
         speed: 0.5
-        damage: 50
+        damage: 30
         boomRange: 0
         specialAttack: None
+        specialAttackInfo: 
     - towerPrefab: {fileID: 239660977579191947, guid: e0b488c3af2af7b46b9a8e5b71e80e47, type: 3}
       level: 2
       price: 100
       attackInfo:
         range: 15
         speed: 0.5
-        damage: 70
+        damage: 50
         boomRange: 0
         specialAttack: None
+        specialAttackInfo: 
     - towerPrefab: {fileID: 4918312701166663463, guid: 85374f05c1ffaa444ba2563286fc6015, type: 3}
       level: 3
       price: 200
       attackInfo:
         range: 15
         speed: 0.3
-        damage: 100
+        damage: 80
         boomRange: 0
         specialAttack: None
+        specialAttackInfo: 
   createEffect: {fileID: 2572039024578808563, guid: 7a52eac1fe9477b41b1ac74ca9e9ff71, type: 3}
   deleteEffect: {fileID: 8331385481643737470, guid: 2914e92e8aa2e524c9ac542b61207a86, type: 3}
   projectile: {fileID: 0}
@@ -84,6 +88,7 @@ MonoBehaviour:
   currentLevel: 0
   Target: {fileID: 0}
   shots: {fileID: 0}
+  towerSprite: {fileID: 21300000, guid: 82c827f0c762d4b4ebaf8b2de4d4e2bd, type: 3}
   CreateDuration: 0.2
   DeleteDuration: 0.5
   Curve:
@@ -110,3 +115,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-169870308481751378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7002625382066743222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2861dd58f7f56254fb51ff194fbf777e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Poolingobj: {fileID: 6460157643212831905, guid: 2d302c8ef07f21a44bc61467d5d1ca11, type: 3}

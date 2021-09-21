@@ -48,13 +48,20 @@ public class Fire : Tower
         base.Delete(done);
     }
 
+    public override void DestroyImmediate(UnityAction done = null)
+    {
+        towerState = TowerState.Deleting;
+        DestroyShot();
+        DestroyImmediate(gameObject);
+    }
+
     public override void Init(Transform curTower)
     {
         turret = GetChild(curTower, nameof(turret));
         projectile = GetChild(curTower, nameof(projectile));
         bombPoint = GetChild(curTower, nameof(bombPoint));
         shot = GetChild(curTower, "FireBomb")?.GetComponent<Shot>();
-        shot.Init(GetCurLevelAttackInfo(), bombPoint);
+        shot.Init(GetCurLevelAttackInfo(), bombPoint, shots);
     }
 
     // Start is called before the first frame update

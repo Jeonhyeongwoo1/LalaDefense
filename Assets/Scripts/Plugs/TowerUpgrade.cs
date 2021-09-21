@@ -39,10 +39,15 @@ public class TowerUpgrade : BaseTheme, IPointerEnterHandler, IPointerExitHandler
         gameObject.SetActive(false);
     }
 
-    public void Setup(float level, float price, Tower tower)
+    public void Setup(Tower tower)
     {
-        m_Upgrade.text = string.Format("{0:#,###}", level == 3 ? "MAX" : price.ToString());
-        m_Sell.text = string.Format("{0:#,###}", (price * m_Ratio));
+        float level = tower.towerInfo.towerLevels[tower.currentLevel].level;
+        float upgradePrice = level == 3 ? tower.towerInfo.towerLevels[tower.currentLevel].price
+                                        : tower.towerInfo.towerLevels[tower.currentLevel + 1].price;
+        float sellPrice = tower.towerInfo.towerLevels[tower.currentLevel].price;
+        
+        m_Upgrade.text = string.Format("{0:#,###}", level == 3 ? "MAX" : upgradePrice.ToString());
+        m_Sell.text = string.Format("{0:#,###}", (sellPrice * m_Ratio));
         m_TargetTower = tower;
     }
 
@@ -50,22 +55,23 @@ public class TowerUpgrade : BaseTheme, IPointerEnterHandler, IPointerExitHandler
     {
         Theme theme = Core.plugs.GetPlugable<Theme>();
         float userMoney = theme.GetTheme<UserInfoUI>().money;
-        float price = m_TargetTower.towerInfo.towerLevels[m_TargetTower.currentLevel].price;
+        float level = m_TargetTower.towerInfo.towerLevels[m_TargetTower.currentLevel].level;
+
+        if (level == 3)
+        {
+            //Open Popup
+            Popup popup = Core.plugs.GetPlugable<Popup>();
+            popup?.GetPopup<NotifyPopup>().SetContent("더 이상 할 수 없습니다.");
+            popup.Open<NotifyPopup>();
+            return;
+        }
+
+        float price = m_TargetTower.towerInfo.towerLevels[m_TargetTower.currentLevel + 1].price;
         if (userMoney < price)
         {
             //Open Popup
             Popup popup = Core.plugs.GetPlugable<Popup>();
             popup?.GetPopup<NotifyPopup>().SetContent("돈이 부족합니다. !!");
-            popup.Open<NotifyPopup>();
-            return;
-        }
-
-        float level = m_TargetTower.towerInfo.towerLevels[m_TargetTower.currentLevel].level;
-        if(level == 3)
-        {
-            //Open Popup
-            Popup popup = Core.plugs.GetPlugable<Popup>();
-            popup?.GetPopup<NotifyPopup>().SetContent("더 이상 할 수 없습니다.");
             popup.Open<NotifyPopup>();
             return;
         }
@@ -77,10 +83,16 @@ public class TowerUpgrade : BaseTheme, IPointerEnterHandler, IPointerExitHandler
             m_TowerManager = GameObject.FindGameObjectWithTag("Towers");
         }
 
+        if (m_TargetTower.towerState == Tower.TowerState.Creating || m_TargetTower.towerState == Tower.TowerState.Upgrading)
+        {
+            Popup popup = Core.plugs.GetPlugable<Popup>();
+            popup?.GetPopup<NotifyPopup>().SetContent("타워 생성중..");
+            popup.Open<NotifyPopup>();
+            return;
+        }
+
         TowerManager t = m_TowerManager.GetComponent<TowerManager>();
         t.UpgradeTower(m_TargetTower);
-        
-        //Price 
         theme.GetTheme<UserInfoUI>().money -= price;
         Close(null);
     }

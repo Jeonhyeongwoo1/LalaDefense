@@ -7,29 +7,33 @@ public class EnemyHitEffect : MonoBehaviour
 {
     public ParticleSystem hitEffect;
 
-    public void EffectOn(UnityAction done = null)
+    public void SetPosition(Transform target)
     {
-        hitEffect.Play();
-        StartCoroutine(ProceedingEffect(done));
+        transform.position = target.position;
     }
 
-    IEnumerator ProceedingEffect(UnityAction done)
+    public void EffectOn(UnityAction done = null)
     {
-        
-        while(hitEffect.isPlaying)
-        {
-            yield return null;
-        }
-        
-        hitEffect.Stop();
-        done?.Invoke();
-        Destroy(gameObject);
+        StartCoroutine(ProceedingEffect(done));
     }
 
     public void EffectOff()
     {
         hitEffect.Stop();
         StopAllCoroutines();
+    }
+
+    IEnumerator ProceedingEffect(UnityAction done)
+    {
+        hitEffect.Play();
+
+        while (hitEffect.isPlaying)
+        {
+            yield return null;
+        }
+
+        hitEffect.Stop();
+        done?.Invoke();
     }
 
     // Start is called before the first frame update

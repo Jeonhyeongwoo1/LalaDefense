@@ -32,6 +32,19 @@ public class Menu : BaseTheme
         gameObject.SetActive(false);
     }
 
+    public Transform GetMenuTranform(string menuName)
+    {
+        foreach (Menus tr in m_Menus)
+        {
+            if (menuName == tr.menuName)
+            {
+                return tr.menu;
+            }
+        }
+
+        return null;
+    }
+
     IEnumerator OpeningMenus(UnityAction done)
     {
         foreach (var m in m_Menus)
@@ -65,13 +78,27 @@ public class Menu : BaseTheme
             switch (v.menuName)
             {
                 case "SettingsPopup":
-                    v.menu.GetComponent<Button>().onClick.AddListener(() => popup.Open<SettingsPopup>());
+                    v.menu.GetComponent<Button>().onClick.AddListener(() =>
+                    {
+                        if (popup.IsOpenedPopup<SettingsPopup>()) { return; }
+                        popup.Open<SettingsPopup>();
+                    });
                     break;
                 case "StagePopup":
-                    v.menu.GetComponent<Button>().onClick.AddListener(() => popup.Open<StagePopup>());
+                    v.menu.GetComponent<Button>().onClick.AddListener(() =>
+                    {
+                        if (popup.IsOpenedPopup<StagePopup>()) { return; }
+                        popup.Open<StagePopup>();
+                    });
+                    break;
+                case "MissionPopup":
+                    v.menu.GetComponent<Button>().onClick.AddListener(() =>
+                    {
+                        if (popup.IsOpenedPopup<MissionPopup>()) { return; }
+                        popup.Open<MissionPopup>();
+                    });
                     break;
             }
         }
     }
-
 }

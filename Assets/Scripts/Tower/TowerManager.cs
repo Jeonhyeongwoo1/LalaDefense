@@ -59,8 +59,8 @@ public class TowerManager : MonoBehaviour
         Transform t = Instantiate(tower, terrain.nodes.GetBuildPosition(), Quaternion.identity, transform);
         Tower tr = t.GetComponent<Tower>();
         tr.transform.SetParent(GetTowerParent(tower.transform));
-        tr.Create();
         tr.shots = shots;
+        tr.Create();
         activeTowers.Add(tr, node);
         onlyTowers.Add(tr);
     }
@@ -70,7 +70,7 @@ public class TowerManager : MonoBehaviour
         if (onlyTowers == null) { return; }
         if (onlyTowers.Count == 0) { return; }
 
-        onlyTowers.ForEach((v) => Destroy(v.gameObject));
+        onlyTowers.ForEach((v) => v.DestroyImmediate());
         activeTowers.Clear();
         onlyTowers.Clear();
     }

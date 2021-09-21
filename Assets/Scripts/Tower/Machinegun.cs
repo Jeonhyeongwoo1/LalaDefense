@@ -8,7 +8,6 @@ public class Machinegun : Tower
 {
     ParticleSystem muzzleEffect;
     float m_Elapsed = 0;
-    Shot m_AliveShot = null;
 
     public override void Attack()
     {
@@ -22,14 +21,22 @@ public class Machinegun : Tower
         if (m_Elapsed >= GetCurLevelAttackInfo().speed)
         {
             m_Elapsed = 0;
-            GameObject go = Instantiate(shot.gameObject, bombPoint.position, Quaternion.identity, shots);
+            GameObject go = GetComponent<ObjectPool>().Get(shots, bombPoint.position)?.gameObject;
+            if (go == null) { return; }
+            
             Shot b = go.GetComponent<Shot>();
-            m_AliveShot = b;
             b.Seek(Target);
-            b.Init(GetCurLevelAttackInfo());
-            b.Attack(AttackComplete);
+            b.Init(GetCurLevelAttackInfo(), bombPoint, shots);
+            b.Attack(() => AttackComplete(b.transform));
             muzzleEffect.Play();
         }
+    }
+
+    public override void DestroyImmediate(UnityAction done = null)
+    {
+        towerState = TowerState.Deleting;
+        DestroyShot();
+        DestroyImmediate(gameObject);
     }
 
     public override void Standby()
@@ -48,6 +55,7 @@ public class Machinegun : Tower
 
     public override void Delete(UnityAction done = null)
     {
+        DestroyShot();
         base.Delete(done);
     }
 
@@ -57,14 +65,17 @@ public class Machinegun : Tower
         projectile = GetChild(curTower, nameof(projectile));
         bombPoint = GetChild(curTower, nameof(bombPoint));
         muzzleEffect = GetChild(curTower, nameof(muzzleEffect))?.GetComponent<ParticleSystem>();
+
+        ObjectPool pool = GetComponent<ObjectPool>();
+        if (pool.GetCount() == 0)
+        {
+            pool.Initialize(shots, 5);
+        }
     }
 
-    void AttackComplete()
+    void AttackComplete(Transform shot)
     {
-        if (m_AliveShot != null)
-        {
-            Destroy(m_AliveShot.gameObject);
-        }
+        GetComponent<ObjectPool>()?.Return(shot);
     }
 
     // Start is called before the first frame update

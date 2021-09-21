@@ -15,7 +15,7 @@ public class Laser : Shot
         enemy = target;
     }
 
-    public override void Init(AttackInfo info, Transform bombPoint)
+    public override void Init(AttackInfo info, Transform bombPoint, Transform shots = null)
     {
         this.info = info;
         this.bombPoint = bombPoint;

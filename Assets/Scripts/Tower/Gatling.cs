@@ -12,7 +12,6 @@ public class Gatling : Tower
     [SerializeField] Transform m_barrel;
     [SerializeField] float m_barrelRotationSpeed = 0;
 
-    List<Shot> m_AliveShots = new List<Shot>();
     float m_Elapsed = 0;
     ParticleSystem muzzleEffect;
 
@@ -37,29 +36,36 @@ public class Gatling : Tower
             m_Elapsed = 0;
             for (var i = 0; i < m_BulletCount; i++)
             {
-                GameObject go = Instantiate(shot.gameObject, bombPoint.position, Quaternion.identity, shots);
+                GameObject go = GetComponent<ObjectPool>().Get(shots, bombPoint.position)?.gameObject;
+                if (go == null) { return; }
+                
                 Shot b = go.GetComponent<Shot>();
-                m_AliveShots.Add(b);
                 b.Seek(Target);
-                b.Init(GetCurLevelAttackInfo());
-                b.Attack(AttackComplete);
+                b.Init(GetCurLevelAttackInfo(), bombPoint, shots);
+                b.Attack(() => AttackComplete(b.transform));
                 muzzleEffect.Play();
             }
         }
 
     }
 
+    public override void DestroyImmediate(UnityAction done = null)
+    {
+        towerState = TowerState.Deleting;
+        DestroyShot();
+        DestroyImmediate(gameObject);
+    }
+
     public override void Standby()
     {
+        if (muzzleEffect.isPlaying) { muzzleEffect.Stop(); }
         if (turret.localEulerAngles.x != 0)
         {
             turret.localEulerAngles = Vector3.zero;
             return;
         }
 
-        if (muzzleEffect.isPlaying) { muzzleEffect.Stop(); }
-
-    //    turret.localEulerAngles += new Vector3(0, m_StandbySpeed * m_StandbyMultiplier, 0);
+        //    turret.localEulerAngles += new Vector3(0, m_StandbySpeed * m_StandbyMultiplier, 0);
     }
 
     public override void Create(UnityAction done = null)
@@ -69,6 +75,7 @@ public class Gatling : Tower
 
     public override void Delete(UnityAction done = null)
     {
+        DestroyShot();
         base.Delete(done);
     }
 
@@ -79,14 +86,17 @@ public class Gatling : Tower
         projectile = GetChild(curTower, nameof(projectile));
         bombPoint = GetChild(curTower, nameof(bombPoint));
         muzzleEffect = GetChild(curTower, nameof(muzzleEffect))?.GetComponent<ParticleSystem>();
+        
+        ObjectPool pool = GetComponent<ObjectPool>();
+        if (pool.GetCount() == 0)
+        {
+            pool.Initialize(shots, 12);
+        }
     }
 
-    void AttackComplete()
+    void AttackComplete(Transform shot)
     {
-        if (m_AliveShots.Count != 0)
-        {
-            m_AliveShots.Clear();
-        }
+        GetComponent<ObjectPool>()?.Return(shot);
     }
 
     // Start is called before the first frame update

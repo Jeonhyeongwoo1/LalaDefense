@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 235746bfcce38484c8d7d5224646ef44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyStatus: 0
   enemyInfo:
     level: 2
     enemyType: 11
@@ -58,6 +59,8 @@ MonoBehaviour:
   m_Distance: 1
   m_CurHealth: 0
   m_WayPoints: []
+  m_Checkinghealth: 0
+  m_RealTimeSpeed: 0
 --- !u!1 &2043628765061270531
 GameObject:
   m_ObjectHideFlags: 0

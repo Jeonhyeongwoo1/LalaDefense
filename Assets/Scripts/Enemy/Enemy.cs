@@ -83,7 +83,7 @@ public class Enemy : MonoBehaviour
         m_CurHealth -= amount;
         m_HealthBar.fillAmount -= amount / enemyInfo.health;
 
-        if (!string.IsNullOrEmpty(specialAttackInfo) && !string.IsNullOrEmpty(specialAttackInfo))
+        if (!string.IsNullOrEmpty(specialAttackInfo) && !string.IsNullOrEmpty(specialAttackInfo) && enemyInfo.level != EnemyInfo.Level.Boss)
         {
             GotSpecialAttack(specialAttack, specialAttackInfo);
         }
@@ -130,7 +130,7 @@ public class Enemy : MonoBehaviour
                     StartCoroutine(IsBeingStunAttakced(specialAttackInfo, () => isbeingStunAttacked = false));
                 }
                 break;
-                
+
         }
     }
 
@@ -159,17 +159,32 @@ public class Enemy : MonoBehaviour
         }
         random.Add("Stun", wegiht);
         random.Add("None", 100 - wegiht);
-        
+
         string value = WeightedRandomizer.TakeOne(random);
-        if(value == "None")
+        if (value == "None")
         {
             done?.Invoke();
             yield break;
         }
 
+        if (enemyInfo.level == EnemyInfo.Level.Boss) { yield break; }
+
+        string fwd = enemyInfo.enemyType == EnemyType.Bat || enemyInfo.enemyType == EnemyType.Dragon ? "FlyFWD" : "WalkFWD";
+        m_Animator.SetBool(fwd, false);
+
         while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
+            m_RealTimeSpeed = 0;
+            yield return null;
+        }
+
+        //애니메이션 전환 시간을 빼야할수도..
+        fwd = enemyInfo.enemyType == EnemyType.Bat || enemyInfo.enemyType == EnemyType.Dragon ? "FlyFWD" : "WalkFWD";
+        m_Animator.SetBool(fwd, true);
+        AnimatorStateInfo info = m_Animator.GetCurrentAnimatorStateInfo(0);
+        while (!(m_Animator.GetCurrentAnimatorStateInfo(0).fullPathHash == Animator.StringToHash("Base Layer." + fwd)))
+        {
             m_RealTimeSpeed = 0;
             yield return null;
         }
@@ -233,8 +248,8 @@ public class Enemy : MonoBehaviour
             else if (enemyStatus == Status.beingAttacked)
             {
                 elapsed += Time.deltaTime;
-                //2초가 지난 후에 공격을 받고 있는지 확인
-                if (elapsed >= 2)
+                //3초가 지난 후에 공격을 받고 있는지 확인
+                if (elapsed >= 3)
                 {
                     elapsed = 0;
                     if (m_Checkinghealth == m_CurHealth) //공격을 받지않는 상태..
@@ -285,6 +300,11 @@ public class Enemy : MonoBehaviour
                 UpdateUserInfoUI();
             }
 
+            if (enemyInfo.level == EnemyInfo.Level.Boss && m_CurHealth > 0)
+            {
+                Core.gameManager.GameOver();
+            }
+
             Destroy(gameObject);
         }
     }
@@ -294,6 +314,10 @@ public class Enemy : MonoBehaviour
         EnemyManager e = transform.parent.GetComponent<EnemyManager>();
         e.aliveEnemyCount--;
         e.aliveEnemies.Remove(this);
+
+        Theme theme = Core.plugs.GetPlugable<Theme>();
+        RoundInfoUI roundInfoUI = theme.GetTheme<RoundInfoUI>();
+        roundInfoUI.aliveEnemyCount--;
     }
 
     void UpdateUserInfoUI()

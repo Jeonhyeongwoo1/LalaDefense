@@ -8,12 +8,11 @@ public class Cannon : Tower
 {
     ParticleSystem muzzleEffect;
     float m_Elapsed = 0;
-    Shot m_AliveShot = null;
 
     public override void Attack()
     {
         if (Target == null) { return; }
-        
+
         turret.LookAt(Target.transform);
 
         if (muzzleEffect.isPlaying) { muzzleEffect.Stop(); }
@@ -22,12 +21,13 @@ public class Cannon : Tower
         if (m_Elapsed >= GetCurLevelAttackInfo().speed)
         {
             m_Elapsed = 0;
-            GameObject go = Instantiate(shot.gameObject, bombPoint.position, Quaternion.identity, shots);
+            GameObject go = GetComponent<ObjectPool>().Get(shots, bombPoint.position)?.gameObject;
+            if (go == null) { return; }
+
             Shot b = go.GetComponent<Shot>();
-            m_AliveShot = b;
             b.Seek(Target);
-            b.Init(GetCurLevelAttackInfo());
-            b.Attack(AttackComplete);
+            b.Init(GetCurLevelAttackInfo(), bombPoint, shots);
+            b.Attack(() => AttackComplete(b.transform));
             muzzleEffect.Play();
         }
     }
@@ -46,9 +46,18 @@ public class Cannon : Tower
         base.Create(done);
     }
 
+
     public override void Delete(UnityAction done = null)
     {
+        DestroyShot();
         base.Delete(done);
+    }
+
+    public override void DestroyImmediate(UnityAction done = null)
+    {
+        towerState = TowerState.Deleting;
+        DestroyShot();
+        DestroyImmediate(gameObject);
     }
 
     public override void Init(Transform curTower)
@@ -57,6 +66,12 @@ public class Cannon : Tower
         projectile = GetChild(curTower, nameof(projectile));
         bombPoint = GetChild(curTower, nameof(bombPoint));
         muzzleEffect = GetChild(curTower, nameof(muzzleEffect))?.GetComponent<ParticleSystem>();
+
+        ObjectPool pool = GetComponent<ObjectPool>();
+        if (pool.GetCount() == 0)
+        {
+            pool.Initialize(shots, 2);
+        }
     }
 
     void Start()
@@ -64,12 +79,9 @@ public class Cannon : Tower
         InvokeRepeating("UpdateTarget", 0, 0.5f);
     }
 
-    void AttackComplete()
+    void AttackComplete(Transform shot)
     {
-        if (m_AliveShot != null)
-        {
-            Destroy(m_AliveShot.gameObject);
-        }
+        GetComponent<ObjectPool>()?.Return(shot);
     }
 
     /// <summary>

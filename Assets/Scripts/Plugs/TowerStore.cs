@@ -6,13 +6,7 @@ using UnityEngine.UI;
 
 public class TowerStore : BaseTheme
 {
-    bool m_CanBuild = false;
-    public bool CanBuild
-    {
-        set => m_CanBuild = value;
-        get => m_CanBuild;
-    }
-
+    public bool isOpenCircleBtn = false;
 
     [SerializeField] Button m_CircleBtn;
     [SerializeField] Button m_Close;
@@ -26,8 +20,7 @@ public class TowerStore : BaseTheme
     public void OnClickItem(GameObject prefab, float price)
     {
         print("tower : " + prefab + "Price : " + price);
-        CanBuild = true;
-
+        
         Terrain t = Core.models.GetModel<Terrain>();
         t.nodes.gameObject.SetActive(true);
         StartCoroutine(CheckingMousePoint(prefab, price));
@@ -48,7 +41,23 @@ public class TowerStore : BaseTheme
 
     public void OpenCircleAsync(UnityAction done)
     {
+        isOpenCircleBtn = true;
         StartCoroutine(CoUtilize.VLerp((v) => m_CircleBtn.transform.localScale = v, Vector3.zero, Vector3.one, 0.3f, done, curve));
+    }
+
+    public void OnCloseTowerStore()
+    {
+        if (isOpenCircleBtn) { return; }
+
+        StopCoroutine("CheckingMousePoint");
+
+        Terrain t = Core.models.GetModel<Terrain>();
+        if (t.nodes.gameObject.activeSelf)
+        {
+            t.nodes.gameObject.SetActive(false);
+        }
+
+        StartCoroutine(CoUtilize.VLerp((v) => m_TowerStoreUI.localScale = v, Vector2.one, Vector2.up, 0.3f, OpenCircleBtn, curve));
     }
 
     void CreateTower(RaycastHit hit, GameObject tower, float price)
@@ -75,7 +84,6 @@ public class TowerStore : BaseTheme
         userInfoUI.money -= price;
         TowerManager manager = m_TowerManager.GetComponent<TowerManager>();
         manager.CreateTower(tower.transform, hit.transform);
-        CanBuild = false;
     }
 
     void CloseTowerStore(UnityAction done)
@@ -87,7 +95,6 @@ public class TowerStore : BaseTheme
         {
             t.nodes.gameObject.SetActive(false);
         }
-       
         
         StartCoroutine(CoUtilize.VLerp((v) => m_TowerStoreUI.localScale = v, Vector2.one, Vector2.up, 0.3f, done, curve));
     }
@@ -109,6 +116,7 @@ public class TowerStore : BaseTheme
 
     void OpenTowerStore()
     {
+        isOpenCircleBtn = false;
         StartCoroutine(CoUtilize.VLerp((v) => m_TowerStoreUI.localScale = v, Vector2.up, Vector2.one, 0.3f, null, curve));
     }
 
@@ -132,7 +140,6 @@ public class TowerStore : BaseTheme
 
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity))
                 {
-                    if (!CanBuild) { yield break; }
                     if (hit.transform.tag == "Node")
                     {
                         CreateTower(hit, tower, price);

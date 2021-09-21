@@ -46,7 +46,6 @@ public class TextHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (target == null)
         {
-            print("TEST");
             onClickEvent?.Invoke();
             return;
         }

@@ -54,7 +54,12 @@ public class Acid : Tower
         shot = GetChild(curTower, "Laser").GetComponent<Laser>();
         shot?.Init(GetCurLevelAttackInfo(), bombPoint);
         shot?.gameObject.SetActive(false);
-
+    }
+    
+    public override void DestroyImmediate(UnityAction done = null)
+    {
+        towerState = TowerState.Deleting;
+        DestroyImmediate(gameObject);
     }
 
     // Start is called before the first frame update

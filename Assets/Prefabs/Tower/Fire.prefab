@@ -50,31 +50,34 @@ MonoBehaviour:
     towerLevels:
     - towerPrefab: {fileID: 8928063157502050098, guid: e2c85573c45b0974bb1b9ba7b1c1f3fb, type: 3}
       level: 1
-      price: 250
+      price: 200
       attackInfo:
-        range: 8
+        range: 10
         speed: 0
-        damage: 3
+        damage: 10
         boomRange: 0
         specialAttack: Fire
+        specialAttackInfo: 
     - towerPrefab: {fileID: 7589466474377246490, guid: 70be7548d91bcbe4cb7cf8588cd51205, type: 3}
       level: 2
-      price: 350
+      price: 300
       attackInfo:
-        range: 8
+        range: 10
         speed: 0
-        damage: 3
+        damage: 15
         boomRange: 0
         specialAttack: Fire
+        specialAttackInfo: 
     - towerPrefab: {fileID: 8600567119759681076, guid: ca895eab8992d774fab88a9719e82c20, type: 3}
       level: 3
-      price: 450
+      price: 400
       attackInfo:
-        range: 8
+        range: 10
         speed: 0
-        damage: 3
+        damage: 20
         boomRange: 0
         specialAttack: Fire
+        specialAttackInfo: 
   createEffect: {fileID: 2572039024578808563, guid: 7a52eac1fe9477b41b1ac74ca9e9ff71, type: 3}
   deleteEffect: {fileID: 8331385481643737470, guid: 2914e92e8aa2e524c9ac542b61207a86, type: 3}
   projectile: {fileID: 0}
@@ -84,6 +87,7 @@ MonoBehaviour:
   currentLevel: 0
   Target: {fileID: 0}
   shots: {fileID: 0}
+  towerSprite: {fileID: 21300000, guid: 7201eb93878a75a499f01a48e4abca63, type: 3}
   CreateDuration: 0.2
   DeleteDuration: 0.5
   Curve:

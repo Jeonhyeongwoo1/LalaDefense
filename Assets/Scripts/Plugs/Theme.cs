@@ -11,14 +11,8 @@ public abstract class BaseTheme : MonoBehaviour
 
 public class Theme : MonoBehaviour, IPlugable
 {
-    // public RoundUI roundUI;
-    // public TowerStore towerStore;
-    // public UserInfoUI userInfoUI;
-    // public TowerUpgrade towerUpgrade;
-
     [SerializeField] List<BaseTheme> themes = new List<BaseTheme>();
     [SerializeField] List<BaseTheme> m_Opened = new List<BaseTheme>();
-
 
     public void RemoveOpenedTheme(BaseTheme p)
     {

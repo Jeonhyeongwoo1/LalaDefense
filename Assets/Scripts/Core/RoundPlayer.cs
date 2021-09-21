@@ -102,11 +102,19 @@ public class RoundPlayer : MonoBehaviour
     {
         yield return new WaitForSeconds(m_RoundWaitTime);
 
+        Theme theme = Core.plugs.GetPlugable<Theme>();
+        if(!theme.IsOpenedTheme<RoundInfoUI>()) 
+        {
+            theme.Open<RoundInfoUI>();
+        }
+       
         EnemyInfo enemyInfo = new EnemyInfo();
+        RoundInfoUI roundInfoUI = theme.GetTheme<RoundInfoUI>();
 
         for (int i = 0; i < m_Rounds.Count; i++)
         {
             m_RoundState = RoundState.Play;
+            roundInfoUI.SetRoundInfo(i + 1, m_Rounds.Count, m_Rounds[i].enemyCount, m_Rounds[i].enemyCount);
             yield return OpeningRoundUI(i + 1);
             yield return new WaitForSeconds(m_RoundWaitTime);
             Log("Playing Round Index : " + m_Rounds[i].index);

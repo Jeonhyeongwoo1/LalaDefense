@@ -4898,6 +4898,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireEffect: {fileID: 258024652671034115}
+  m_HitEffect: {fileID: 4908340465125646093, guid: 3bdd00c4c98d4e046bfa8d110326d1a6, type: 3}
 --- !u!1 &94849885317651551
 GameObject:
   m_ObjectHideFlags: 0

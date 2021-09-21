@@ -11,11 +11,6 @@ public abstract class BasePopup : MonoBehaviour
 
 public class Popup : MonoBehaviour, IPlugable
 {
-    // public StagePopup stagePopup;
-    // public PausePopup pausePopup;
-    // public CompletePopup completePopup;
-    // public LosePopup losePopup;
-
     [SerializeField] List<BasePopup> popups = new List<BasePopup>();
     [SerializeField] List<BasePopup> m_Opened = new List<BasePopup>();
 
@@ -122,11 +117,4 @@ public class Popup : MonoBehaviour, IPlugable
     {
         Core.Ensure(() => Core.plugs.SetPlug(this));
     }
-
-    [ContextMenu("TEST")]
-    public void Test()
-    {
-        Open<LosePopup>();
-    }
-
 }

@@ -15,18 +15,12 @@ public class LosePopup : BasePopup
 
     public override void Open(UnityAction done)
     {
-        gameObject.SetActive(true);
-        StartCoroutine(CoUtilize.VLerp((v) => popup.localScale = v, Vector3.zero, Vector3.one, 0.2f, () => Opened(done), m_Curve));
-    }
-
-    void Opened(UnityAction done)
-    {
-        //애니메이션?
         Theme theme = Core.plugs.GetPlugable<Theme>();
         float score = theme.GetTheme<UserInfoUI>().score;
         m_Score.text = score == 0 ? "0" : string.Format("{0:#,###}", score);
 
-        done?.Invoke();
+        gameObject.SetActive(true);
+        StartCoroutine(CoUtilize.VLerp((v) => popup.localScale = v, Vector3.zero, Vector3.one, 0.2f, done, m_Curve));
     }
 
     public override void Close(UnityAction done)

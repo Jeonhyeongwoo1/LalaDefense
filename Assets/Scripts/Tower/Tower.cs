@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
@@ -56,6 +57,7 @@ public abstract class Tower : MonoBehaviour, IPointerClickHandler
 
     public Enemy Target;
     public Transform shots;
+    public Sprite towerSprite;
     protected GameObject Enemies;
     [SerializeField, Range(0, 1)] protected float CreateDuration;
     [SerializeField, Range(0, 1)] protected float DeleteDuration;
@@ -64,17 +66,10 @@ public abstract class Tower : MonoBehaviour, IPointerClickHandler
     public abstract void Attack();
     public abstract void Standby();
     public abstract void Init(Transform tr);
+    public abstract void DestroyImmediate(UnityAction done = null);
 
     public virtual void UpgradeTower()
     {
-        if(towerState == TowerState.Creating || towerState == TowerState.Deleting)
-        {
-            Popup popup = Core.plugs.GetPlugable<Popup>();
-            popup?.GetPopup<NotifyPopup>().SetContent("타워 생성중..");
-            popup.Open<NotifyPopup>();
-            return;
-        }
-
         towerState = TowerState.Upgrading;
         // 0 ~ 2
         if (currentLevel == towerInfo.towerLevels.Length)
@@ -122,8 +117,22 @@ public abstract class Tower : MonoBehaviour, IPointerClickHandler
         }
 
         towerUpgrade.transform.position = transform.position + towerUpgrade.offset;
-        towerUpgrade.Setup(towerInfo.towerLevels[currentLevel].level, towerInfo.towerLevels[currentLevel].price, this);
+        towerUpgrade.Setup(this);
+        
+        TowerInfoUI towerInfoUI = theme.GetTheme<TowerInfoUI>();
+        towerInfoUI.Setup(towerSprite, this);
+
         theme.Open<TowerUpgrade>();
+
+        if (!theme.IsOpenedTheme<TowerInfoUI>())
+        {
+            theme.Open<TowerInfoUI>();
+        }
+    }
+
+    public AttackInfo GetCurLevelAttackInfo()
+    {
+        return towerInfo.towerLevels[currentLevel].attackInfo;
     }
 
     protected void UpdateTarget()
@@ -193,11 +202,6 @@ public abstract class Tower : MonoBehaviour, IPointerClickHandler
         return null;
     }
 
-    protected AttackInfo GetCurLevelAttackInfo()
-    {
-        return towerInfo.towerLevels[currentLevel].attackInfo;
-    }
-
     IEnumerator ProceedingEffect(ParticleSystem p, UnityAction done)
     {
         if(p == null)
@@ -234,5 +238,20 @@ public abstract class Tower : MonoBehaviour, IPointerClickHandler
         });
     }
 
+    protected void DestroyShot()
+    {
+        List<Transform> list = new List<Transform>();
+        list = GetComponent<ObjectPool>()?.GetAllCreatedList();
+        if (list != null)
+        {
+            list.ForEach((v) =>
+            {
+                v.GetComponent<Shot>().StopAllCoroutines();
+                Destroy(v.gameObject);
+            });
+        }
+    }
+
     void TowerCreated() { towerState = TowerState.Standby; }
+
 }

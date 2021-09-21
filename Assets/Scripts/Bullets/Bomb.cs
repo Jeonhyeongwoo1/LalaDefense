@@ -18,7 +18,7 @@ public class Bomb : Shot
         enemy = target;
     }
 
-    public override void Init(AttackInfo info, Transform bombPoint = null)
+    public override void Init(AttackInfo info, Transform bombPoint = null, Transform shots = null)
     {
         m_Damage = info.damage;
         this.bombPoint = bombPoint;

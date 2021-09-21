@@ -15,15 +15,23 @@ public class Round
     public float enemyHealth;
     public float enemyRewardMoney;
     public float enemySpeed;
-
 }
 
 [Serializable]
+public class Mission
+{
+    public string missionName;
+    public string missionCondition;
+    public string missionContent;
+}
+
+[Serializable]  
 public class Stage
 {
     public int stageNum;
     public int userMoney;
     public int userHeart;
+    public Mission[] mission;
     public Round[] roundInfo;
 }
 
@@ -86,6 +94,9 @@ public class StagePlayer : MonoBehaviour
 
         m_EnemyManager.DestroyEnemy();
         m_TowerManager.DestroyImmediateAllTower();
+
+        TowerStore towerStore = theme.GetTheme<TowerStore>();
+        if (!towerStore.isOpenCircleBtn) { towerStore.OnCloseTowerStore(); }
 
         OnPlayStage();
     }

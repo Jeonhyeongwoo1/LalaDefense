@@ -12,25 +12,38 @@ public class ElectricBomb : Shot
 
     [SerializeField] Vector3 m_Scale = new Vector3(0.5f, 0.5f, 0.5f);
     [SerializeField, Range(0, 5)] float m_AliveDuration = 1.5f;
-    [SerializeField] float hitDist = 1f;
 
-    float m_Elapsed = 0;
-    RaycastHit m_RaycastHit;
+    EnemyHitEffect m_EnemyHitEffect;
+    UnityAction m_AttackedEvent = null;
 
     public override void Seek(Enemy target)
     {
         enemy = target;
     }
 
-    public override void Init(AttackInfo info, Transform bombPoint = null)
+    public override void Init(AttackInfo info, Transform bombPoint = null, Transform shots = null)
     {
         this.info = info;
         this.bombPoint = bombPoint;
+
+        if (m_EnemyHitEffect == null)
+        {
+            GameObject effect = Instantiate(m_HitEffect, enemy.transform.position, Quaternion.identity, shots.GetChild(0));
+            m_EnemyHitEffect = effect.GetComponent<EnemyHitEffect>();
+        }
     }
 
     public override void Attack(UnityAction done = null)
     {
+        m_AttackedEvent = done;
         StartCoroutine(TargetAttack(done));
+    }
+
+    public void ResetState()
+    {
+        StopAllCoroutines();
+        transform.localScale = Vector3.zero;
+        transform.position = Vector3.zero;
     }
 
     public void SetBombLevel(int level)
@@ -55,7 +68,6 @@ public class ElectricBomb : Shot
     IEnumerator TargetAttack(UnityAction done)
     {
         //ScaleUp 시간은 타워의 speed
-
         float elapsed = 0;
 
         while (elapsed < info.speed)
@@ -63,7 +75,6 @@ public class ElectricBomb : Shot
             if (enemy == null)
             {
                 done?.Invoke();
-                Destroy(gameObject);
                 yield break;
             }
 
@@ -73,52 +84,60 @@ public class ElectricBomb : Shot
             yield return null;
         }
 
+        elapsed = 0;
+
         while (true)
         {
-            m_Elapsed += Time.deltaTime;
+            elapsed += Time.deltaTime;
             GetComponent<MeshRenderer>().material.mainTextureOffset = new Vector2(elapsed, 0);
 
             if (enemy == null)
             {
                 done?.Invoke();
-                Destroy(gameObject);
                 yield break;
             }
 
-            if (m_Elapsed > m_AliveDuration)
+            if (elapsed > m_AliveDuration)
             {
-                m_Elapsed = 0;
+                elapsed = 0;
                 done?.Invoke();
-                Destroy(gameObject);
                 yield break;
             }
 
-            Vector3 dir = enemy.transform.position - transform.position;
-            if (Physics.Raycast(transform.position, dir.normalized, out m_RaycastHit, hitDist))
-            {
-                //hit
-                if (m_RaycastHit.transform == enemy.skinnedMeshRenderer)
-                {
-                    enemy.TakeDamage(info.damage, info.specialAttack, info.specialAttackInfo);
-                    HitEffectOn();
-                    done?.Invoke();
-                    Destroy(gameObject);
-                }
-            }
-
-            transform.Translate(dir.normalized * 2, Space.World);
+            Vector3 dir = (enemy.transform.position - transform.position) + new Vector3(0, 1, 0);
+            transform.Translate(dir.normalized * 1.7f, Space.World);
             transform.LookAt(enemy.transform);
             yield return null;
         }
 
     }
 
-
     public void HitEffectOn()
     {
-        GameObject effect = Instantiate(m_HitEffect, enemy.transform.position, Quaternion.identity);
-        EnemyHitEffect ef = effect.GetComponent<EnemyHitEffect>();
-        ef.EffectOn();
+        if (m_EnemyHitEffect != null)
+        {
+            m_EnemyHitEffect.SetPosition(enemy.transform);
+            m_EnemyHitEffect.EffectOn();
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (m_EnemyHitEffect != null)
+        {
+            m_EnemyHitEffect.StopAllCoroutines();
+            DestroyImmediate(m_EnemyHitEffect.gameObject);
+        }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.transform == enemy.skinnedMeshRenderer)
+        {
+            enemy.TakeDamage(info.damage, info.specialAttack, info.specialAttackInfo);
+            HitEffectOn();
+            m_AttackedEvent?.Invoke();
+        }
     }
 
 }

@@ -58,6 +58,7 @@ public class EnemyManager : MonoBehaviour
         if (e == null)
         {
             Debug.Log("Enemy가 존재하지 않습니다.");
+            Core.gameManager.OnNextGame();
             return;
         }
 
@@ -126,6 +127,7 @@ public class EnemyManager : MonoBehaviour
         theme.Open<TowerStore>();
         theme.Open<UserInfoUI>();
         theme.Open<Menu>();
+        theme.Open<RoundInfoUI>();
         e.ShowHideHealthBar(true);
         e.SetAnimator("WalkFWD", true);
         m_PointLight.SetActive(false);
