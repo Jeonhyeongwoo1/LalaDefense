@@ -1,27 +1,124 @@
 {
     "stageNum": 3,
-    "userMoney": 200,
+    "userMoney": 300,
     "userHeart": 10,
+    "mission": [
+        {
+            "missionName": "Default",
+            "missionCondition": "",
+            "missionContent": "Defeat Monster"
+        },
+        {
+            "missionName": "Heart",
+            "missionCondition": "5",
+            "missionContent": "The heart is over 5"
+        },
+        {
+            "missionName": "Score",
+            "missionCondition": "5000",
+            "missionContent": "The Score is over 5000"
+        }
+    ],
     "roundInfo": [
         {
             "index": 1,
-            "score": 50,
-            "enemyCount": 10,
-            "enemyLevel": "Normal",
-            "enemyType": "Golem",
-            "enemyHealth": 100,
-            "enemyRewardMoney": 30,
-            "enemySpeed": 1
-        },
-        {
-            "index": 2,
             "score": 70,
             "enemyCount": 10,
             "enemyLevel": "Normal",
-            "enemyType": "Golem",
+            "enemyType": "EvilMage",
             "enemyHealth": 100,
             "enemyRewardMoney": 30,
-            "enemySpeed": 1
+            "enemySpeed": 3
+        },
+        {
+            "index": 2,
+            "score": 90,
+            "enemyCount": 10,
+            "enemyLevel": "Normal",
+            "enemyType": "Golem",
+            "enemyHealth": 300,
+            "enemyRewardMoney": 30,
+            "enemySpeed": 3
+        },
+        {
+            "index": 3,
+            "score": 100,
+            "enemyCount": 10,
+            "enemyLevel": "Normal",
+            "enemyType": "TurtleShell",
+            "enemyHealth": 600,
+            "enemyRewardMoney": 30,
+            "enemySpeed": 3
+        },
+        {
+            "index": 4,
+            "score": 110,
+            "enemyCount": 12,
+            "enemyLevel": "Normal",
+            "enemyType": "Skeleton",
+            "enemyHealth": 1200,
+            "enemyRewardMoney": 30,
+            "enemySpeed": 3
+        },
+        {
+            "index": 5,
+            "score": 70,
+            "enemyCount": 13,
+            "enemyLevel": "Normal",
+            "enemyType": "Bat",
+            "enemyHealth": 800,
+            "enemyRewardMoney": 40,
+            "enemySpeed": 5
+        },
+        {
+            "index": 6,
+            "score": 70,
+            "enemyCount": 20,
+            "enemyLevel": "Normal",
+            "enemyType": "EvilMage",
+            "enemyHealth": 1000,
+            "enemyRewardMoney": 40,
+            "enemySpeed": 5
+        },
+        {
+            "index": 7,
+            "score": 70,
+            "enemyCount": 20,
+            "enemyLevel": "Normal",
+            "enemyType": "Orc",
+            "enemyHealth": 1600,
+            "enemyRewardMoney": 60,
+            "enemySpeed": 4
+        },
+        {
+            "index": 8,
+            "score": 70,
+            "enemyCount": 15,
+            "enemyLevel": "Normal",
+            "enemyType": "Dragon",
+            "enemyHealth": 1000,
+            "enemyRewardMoney": 60,
+            "enemySpeed": 8
+        },
+        {
+            "index": 9,
+            "score": 70,
+            "enemyCount": 20,
+            "enemyLevel": "Normal",
+            "enemyType": "TurtleShell",
+            "enemyHealth": 2000,
+            "enemyRewardMoney": 100,
+            "enemySpeed": 4
+        },
+        {
+            "index": 10,
+            "score": 50,
+            "enemyCount": 1,
+            "enemyLevel": "Boss",
+            "enemyType": "BOrc",
+            "enemyHealth": 35000,
+            "enemyRewardMoney": 0,
+            "enemySpeed": 3
         }
     ]
 }

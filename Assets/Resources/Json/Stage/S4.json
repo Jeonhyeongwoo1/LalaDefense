@@ -1,36 +1,123 @@
 {
     "stageNum": 4,
-    "userMoney": 10000,
+    "userMoney": 400,
     "userHeart": 10,
+    "mission": [
+        {
+            "missionName": "Default",
+            "missionCondition": "",
+            "missionContent": "Defeat Monster"
+        },
+        {
+            "missionName": "Heart",
+            "missionCondition": "5",
+            "missionContent": "The heart is over 5"
+        },
+        {
+            "missionName": "Score",
+            "missionCondition": "5000",
+            "missionContent": "The Score is over 5000"
+        }
+    ],
     "roundInfo": [
         {
             "index": 1,
             "score": 70,
             "enemyCount": 10,
             "enemyLevel": "Normal",
-            "enemyType": "Golem",
-            "enemyHealth": 2000,
+            "enemyType": "MonsterPlant",
+            "enemyHealth": 300,
             "enemyRewardMoney": 30,
             "enemySpeed": 3
         },
         {
             "index": 2,
-            "score": 70,
+            "score": 90,
             "enemyCount": 10,
             "enemyLevel": "Normal",
             "enemyType": "Golem",
-            "enemyHealth": 2000,
+            "enemyHealth": 500,
             "enemyRewardMoney": 30,
             "enemySpeed": 3
         },
         {
             "index": 3,
+            "score": 100,
+            "enemyCount": 10,
+            "enemyLevel": "Normal",
+            "enemyType": "TurtleShell",
+            "enemyHealth": 800,
+            "enemyRewardMoney": 40,
+            "enemySpeed": 3
+        },
+        {
+            "index": 4,
+            "score": 110,
+            "enemyCount": 15,
+            "enemyLevel": "Normal",
+            "enemyType": "Skeleton",
+            "enemyHealth": 1200,
+            "enemyRewardMoney": 40,
+            "enemySpeed": 3
+        },
+        {
+            "index": 5,
+            "score": 70,
+            "enemyCount": 13,
+            "enemyLevel": "Normal",
+            "enemyType": "Spider",
+            "enemyHealth": 800,
+            "enemyRewardMoney": 50,
+            "enemySpeed": 5
+        },
+        {
+            "index": 6,
+            "score": 70,
+            "enemyCount": 20,
+            "enemyLevel": "Normal",
+            "enemyType": "EvilMage",
+            "enemyHealth": 1100,
+            "enemyRewardMoney": 50,
+            "enemySpeed": 5
+        },
+        {
+            "index": 7,
+            "score": 70,
+            "enemyCount": 20,
+            "enemyLevel": "Normal",
+            "enemyType": "Slime",
+            "enemyHealth": 1700,
+            "enemyRewardMoney": 60,
+            "enemySpeed": 4
+        },
+        {
+            "index": 8,
+            "score": 70,
+            "enemyCount": 15,
+            "enemyLevel": "Normal",
+            "enemyType": "Dragon",
+            "enemyHealth": 1600,
+            "enemyRewardMoney": 60,
+            "enemySpeed": 8
+        },
+        {
+            "index": 9,
+            "score": 70,
+            "enemyCount": 20,
+            "enemyLevel": "Normal",
+            "enemyType": "TurtleShell",
+            "enemyHealth": 3000,
+            "enemyRewardMoney": 100,
+            "enemySpeed": 4
+        },
+        {
+            "index": 10,
             "score": 50,
             "enemyCount": 1,
             "enemyLevel": "Boss",
             "enemyType": "BOrc",
-            "enemyHealth": 10000,
-            "enemyRewardMoney": 30,
+            "enemyHealth": 38000,
+            "enemyRewardMoney": 0,
             "enemySpeed": 3
         }
     ]
