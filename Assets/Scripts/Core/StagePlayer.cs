@@ -25,7 +25,7 @@ public class Mission
     public string missionContent;
 }
 
-[Serializable]  
+[Serializable]
 public class Stage
 {
     public int stageNum;
@@ -37,8 +37,12 @@ public class Stage
 
 public class StagePlayer : MonoBehaviour
 {
-    public enum StageState { None, Ready, Play, Done }
+    public int missionCount
+    {
+        get => m_Stage.mission.Length;
+    }
 
+    public enum StageState { None, Ready, Play, Done }
     public RoundPlayer roundPlayer;
 
     [SerializeField] Stage m_Stage;
@@ -82,7 +86,9 @@ public class StagePlayer : MonoBehaviour
 
         m_Stage = stage;
         Theme theme = Core.plugs.GetPlugable<Theme>();
-        theme.GetTheme<UserInfoUI>()?.SetUserInfo(m_Stage.userHeart, m_Stage.userMoney, 0);
+        Core.state.heart = m_Stage.userHeart;
+        Core.state.money = m_Stage.userMoney;
+        Core.state.score = 0;
 
         List<Round> round = new List<Round>();
         round.AddRange(m_Stage.roundInfo);
@@ -97,6 +103,7 @@ public class StagePlayer : MonoBehaviour
 
         TowerStore towerStore = theme.GetTheme<TowerStore>();
         if (!towerStore.isOpenCircleBtn) { towerStore.OnCloseTowerStore(); }
+        Core.plugs.GetPlugable<Popup>()?.CloseOpenedPopups();
 
         OnPlayStage();
     }
@@ -113,7 +120,9 @@ public class StagePlayer : MonoBehaviour
         Theme theme = Core.plugs.GetPlugable<Theme>();
         theme.Open<TowerStore>();
         UserInfoUI userInfo = theme.GetTheme<UserInfoUI>();
-        userInfo.SetUserInfo(m_Stage.userHeart, m_Stage.userMoney, 0);
+        Core.state.heart = m_Stage.userHeart;
+        Core.state.money = m_Stage.userMoney;
+        Core.state.score = 0;
         theme.Open<UserInfoUI>();
         theme.Open<Menu>();
 
@@ -141,7 +150,7 @@ public class StagePlayer : MonoBehaviour
     void OnStageCompleted()
     {
         Popup popup = Core.plugs.GetPlugable<Popup>();
-        popup.Open<CompletePopup>();
+        popup.CloseOpenedPopups(() => popup.Open<CompletePopup>());
         m_DoneEvent?.Invoke();
     }
 

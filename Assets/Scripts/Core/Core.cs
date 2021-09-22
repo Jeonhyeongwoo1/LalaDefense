@@ -2,17 +2,19 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
-public class Core : Singleton<Core> 
+public class Core : Singleton<Core>
 {
     static public ScenarioDirector scenario => Core.Instance?.m_ScenarioDirector;
     static public ModelDirector models => Core.Instance?.m_ModelDirector;
     static public PlugDirector plugs => Core.Instance?.m_PlugDirector;
     static public GamePlayManager gameManager => Core.Instance?.m_GamePlayManager;
-    
+    static public XState state => Core.Instance?.m_XState;
+
     [SerializeField] GamePlayManager m_GamePlayManager = null;
     [SerializeField] ScenarioDirector m_ScenarioDirector = null;
     [SerializeField] ModelDirector m_ModelDirector = null;
     [SerializeField] PlugDirector m_PlugDirector = null;
+    [SerializeField] XState m_XState = null;
 
     static UnityEvent m_EnsureDone = new UnityEvent();
 
@@ -64,6 +66,7 @@ public class Core : Singleton<Core>
         EnsureCore<ModelDirector>(ref m_ModelDirector);
         EnsureCore<PlugDirector>(ref m_PlugDirector);
         EnsureCore<GamePlayManager>(ref m_GamePlayManager);
+        EnsureCore<XState>(ref m_XState);
 
         Debug.Log("Core Initialized.");
     }

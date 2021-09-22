@@ -10,59 +10,11 @@ public class UserInfoUI : BaseTheme
     [SerializeField] Text m_Money;
     [SerializeField] Text m_Score;
 
-    float h;
-    public float heart
-    {
-        get => h;
-        set
-        {
-            h = value;
-            m_Heart.text = value == 0 ? "0" : string.Format("{0:#,###}", value);
-            if (h == 0)
-            {
-                //Die
-                Die();
-            }
-        }
-    }
-
-    float m;
-    public float money
-    {
-        get => m;
-        set
-        {
-            m = value;
-            m_Money.text = value == 0 ? "0" : string.Format("{0:#,###}", value);
-        }
-    }
-
-    float s;
-    public float score
-    {
-        get => s;
-        set
-        {
-            s = value;
-            m_Score.text = value == 0 ? "0" : string.Format("{0:#,###}", value);
-        }
-    }
-
-    public void SetUserInfo(float heart, float money, float score)
-    {
-        this.heart = heart;
-        this.money = money;
-        this.score = score;
-    }
-
-    void Die()
-    {
-        Core.gameManager.GameOver();
-    }
-
-
     public override void Open(UnityAction done)
     {
+        m_Heart.text = Core.state.heart.ToString();
+        m_Money.text = Core.state.money.ToString();
+        m_Score.text = Core.state.score.ToString();
         done?.Invoke();
     }
 
@@ -72,4 +24,40 @@ public class UserInfoUI : BaseTheme
         done?.Invoke();
         gameObject.SetActive(false);
     }
+
+    void OnEnable()
+    {
+        Core.state.Listen(nameof(Core.state.heart), OnValueChanged);
+        Core.state.Listen(nameof(Core.state.money), OnValueChanged);
+        Core.state.Listen(nameof(Core.state.score), OnValueChanged);
+    }
+
+    void OnDisable()
+    {
+        if (Core.state == null) { return; }
+        Core.state.Remove(nameof(Core.state.heart), OnValueChanged);
+        Core.state.Remove(nameof(Core.state.money), OnValueChanged);
+        Core.state.Remove(nameof(Core.state.score), OnValueChanged);
+    }
+
+    void OnValueChanged(string key, object o)
+    {
+        switch (key)
+        {
+            case nameof(Core.state.heart):
+                int heart = int.Parse(o.ToString());
+                m_Heart.text = heart == 0 ? "0" : string.Format("{0:#,###}", heart);
+                break;
+            case nameof(Core.state.money):
+                int money = int.Parse(o.ToString());
+                m_Money.text = money == 0 ? "0" : string.Format("{0:#,###}", money);
+                break;
+            case nameof(Core.state.score):
+                int score = int.Parse(o.ToString());
+                m_Score.text = score == 0 ? "0" : string.Format("{0:#,###}", score);
+                break;
+        }
+
+    }
+
 }

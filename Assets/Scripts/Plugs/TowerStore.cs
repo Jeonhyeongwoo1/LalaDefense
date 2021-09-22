@@ -67,9 +67,7 @@ public class TowerStore : BaseTheme
             m_TowerManager = GameObject.FindGameObjectWithTag("Towers");
         }
 
-        Theme theme = Core.plugs.GetPlugable<Theme>();
-        UserInfoUI userInfoUI = theme.GetTheme<UserInfoUI>();
-        float money = userInfoUI.money;
+        float money = Core.state.money;
 
         if (price > money)
         {
@@ -81,7 +79,7 @@ public class TowerStore : BaseTheme
 
         Debug.Log("Create Tower :" + tower.name);
 
-        userInfoUI.money -= price;
+        Core.state.money -= price;
         TowerManager manager = m_TowerManager.GetComponent<TowerManager>();
         manager.CreateTower(tower.transform, hit.transform);
     }

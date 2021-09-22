@@ -312,21 +312,14 @@ public class Enemy : MonoBehaviour
     void RemoveAliveEnemy()
     {
         EnemyManager e = transform.parent.GetComponent<EnemyManager>();
-        e.aliveEnemyCount--;
         e.aliveEnemies.Remove(this);
-
-        Theme theme = Core.plugs.GetPlugable<Theme>();
-        RoundInfoUI roundInfoUI = theme.GetTheme<RoundInfoUI>();
-        roundInfoUI.aliveEnemyCount--;
+        Core.state.aliveEnemyCount--;
     }
 
     void UpdateUserInfoUI()
     {
-        Theme theme = Core.plugs.GetPlugable<Theme>();
-        UserInfoUI userInfoUI = theme.GetTheme<UserInfoUI>();
-        float score = Core.gameManager.roundPlayer.roundCurScore;
-        userInfoUI.score += score;
-        userInfoUI.money += enemyInfo.rewardMoney;
+        Core.state.score += Core.gameManager.roundPlayer.roundCurScore;
+        Core.state.money += enemyInfo.rewardMoney;
     }
 
     void BounsEnemyDie()
@@ -367,8 +360,7 @@ public class Enemy : MonoBehaviour
 
     void EndPath()
     {
-        Theme theme = Core.plugs.GetPlugable<Theme>();
-        theme.GetTheme<UserInfoUI>().heart--;
+        Core.state.heart--;
         ActionDie();
     }
 

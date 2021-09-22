@@ -6,19 +6,6 @@ using Cinemachine;
 
 public class EnemyManager : MonoBehaviour
 {
-    float m_AliveEnemyCount;
-    public float aliveEnemyCount
-    {
-        get => m_AliveEnemyCount;
-        set
-        {
-            m_AliveEnemyCount = value;
-            if (aliveEnemyCount == 0)
-            {
-                Core.gameManager?.roundPlayer?.SetState(RoundPlayer.RoundState.Done);
-            }
-        }
-    }
 
     public List<Enemy> enemies = new List<Enemy>(); //적 리스트
     public List<Enemy> aliveEnemies = new List<Enemy>();
@@ -46,14 +33,14 @@ public class EnemyManager : MonoBehaviour
 
         aliveEnemies.ForEach((v) => Destroy(v.gameObject));
         aliveEnemies.Clear();
-        aliveEnemyCount = 0;
+        Core.state.aliveEnemyCount = 0;
     }
 
     public void EnemySpawn(EnemyInfo enemy, float count)
     {
         Enemy e = enemies.Find((v) => enemy.enemyType == v.enemyInfo.enemyType
                                             && enemy.level == v.enemyInfo.level);
-        aliveEnemyCount = count;
+        Core.state.aliveEnemyCount = count;
 
         if (e == null)
         {
@@ -62,7 +49,7 @@ public class EnemyManager : MonoBehaviour
             return;
         }
 
-        if (aliveEnemyCount == 0)
+        if (Core.state.aliveEnemyCount == 0)
         {
             Debug.Log("Enemy Count가 0 입니다.");
             return;
@@ -144,7 +131,5 @@ public class EnemyManager : MonoBehaviour
         to.enabled = true;
         while (!IsLive(to)) { yield return null; }
     }
-
-
 
 }

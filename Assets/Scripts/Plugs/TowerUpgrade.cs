@@ -20,7 +20,7 @@ public class TowerUpgrade : BaseTheme, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] AnimationCurve m_Curve;
 
     [SerializeField] Tower m_TargetTower;
-    
+
     bool m_IsOnPointerEnter = false;
     GameObject m_TowerManager = null;
 
@@ -45,7 +45,7 @@ public class TowerUpgrade : BaseTheme, IPointerEnterHandler, IPointerExitHandler
         float upgradePrice = level == 3 ? tower.towerInfo.towerLevels[tower.currentLevel].price
                                         : tower.towerInfo.towerLevels[tower.currentLevel + 1].price;
         float sellPrice = tower.towerInfo.towerLevels[tower.currentLevel].price;
-        
+
         m_Upgrade.text = string.Format("{0:#,###}", level == 3 ? "MAX" : upgradePrice.ToString());
         m_Sell.text = string.Format("{0:#,###}", (sellPrice * m_Ratio));
         m_TargetTower = tower;
@@ -53,8 +53,7 @@ public class TowerUpgrade : BaseTheme, IPointerEnterHandler, IPointerExitHandler
 
     public void Upgrade()
     {
-        Theme theme = Core.plugs.GetPlugable<Theme>();
-        float userMoney = theme.GetTheme<UserInfoUI>().money;
+        float userMoney = Core.state.money;
         float level = m_TargetTower.towerInfo.towerLevels[m_TargetTower.currentLevel].level;
 
         if (level == 3)
@@ -93,7 +92,7 @@ public class TowerUpgrade : BaseTheme, IPointerEnterHandler, IPointerExitHandler
 
         TowerManager t = m_TowerManager.GetComponent<TowerManager>();
         t.UpgradeTower(m_TargetTower);
-        theme.GetTheme<UserInfoUI>().money -= price;
+        Core.state.money -= price;
         Close(null);
     }
 
@@ -105,8 +104,7 @@ public class TowerUpgrade : BaseTheme, IPointerEnterHandler, IPointerExitHandler
 
         float price = m_TargetTower.towerInfo.towerLevels[m_TargetTower.currentLevel].price;
         float sell = price * m_Ratio;
-        Theme theme = Core.plugs.GetPlugable<Theme>();
-        theme.GetTheme<UserInfoUI>().money += sell;
+        Core.state.money += sell;
 
         if (m_TowerManager == null)
         {
@@ -152,7 +150,7 @@ public class TowerUpgrade : BaseTheme, IPointerEnterHandler, IPointerExitHandler
         if (m_TargetTower != null)
         {
             Transform[] childs = m_TargetTower.GetComponentsInChildren<Transform>();
-            foreach(Transform t in childs)
+            foreach (Transform t in childs)
             {
                 if (t.name == "Body") { body = t; }
             }

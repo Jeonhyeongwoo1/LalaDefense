@@ -39,6 +39,7 @@ public class StagePopup : BasePopup
     {
         Core.plugs.GetPlugable<Popup>().RemoveOpenedPopup(this);
         monsterImage.Close();
+        done?.Invoke();
         gameObject.SetActive(false);
     }
 

@@ -63,6 +63,7 @@ public class TowerManager : MonoBehaviour
         tr.Create();
         activeTowers.Add(tr, node);
         onlyTowers.Add(tr);
+        Core.state.towerCount++;
     }
 
     public void DestroyImmediateAllTower()
@@ -73,6 +74,7 @@ public class TowerManager : MonoBehaviour
         onlyTowers.ForEach((v) => v.DestroyImmediate());
         activeTowers.Clear();
         onlyTowers.Clear();
+        Core.state.towerCount = 0;
     }
 
     public void DeleteTower(Tower tower)
@@ -93,6 +95,7 @@ public class TowerManager : MonoBehaviour
 
         activeTowers.Remove(tower);
         onlyTowers.Remove(tower);
+        Core.state.towerCount--;
     }
 
 }

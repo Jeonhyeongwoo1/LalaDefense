@@ -16,16 +16,12 @@ public class CompletePopup : BasePopup
     [SerializeField] Button m_Restart;
     [SerializeField] Button m_Next;
     [SerializeField] AnimationCurve m_Curve;
+    [SerializeField] GameObject[] m_Stars;
 
     public override void Open(UnityAction done)
     {
-        Theme theme = Core.plugs.GetPlugable<Theme>();
-        UserInfoUI userInfo = theme.GetTheme<UserInfoUI>();
-        m_Score.text = userInfo.score == 0 ? "0" : string.Format("{0:#,###}", userInfo.score);
-        m_Heart.text = "x" + userInfo.heart.ToString();
-
-        
-
+        SetStar();
+        SetUserInfo();
         StartCoroutine(CoUtilize.VLerp((v) => popup.localScale = v, Vector3.zero, Vector3.one, 0.2f, done, m_Curve));
     }
 
@@ -35,6 +31,38 @@ public class CompletePopup : BasePopup
         p.RemoveOpenedPopup(this);
         done?.Invoke();
         gameObject.SetActive(false);
+    }
+
+    void SetStar()
+    {
+        Popup popup = Core.plugs.GetPlugable<Popup>();
+        int missionCompleteCount = popup.GetPopup<MissionPopup>().GetMissionCompleteCount();
+        int count = 0;
+        if (missionCompleteCount == Core.gameManager.stagePlayer.missionCount - 1)
+        {
+            count = 3;
+        }
+        else if (missionCompleteCount < Core.gameManager.stagePlayer.missionCount && missionCompleteCount != 0)
+        {
+            count = 2;
+        }
+        else
+        {
+            count = 1;
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            m_Stars[i].SetActive(true);
+        }
+
+        Core.state.missionCompleteCount = count;
+    }
+
+    void SetUserInfo()
+    {
+        m_Score.text = Core.state.score.ToString();
+        m_Heart.text = Core.state.heart.ToString();
     }
 
     //마지막일 경우 안보이는??
@@ -61,5 +89,4 @@ public class CompletePopup : BasePopup
         m_Home.onClick.AddListener(GoHome);
         m_Restart.onClick.AddListener(OnRestart);
     }
-
 }

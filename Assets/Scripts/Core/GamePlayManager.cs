@@ -59,7 +59,8 @@ public class GamePlayManager : MonoBehaviour
         towerStore.OnCloseTowerStore();
 
         Popup popup = Core.plugs.GetPlugable<Popup>();
-        popup.Open<LosePopup>();
+        popup.CloseOpenedPopups(() => popup.Open<LosePopup>());
+        
     }
 
     public void GamePause(bool isPause)
@@ -74,10 +75,12 @@ public class GamePlayManager : MonoBehaviour
         Terrain terrain = Core.models.GetModel<Terrain>();
         terrain.nodes.ActiveAllNodes(true);
 
-        Theme theme = Core.plugs.GetPlugable<Theme>();
         Stage s = stagePlayer.GetStage();
-        theme.GetTheme<UserInfoUI>()?.SetUserInfo(s.userHeart, s.userMoney, 0);
+        Core.state.heart = s.userHeart;
+        Core.state.money = s.userMoney;
+        Core.state.score = 0;
 
+        Theme theme = Core.plugs.GetPlugable<Theme>();
         TowerStore towerStore = theme.GetTheme<TowerStore>();
         towerStore.OnCloseTowerStore();
 
