@@ -15,8 +15,8 @@
         },
         {
             "missionName": "Score",
-            "missionCondition": "5000",
-            "missionContent": "The Score is over 5000"
+            "missionCondition": "17000",
+            "missionContent": "The Score is over 17000"
         }
     ],
     "roundInfo": [
@@ -96,7 +96,7 @@
             "enemyCount": 15,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 1600,
+            "enemyHealth": 2500,
             "enemyRewardMoney": 80,
             "enemySpeed": 8
         },
@@ -106,7 +106,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "MonsterPlant",
-            "enemyHealth": 3000,
+            "enemyHealth": 4000,
             "enemyRewardMoney": 60,
             "enemySpeed": 4
         },
@@ -116,7 +116,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Orc",
-            "enemyHealth": 1700,
+            "enemyHealth": 4500,
             "enemyRewardMoney": 70,
             "enemySpeed": 4
         },
@@ -126,7 +126,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 2000,
+            "enemyHealth": 4000,
             "enemyRewardMoney": 70,
             "enemySpeed": 8
         },
@@ -136,9 +136,9 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Bat",
-            "enemyHealth": 4000,
+            "enemyHealth": 5000,
             "enemyRewardMoney": 70,
-            "enemySpeed": 4
+            "enemySpeed": 6
         },
         {
             "index": 13,
@@ -146,7 +146,7 @@
             "enemyCount": 15,
             "enemyLevel": "Normal",
             "enemyType": "TurtleShell",
-            "enemyHealth": 5000,
+            "enemyHealth": 5300,
             "enemyRewardMoney": 70,
             "enemySpeed": 6
         },
@@ -156,7 +156,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "MonsterPlant",
-            "enemyHealth": 6000,
+            "enemyHealth": 6500,
             "enemyRewardMoney": 100,
             "enemySpeed": 4
         },

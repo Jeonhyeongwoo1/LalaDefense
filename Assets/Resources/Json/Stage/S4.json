@@ -15,8 +15,8 @@
         },
         {
             "missionName": "Score",
-            "missionCondition": "5000",
-            "missionContent": "The Score is over 5000"
+            "missionCondition": "9500",
+            "missionContent": "The Score is over 9500"
         }
     ],
     "roundInfo": [
@@ -86,7 +86,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Slime",
-            "enemyHealth": 1700,
+            "enemyHealth": 1800,
             "enemyRewardMoney": 60,
             "enemySpeed": 4
         },

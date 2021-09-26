@@ -15,8 +15,8 @@
         },
         {
             "missionName": "Score",
-            "missionCondition": "5000",
-            "missionContent": "The Score is over 5000"
+            "missionCondition": "17000",
+            "missionContent": "The Score is over 17000"
         }
     ],
     "roundInfo": [
@@ -46,7 +46,7 @@
             "enemyCount": 10,
             "enemyLevel": "Normal",
             "enemyType": "Orc",
-            "enemyHealth": 850,
+            "enemyHealth": 1200,
             "enemyRewardMoney": 50,
             "enemySpeed": 3
         },
@@ -56,7 +56,7 @@
             "enemyCount": 15,
             "enemyLevel": "Normal",
             "enemyType": "Spider",
-            "enemyHealth": 1200,
+            "enemyHealth": 1500,
             "enemyRewardMoney": 50,
             "enemySpeed": 3
         },
@@ -66,7 +66,7 @@
             "enemyCount": 13,
             "enemyLevel": "Normal",
             "enemyType": "Orc",
-            "enemyHealth": 900,
+            "enemyHealth": 1600,
             "enemyRewardMoney": 60,
             "enemySpeed": 5
         },
@@ -86,7 +86,7 @@
             "enemyCount": 10,
             "enemyLevel": "Normal",
             "enemyType": "TurtleShell",
-            "enemyHealth": 2000,
+            "enemyHealth": 2500,
             "enemyRewardMoney": 50,
             "enemySpeed": 4
         },
@@ -96,7 +96,7 @@
             "enemyCount": 15,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 2000,
+            "enemyHealth": 2500,
             "enemyRewardMoney": 60,
             "enemySpeed": 8
         },
@@ -106,7 +106,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Skeleton",
-            "enemyHealth": 4000,
+            "enemyHealth": 4400,
             "enemyRewardMoney": 60,
             "enemySpeed": 4
         },
@@ -116,7 +116,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Orc",
-            "enemyHealth": 2500,
+            "enemyHealth": 3200,
             "enemyRewardMoney": 80,
             "enemySpeed": 8
         },
@@ -126,7 +126,7 @@
             "enemyCount": 22,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 2900,
+            "enemyHealth": 3400,
             "enemyRewardMoney": 80,
             "enemySpeed": 8
         },
@@ -136,7 +136,7 @@
             "enemyCount": 22,
             "enemyLevel": "Normal",
             "enemyType": "Bat",
-            "enemyHealth": 5300,
+            "enemyHealth": 5600,
             "enemyRewardMoney": 100,
             "enemySpeed": 4
         },
@@ -146,7 +146,7 @@
             "enemyCount": 18,
             "enemyLevel": "Normal",
             "enemyType": "Golem",
-            "enemyHealth": 7000,
+            "enemyHealth": 7100,
             "enemyRewardMoney": 70,
             "enemySpeed": 6
         },
@@ -156,7 +156,7 @@
             "enemyCount": 22,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 8500,
+            "enemyHealth": 8700,
             "enemyRewardMoney": 100,
             "enemySpeed": 4
         },
@@ -166,7 +166,7 @@
             "enemyCount": 1,
             "enemyLevel": "Boss",
             "enemyType": "BOrc",
-            "enemyHealth": 60000,
+            "enemyHealth": 65000,
             "enemyRewardMoney": 0,
             "enemySpeed": 3
         }

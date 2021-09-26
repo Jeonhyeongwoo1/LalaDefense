@@ -15,8 +15,8 @@
         },
         {
             "missionName": "Score",
-            "missionCondition": "5000",
-            "missionContent": "The Score is over 5000"
+            "missionCondition": "9400",
+            "missionContent": "The Score is over 9400"
         }
     ],
     "roundInfo": [
@@ -116,7 +116,7 @@
             "enemyCount": 1,
             "enemyLevel": "Boss",
             "enemyType": "BOrc",
-            "enemyHealth": 35000,
+            "enemyHealth": 25000,
             "enemyRewardMoney": 0,
             "enemySpeed": 3
         }

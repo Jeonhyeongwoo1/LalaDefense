@@ -15,8 +15,13 @@
         },
         {
             "missionName": "Score",
-            "missionCondition": "5000",
-            "missionContent": "The Score is over 5000"
+            "missionCondition": "9000",
+            "missionContent": "The Score is over 9000"
+        },
+        {
+            "missionName": "TowerCount",
+            "missionCondition": "15",
+            "missionContent": "Total tower count is over 15"
         }
     ],
     "roundInfo": [
@@ -96,7 +101,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 1800,
+            "enemyHealth": 1600,
             "enemyRewardMoney": 50,
             "enemySpeed": 4
         },
@@ -106,8 +111,8 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "TurtleShell",
-            "enemyHealth": 2000,
-            "enemyRewardMoney": 100,
+            "enemyHealth": 1900,
+            "enemyRewardMoney": 120,
             "enemySpeed": 4
         },
         {
@@ -116,7 +121,7 @@
             "enemyCount": 1,
             "enemyLevel": "Boss",
             "enemyType": "BOrc",
-            "enemyHealth": 25000,
+            "enemyHealth": 22000,
             "enemyRewardMoney": 0,
             "enemySpeed": 3
         }

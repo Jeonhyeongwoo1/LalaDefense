@@ -46,8 +46,8 @@
             "enemyCount": 10,
             "enemyLevel": "Normal",
             "enemyType": "Orc",
-            "enemyHealth": 850,
-            "enemyRewardMoney": 50,
+            "enemyHealth": 1250,
+            "enemyRewardMoney": 40,
             "enemySpeed": 3
         },
         {
@@ -56,7 +56,7 @@
             "enemyCount": 15,
             "enemyLevel": "Normal",
             "enemyType": "EvilMage",
-            "enemyHealth": 1200,
+            "enemyHealth": 1500,
             "enemyRewardMoney": 50,
             "enemySpeed": 3
         },
@@ -66,8 +66,8 @@
             "enemyCount": 13,
             "enemyLevel": "Normal",
             "enemyType": "Orc",
-            "enemyHealth": 900,
-            "enemyRewardMoney": 60,
+            "enemyHealth": 1600,
+            "enemyRewardMoney": 45,
             "enemySpeed": 5
         },
         {
@@ -76,17 +76,17 @@
             "enemyCount": 18,
             "enemyLevel": "Normal",
             "enemyType": "Bat",
-            "enemyHealth": 1000,
-            "enemyRewardMoney": 40,
+            "enemyHealth": 1100,
+            "enemyRewardMoney": 45,
             "enemySpeed": 8
         },
         {
             "index": 7,
             "score": 70,
-            "enemyCount": 10,
+            "enemyCount": 13,
             "enemyLevel": "Normal",
             "enemyType": "Spider",
-            "enemyHealth": 2000,
+            "enemyHealth": 2500,
             "enemyRewardMoney": 50,
             "enemySpeed": 4
         },
@@ -96,7 +96,7 @@
             "enemyCount": 15,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 1800,
+            "enemyHealth": 2700,
             "enemyRewardMoney": 60,
             "enemySpeed": 8
         },
@@ -106,7 +106,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Skeleton",
-            "enemyHealth": 3200,
+            "enemyHealth": 4600,
             "enemyRewardMoney": 60,
             "enemySpeed": 4
         },
@@ -116,7 +116,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Orc",
-            "enemyHealth": 2600,
+            "enemyHealth": 3420,
             "enemyRewardMoney": 70,
             "enemySpeed": 8
         },
@@ -126,7 +126,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 2900,
+            "enemyHealth": 3600,
             "enemyRewardMoney": 60,
             "enemySpeed": 8
         },
@@ -136,29 +136,29 @@
             "enemyCount": 22,
             "enemyLevel": "Normal",
             "enemyType": "Bat",
-            "enemyHealth": 5000,
-            "enemyRewardMoney": 50,
+            "enemyHealth": 6200,
+            "enemyRewardMoney": 100,
             "enemySpeed": 4
         },
         {
             "index": 13,
             "score": 70,
-            "enemyCount": 18,
+            "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Golem",
-            "enemyHealth": 6500,
+            "enemyHealth": 7800,
             "enemyRewardMoney": 70,
             "enemySpeed": 4
         },
         {
             "index": 14,
             "score": 70,
-            "enemyCount": 22,
+            "enemyCount": 15,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 8000,
-            "enemyRewardMoney": 100,
-            "enemySpeed": 4
+            "enemyHealth": 21000,
+            "enemyRewardMoney": 50,
+            "enemySpeed": 2
         },
         {
             "index": 15,
@@ -166,7 +166,7 @@
             "enemyCount": 22,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 3500,
+            "enemyHealth": 3800,
             "enemyRewardMoney": 80,
             "enemySpeed": 10
         },
@@ -176,7 +176,7 @@
             "enemyCount": 28,
             "enemyLevel": "Normal",
             "enemyType": "Bat",
-            "enemyHealth": 8100,
+            "enemyHealth": 8900,
             "enemyRewardMoney": 90,
             "enemySpeed": 4
         },
@@ -186,7 +186,7 @@
             "enemyCount": 25,
             "enemyLevel": "Normal",
             "enemyType": "Golem",
-            "enemyHealth": 7800,
+            "enemyHealth": 8900,
             "enemyRewardMoney": 70,
             "enemySpeed": 6
         },
@@ -196,7 +196,7 @@
             "enemyCount": 30,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 9500,
+            "enemyHealth": 9900,
             "enemyRewardMoney": 100,
             "enemySpeed": 4
         },
@@ -206,7 +206,7 @@
             "enemyCount": 1,
             "enemyLevel": "Boss",
             "enemyType": "BOrc",
-            "enemyHealth": 60000,
+            "enemyHealth": 68000,
             "enemyRewardMoney": 0,
             "enemySpeed": 3
         }

@@ -106,7 +106,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "MonsterPlant",
-            "enemyHealth": 3500,
+            "enemyHealth": 4300,
             "enemyRewardMoney": 60,
             "enemySpeed": 4
         },
@@ -116,9 +116,9 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Orc",
-            "enemyHealth": 2000,
+            "enemyHealth": 4000,
             "enemyRewardMoney": 70,
-            "enemySpeed": 8
+            "enemySpeed": 6
         },
         {
             "index": 11,
@@ -126,7 +126,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 2300,
+            "enemyHealth": 4300,
             "enemyRewardMoney": 70,
             "enemySpeed": 8
         },
@@ -136,7 +136,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Bat",
-            "enemyHealth": 5000,
+            "enemyHealth": 5500,
             "enemyRewardMoney": 70,
             "enemySpeed": 4
         },
@@ -146,7 +146,7 @@
             "enemyCount": 15,
             "enemyLevel": "Normal",
             "enemyType": "TurtleShell",
-            "enemyHealth": 6000,
+            "enemyHealth": 6500,
             "enemyRewardMoney": 70,
             "enemySpeed": 6
         },
@@ -156,7 +156,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "MonsterPlant",
-            "enemyHealth": 6500,
+            "enemyHealth": 6650,
             "enemyRewardMoney": 100,
             "enemySpeed": 4
         },
