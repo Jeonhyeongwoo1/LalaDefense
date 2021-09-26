@@ -15,8 +15,8 @@
         },
         {
             "missionName": "Score",
-            "missionCondition": "9500",
-            "missionContent": "The Score is over 9500"
+            "missionCondition": "9600",
+            "missionContent": "The Score is over 9600"
         }
     ],
     "roundInfo": [
