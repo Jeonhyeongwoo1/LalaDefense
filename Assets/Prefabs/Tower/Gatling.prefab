@@ -63,7 +63,7 @@ MonoBehaviour:
       level: 2
       price: 350
       attackInfo:
-        range: 12
+        range: 13
         speed: 0.3
         damage: 15
         boomRange: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
       level: 3
       price: 450
       attackInfo:
-        range: 12
+        range: 14
         speed: 0.25
         damage: 35
         boomRange: 0

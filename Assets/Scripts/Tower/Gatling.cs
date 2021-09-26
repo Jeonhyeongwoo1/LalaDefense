@@ -59,10 +59,9 @@ public class Gatling : Tower
     public override void Standby()
     {
         if (muzzleEffect.isPlaying) { muzzleEffect.Stop(); }
-        if (turret.localEulerAngles.x != 0)
+        if (turret.localEulerAngles != Vector3.zero)
         {
-            turret.localEulerAngles = Vector3.zero;
-            return;
+            turret.localEulerAngles = Vector3.Slerp(turret.localEulerAngles, Vector3.zero, Time.deltaTime * 3);
         }
 
         //    turret.localEulerAngles += new Vector3(0, m_StandbySpeed * m_StandbyMultiplier, 0);

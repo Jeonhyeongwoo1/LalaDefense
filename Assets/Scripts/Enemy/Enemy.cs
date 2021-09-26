@@ -75,6 +75,8 @@ public class Enemy : MonoBehaviour
 
     public void TakeDamage(float amount, string specialAttack = null, string specialAttackInfo = null)
     {
+        if (enemyStatus == Enemy.Status.Die) { return; }
+
         if (enemyStatus == Status.Normal)
         {
             enemyStatus = Status.Attacked;
