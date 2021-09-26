@@ -578,8 +578,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46071a03b45858241a72d99124f325b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MinLoadingDuration: 5
   loadingAni: {fileID: 1603414077}
+  m_MinLoadingDuration: 3
+  fadeDuration: 2
 --- !u!1 &1949364081
 GameObject:
   m_ObjectHideFlags: 0

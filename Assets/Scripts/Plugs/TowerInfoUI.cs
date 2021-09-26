@@ -61,6 +61,7 @@ public class TowerInfoUI : BaseTheme, IPointerEnterHandler, IPointerExitHandler
 
     public override void Close(UnityAction done)
     {
+        if (!m_Frame.gameObject.activeSelf) { return; }
         Vector3 pos = m_Frame.localPosition;
         StartCoroutine(CoUtilize.Lerp((v) => m_Frame.localPosition = new Vector3(v, pos.y, pos.z), m_Frame.localPosition.x, m_InitAxisX, m_CloseDuration, () => Closed(done), m_Curve));
     }

@@ -15,9 +15,8 @@ public class Bgm : MonoBehaviour
 
     public UnityAction bgmTextOnclickEvent;
     bool m_MuteOn = false;
-    
+
     [Header("[GameObject Component]")]
-    public AudioSource audioSource;
     [SerializeField] Slider m_Volume;
     [SerializeField] Image m_VolumeFill;
     [SerializeField] Image m_VolumeHandle;
@@ -25,6 +24,7 @@ public class Bgm : MonoBehaviour
     [SerializeField] Image m_MuteBgmImage;
     [SerializeField] TextMeshProUGUI m_Off;
     [SerializeField] TextMeshProUGUI m_On;
+    [SerializeField] TMP_Dropdown m_Dropdown;
 
     [Header("Resources")]
     [SerializeField] Sprite m_VolumeHandleOn;
@@ -42,15 +42,34 @@ public class Bgm : MonoBehaviour
     [SerializeField, Range(0, 1)] float m_MuteDuration;
     //AudioListener audioListener = Camera.main.GetComponent<AudioListener>();
 
+    string m_CurrentAudio;
+
     public void Init()
     {
-        if (audioSource != null) { m_MuteOn = m_Volume.value == 0; }
-
         Vector3 v = m_MuteBtn.transform.localPosition;
         m_MuteBtn.transform.localPosition = new Vector3(m_MuteOn ? m_OffX : m_OnX, v.y, v.z);
         m_MuteOn = !m_MuteOn;
+        SetBgm();
         m_Volume.onValueChanged.AddListener((v) => Set(v));
+        m_Dropdown.onValueChanged.AddListener(OnDropDownValueChanged);
         m_MuteBtn.onClick.AddListener(() => Mute(m_MuteOn));
+       
+    }
+
+    void SetBgm()
+    {
+        for (int i = 0; i < m_Dropdown.options.Count; i++)
+        {
+            if (m_Dropdown.options[i].text == Core.state.audioName)
+            {
+                m_Dropdown.value = i;
+            }
+        }
+    }
+
+    void OnDropDownValueChanged(int value)
+    {
+        Core.state.audioName = m_Dropdown.options[value].text;
     }
 
     public void Mute(bool on) // Mute
@@ -74,17 +93,12 @@ public class Bgm : MonoBehaviour
                         m_MuteDuration));
 
         m_MuteOn = !on;
+        Core.state.mute = on;
     }
 
     public void Set(float amount)
     {
-        if (audioSource == null)
-        {
-            Debug.Log("No audio source was specified.");
-            return;
-        }
-
-        audioSource.volume = amount;
+        Core.state.audioVolume = amount;
     }
     
     /// <summary>

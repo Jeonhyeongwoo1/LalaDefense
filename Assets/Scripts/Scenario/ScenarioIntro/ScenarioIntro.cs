@@ -15,17 +15,15 @@ public class ScenarioIntro : MonoBehaviour, IScenario
     [SerializeField] CinemachineBrain m_BrainCamera;
     [SerializeField] CinemachineVirtualCamera m_FrstCam;
     [SerializeField] float m_FadeOutDuration;
-
-    GameObject m_LaLaMainCamera;
-
+    Camera m_MainCamera;
     bool IsLive(CinemachineVirtualCamera cam) => CinemachineCore.Instance.IsLive(cam) && !CinemachineCore.Instance.GetActiveBrain(0).IsBlending;
 
     public void ScenarioPrepare(UnityAction done)
     {
         Core.models.DefaultLoadModels();
         QualitySettings.SetQualityLevel(0);
-        m_LaLaMainCamera = GameObject.Find("Main Camera");
-        m_LaLaMainCamera.SetActive(false);
+        m_MainCamera = Camera.main;
+        m_MainCamera.gameObject.SetActive(false);
         Core.models.GetModel<Terrain>()?.Close(null);
         m_Skip.onClick.AddListener(OnSkipIntro);
         done?.Invoke();
@@ -55,7 +53,7 @@ public class ScenarioIntro : MonoBehaviour, IScenario
 
     public void ScenarioStop(UnityAction done)
     {
-        m_LaLaMainCamera.SetActive(true);
+        m_MainCamera.gameObject.SetActive(true);
         done?.Invoke();
     }
 

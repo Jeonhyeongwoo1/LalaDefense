@@ -10,11 +10,13 @@ public class ScenarioHome : MonoBehaviour, IScenario
     public string scenarioName => typeof(ScenarioHome).Name;
     [SerializeField] Button m_Start;
     [SerializeField] CinemachineVirtualCamera m_HomeCam;
+    [SerializeField] BgmOnOff m_BgmOnOff;
 
     bool IsLive(CinemachineVirtualCamera cam) => CinemachineCore.Instance.IsLive(cam) && !CinemachineCore.Instance.GetActiveBrain(0).IsBlending;
 
     public void ScenarioPrepare(UnityAction done)
     {
+        m_BgmOnOff.ChangeImage(!Core.state.mute ? true : false);
         QualitySettings.SetQualityLevel(0);
         Core.models.DefaultLoadModels();
         m_Start.onClick.AddListener(OnGameStart);
@@ -28,6 +30,7 @@ public class ScenarioHome : MonoBehaviour, IScenario
 
     public void ScenarioStart(UnityAction done)
     {
+        m_BgmOnOff.isOn = !Core.state.mute ? true : false;
         Core.models.GetModel<Terrain>()?.Close(null);
         BlockSkybox skybox = LalaStarter.GetBlockSkybox();
         skybox.FadeOut(1, () =>
@@ -45,6 +48,11 @@ public class ScenarioHome : MonoBehaviour, IScenario
 
     public void ScenarioStop(UnityAction done)
     {
+        if (m_BgmOnOff.isOn)
+        {
+            m_BgmOnOff.isOn = false;
+        }
+
         done?.Invoke();
     }
 
@@ -52,7 +60,12 @@ public class ScenarioHome : MonoBehaviour, IScenario
     {
         Popup popup = Core.plugs.GetPlugable<Popup>();
         popup.Open<StagePopup>();
-        m_Start.gameObject.SetActive(false);
+        popup.GetPopup<StagePopup>().stageReadyPopup.closeEvent = () =>
+        {
+            m_BgmOnOff.isOn = false;
+            m_BgmOnOff.gameObject.SetActive(false);
+            m_Start.gameObject.SetActive(false);
+        };
     }
 
     void OpenStartBtn()

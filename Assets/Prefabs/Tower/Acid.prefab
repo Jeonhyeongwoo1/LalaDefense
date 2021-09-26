@@ -114,5 +114,5 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_StandbySpeed: 6
+  m_StandbySpeed: 3
   m_StandbyMultiplier: 2

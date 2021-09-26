@@ -10,22 +10,25 @@ public class ScenarioLoading : MonoBehaviour, IScenario
 
     [Range(0, 5), SerializeField] float m_MinLoadingDuration = 4f;
     [SerializeField] float fadeDuration = 2f;
-    float m_ElapsedLoadingTime = 0;
 
-    private object[] models =
+    string[] models =
     {
-        typeof(HomeModel),
-        typeof(Terrain)
+        nameof(HomeModel),
+        nameof(Terrain)
     };
 
-    private object[] plugs =
+    string[] plugs =
     {
-        typeof(Theme),
-        typeof(Popup)
+        nameof(Theme),
+        nameof(Popup)
     };
+
+    float m_TotalSceneCount;
+    float m_LoadedSceneCount;
 
     public void ScenarioPrepare(UnityAction done)
     {
+        m_TotalSceneCount = models.Length + plugs.Length;
         QualitySettings.SetQualityLevel(0);
         loadingAni.ScaleUpText(() => done?.Invoke());
     }
@@ -37,7 +40,6 @@ public class ScenarioLoading : MonoBehaviour, IScenario
 
     public void ScenarioStart(UnityAction done)
     {
-        StartCoroutine(ElapsedTime());
         StartCoroutine(Loading());
         StartCoroutine(LoadingModels());
         StartCoroutine(LoadingPlugs());
@@ -56,32 +58,32 @@ public class ScenarioLoading : MonoBehaviour, IScenario
 
     IEnumerator LoadingModels()
     {
-        foreach (object v in models)
+        foreach (string v in models)
         {
-            yield return LoadingModelSceneAsync<IModel>(v);
+            yield return LoadingModelSceneAsync<IModel>(v, () => m_LoadedSceneCount++);
         }
     }
 
     IEnumerator LoadingPlugs()
     {
-        foreach (object v in plugs)
+        foreach (string v in plugs)
         {
-            yield return LoadingPlugsSceneAsync<IPlugable>(v);
+            yield return LoadingPlugsSceneAsync<IPlugable>(v, () => m_LoadedSceneCount++);
         }
     }
 
-    IEnumerator LoadingModelSceneAsync<IModel>(object name, UnityAction done = null)
+    IEnumerator LoadingModelSceneAsync<IModel>(string name, UnityAction done = null)
     {
         bool isDone = false;
-        Core.models.OnLoadSceneAsync(name.ToString(), () => isDone = true);
+        Core.models.OnLoadSceneAsync(name, () => isDone = true);
         while (isDone) { yield return null; }
         done?.Invoke();
     }
 
-    IEnumerator LoadingPlugsSceneAsync<IPlugable>(object name, UnityAction done = null)
+    IEnumerator LoadingPlugsSceneAsync<IPlugable>(string name, UnityAction done = null)
     {
         bool isDone = false;
-        Core.plugs.OnLoadSceneAsync(name.ToString(), () => isDone = true);
+        Core.plugs.OnLoadSceneAsync(name, () => isDone = true);
         while (isDone) { yield return null; }
         done?.Invoke();
     }
@@ -92,25 +94,18 @@ public class ScenarioLoading : MonoBehaviour, IScenario
         done?.Invoke();
     }
 
-    IEnumerator ElapsedTime()
-    {
-        while (m_ElapsedLoadingTime < m_MinLoadingDuration)
-        {
-            m_ElapsedLoadingTime += Time.deltaTime;
-            yield return null;
-        }
-    }
-
-    //Temporary
     IEnumerator Loading()
     {
         AnimationCurve ac = loadingAni.m_NormalCurve;
         float axisX = 0f;
-
-        while (m_ElapsedLoadingTime < m_MinLoadingDuration)
+        float elapsed = 0;
+        float duration = 0;
+        while (loadingAni.slider.value != 1)
         {
-            loadingAni.slider.value = Mathf.Lerp(0, 1, ac.Evaluate(m_ElapsedLoadingTime / m_MinLoadingDuration));
-            axisX = Mathf.Lerp(0, m_ElapsedLoadingTime, ac.Evaluate(m_ElapsedLoadingTime / m_MinLoadingDuration));
+            elapsed += Time.deltaTime;
+            duration = Mathf.Min(elapsed / m_MinLoadingDuration, m_LoadedSceneCount / m_TotalSceneCount);
+            loadingAni.slider.value = Mathf.Lerp(0, 1, duration);
+            axisX = Mathf.Lerp(0, 1, duration);
             loadingAni.wave.uvRect = new Rect(new Vector2(axisX, 0), Vector2.one);
             yield return null;
         }

@@ -60,8 +60,12 @@ public class TowerUpgrade : BaseTheme, IPointerEnterHandler, IPointerExitHandler
         {
             //Open Popup
             Popup popup = Core.plugs.GetPlugable<Popup>();
-            popup?.GetPopup<NotifyPopup>().SetContent("더 이상 할 수 없습니다.");
-            popup.Open<NotifyPopup>();
+            if (!popup.IsOpenedPopup<NotifyPopup>())
+            {
+                popup?.GetPopup<NotifyPopup>().SetContent("더 이상 할 수 없습니다.");
+                popup.Open<NotifyPopup>();
+            }
+            
             return;
         }
 
@@ -70,8 +74,11 @@ public class TowerUpgrade : BaseTheme, IPointerEnterHandler, IPointerExitHandler
         {
             //Open Popup
             Popup popup = Core.plugs.GetPlugable<Popup>();
-            popup?.GetPopup<NotifyPopup>().SetContent("돈이 부족합니다. !!");
-            popup.Open<NotifyPopup>();
+            if (!popup.IsOpenedPopup<NotifyPopup>())
+            {
+                popup?.GetPopup<NotifyPopup>().SetContent("돈이 부족합니다. !!");
+                popup.Open<NotifyPopup>();
+            }
             return;
         }
 
@@ -85,8 +92,12 @@ public class TowerUpgrade : BaseTheme, IPointerEnterHandler, IPointerExitHandler
         if (m_TargetTower.towerState == Tower.TowerState.Creating || m_TargetTower.towerState == Tower.TowerState.Upgrading)
         {
             Popup popup = Core.plugs.GetPlugable<Popup>();
-            popup?.GetPopup<NotifyPopup>().SetContent("타워 생성중..");
-            popup.Open<NotifyPopup>();
+            if (!popup.IsOpenedPopup<NotifyPopup>())
+            {
+                popup?.GetPopup<NotifyPopup>().SetContent("타워 생성중..");
+                popup.Open<NotifyPopup>();
+            }
+            
             return;
         }
 

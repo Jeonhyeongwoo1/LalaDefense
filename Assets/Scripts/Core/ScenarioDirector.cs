@@ -103,11 +103,11 @@ public class ScenarioDirector : MonoBehaviour
         if(scenario != null)
         {
             Log("Scenario Pending Unload : " + scenario.scenarioName);
-            scenario.ScenarioStopCamera(() => StopedCamera(scenario));
+            scenario.ScenarioStopCamera(() => StoppedCamera(scenario));
         }
     }
 
-    void StopedCamera(IScenario scenario)
+    void StoppedCamera(IScenario scenario)
     {
         if (scenario != null)
         {

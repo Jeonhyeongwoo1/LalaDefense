@@ -11,8 +11,11 @@ public class ScenarioPlay : MonoBehaviour, IScenario
     public EnemyManager enemyManager;
     public TowerManager towerManager;
     public CinemachineVirtualCamera mainCam;
+
+    [SerializeField] AudioListener m_AudioSource;
     //Test
     [SerializeField] int stageIndex = 1;
+
 
     bool IsLive(CinemachineVirtualCamera cam) => CinemachineCore.Instance.IsLive(cam) && !CinemachineCore.Instance.GetActiveBrain(0).IsBlending;
 
@@ -32,6 +35,7 @@ public class ScenarioPlay : MonoBehaviour, IScenario
 
     public void ScenarioStart(UnityAction done)
     {
+        m_AudioSource.RandomChoice();
         Core.models.GetModel<HomeModel>()?.Close(null);
         Core.models.GetModel<Terrain>()?.Open(null);
         if (Core.gameManager.stagePlayer.GetStage() == null)
@@ -51,6 +55,7 @@ public class ScenarioPlay : MonoBehaviour, IScenario
 
     public void ScenarioStop(UnityAction done)
     {
+        m_AudioSource.GetAudioSource().Stop();
         done?.Invoke();
     }
 

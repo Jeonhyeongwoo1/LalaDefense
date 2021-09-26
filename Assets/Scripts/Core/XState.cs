@@ -68,6 +68,27 @@ public class XState : States, IState
         set { m_MissionCompleteCount = value; Set(nameof(missionCompleteCount), value); }
     }
 
+    float m_AudioVolume = 1;
+    public float audioVolume
+    {
+        get => m_AudioVolume;
+        set { m_AudioVolume = value; Set(nameof(audioVolume), value); }
+    }
+
+    bool m_Mute = false;
+    public bool mute
+    {
+        get => m_Mute;
+        set { m_Mute = value; Set(nameof(mute), value); }
+    }
+
+    string m_AudioName;
+    public string audioName
+    {
+        get => m_AudioName;
+        set { m_AudioName = value; Set(nameof(audioName), value); }
+    }
+
 
     void SlientSet()
     {

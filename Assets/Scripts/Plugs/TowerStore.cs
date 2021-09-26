@@ -72,8 +72,12 @@ public class TowerStore : BaseTheme
         if (price > money)
         {
             Popup popup = Core.plugs.GetPlugable<Popup>();
-            popup.Open<NotifyPopup>();
-            popup?.GetPopup<NotifyPopup>().SetContent("돈이 부족합니다. !!");
+            if(!popup.IsOpenedPopup<NotifyPopup>())
+            {
+                popup.Open<NotifyPopup>();
+                popup?.GetPopup<NotifyPopup>().SetContent("돈이 부족합니다. !!");
+            }
+           
             return;
         }
 

@@ -9,6 +9,7 @@ public class StageReady : BasePopup
     public StagePopup stagePopup;
     public GameObject screenDim;
     public Transform popup;
+    public UnityAction closeEvent = null;
 
     [SerializeField] MissionContent missionContent;
     [SerializeField] RollingNumber rollingNumber;
@@ -87,8 +88,9 @@ public class StageReady : BasePopup
         {
             Core.gameManager.StartSelectedGame(m_Stage);
         }
-
+        closeEvent?.Invoke();
         stagePopup.Close(null);
+        closeEvent = null;
         gameObject.SetActive(false);
     }
 

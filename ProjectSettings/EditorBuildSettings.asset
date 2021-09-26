@@ -27,8 +27,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Scenario/ScenarioPlay.unity
     guid: 8994d10eb3644e94c8cb455e325a45af
   - enabled: 1
-    path: Assets/Scenes/Model/TerrainA.unity
+    path: Assets/Scenes/Model/Terrain.unity
     guid: 4e3a893d5dab9d245948c1e1aeeecd1b
+  - enabled: 1
+    path: Assets/Scenes/Plug/Theme.unity
+    guid: b5c3e5409531015419bca3425021361d
   - enabled: 1
     path: Assets/Scenes/Plug/Popup.unity
     guid: ef7098299abf3084995bc5448a67089c

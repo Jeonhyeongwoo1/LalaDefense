@@ -10,7 +10,7 @@ public class StagePopup : BasePopup
     public StageReady stageReadyPopup;
     public HomeConfirmPopup homeConfirmPopup;
     public List<StageList> stageList = new List<StageList>();
-
+   
     [SerializeField] MonsterImageMoving monsterImage;
     [SerializeField] Transform m_Background;
     [SerializeField] Button m_Left;
@@ -65,24 +65,8 @@ public class StagePopup : BasePopup
 
     void ChangedStageList()
     {
-        if (m_CurrentStage != 0)
-        {
-            m_Left.enabled = true;
-        }
-        else
-        {
-            m_Left.enabled = false;
-        }
-
-        if (m_CurrentStage == stageList.Count - 1)
-        {
-            m_Right.enabled = false;
-        }
-        else
-        {
-            m_Right.enabled = true;
-        }
-
+        m_Left.enabled = m_CurrentStage != 0 ? true : false;
+        m_Right.enabled = m_CurrentStage == stageList.Count - 1 ? false : true;
     }
 
     IEnumerator Moving(bool isLeft, UnityAction done)
@@ -139,7 +123,12 @@ public class StagePopup : BasePopup
 
     void GoHome()
     {
-        if (Core.scenario.GetCurScenario().scenarioName == nameof(ScenarioHome)) { return; }
+        if (Core.scenario.GetCurScenario().scenarioName == nameof(ScenarioHome))
+        {
+            Vector3 init = m_Home.transform.localPosition;
+            StartCoroutine(CoUtilize.Shaking((v) => m_Home.transform.localPosition += v, 1f, 1f, () => m_Home.transform.localPosition = init));
+            return;
+        }
 
         homeConfirmPopup.Open(null);
     }
