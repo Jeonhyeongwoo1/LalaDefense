@@ -20,8 +20,8 @@
         },
         {
             "missionName": "TowerCount",
-            "missionCondition": "5",
-            "missionContent": "Total tower count is over 5"
+            "missionCondition": "6",
+            "missionContent": "Total tower count is over 6"
         }
     ],
     "roundInfo": [
