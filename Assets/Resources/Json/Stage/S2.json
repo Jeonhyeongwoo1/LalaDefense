@@ -10,8 +10,8 @@
         },
         {
             "missionName": "Heart",
-            "missionCondition": "5",
-            "missionContent": "The heart is over 5"
+            "missionCondition": "6",
+            "missionContent": "The heart is over 6"
         },
         {
             "missionName": "Score",
