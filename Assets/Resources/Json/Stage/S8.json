@@ -10,13 +10,18 @@
         },
         {
             "missionName": "Heart",
-            "missionCondition": "5",
-            "missionContent": "The heart is over 5"
+            "missionCondition": "4",
+            "missionContent": "The heart is over 4"
         },
         {
             "missionName": "Score",
-            "missionCondition": "5000",
-            "missionContent": "The Score is over 5000"
+            "missionCondition": "22000",
+            "missionContent": "The Score is over 22000"
+        },
+        {
+            "missionName": "TowerCount",
+            "missionCondition": "43",
+            "missionContent": "Total tower count is over 43"
         }
     ],
     "roundInfo": [
@@ -76,7 +81,7 @@
             "enemyCount": 18,
             "enemyLevel": "Normal",
             "enemyType": "Bat",
-            "enemyHealth": 1100,
+            "enemyHealth": 1150,
             "enemyRewardMoney": 45,
             "enemySpeed": 8
         },
@@ -86,7 +91,7 @@
             "enemyCount": 13,
             "enemyLevel": "Normal",
             "enemyType": "Spider",
-            "enemyHealth": 2500,
+            "enemyHealth": 2800,
             "enemyRewardMoney": 50,
             "enemySpeed": 4
         },
@@ -96,7 +101,7 @@
             "enemyCount": 15,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 2700,
+            "enemyHealth": 2760,
             "enemyRewardMoney": 60,
             "enemySpeed": 8
         },
@@ -116,7 +121,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Orc",
-            "enemyHealth": 3420,
+            "enemyHealth": 3520,
             "enemyRewardMoney": 70,
             "enemySpeed": 8
         },
@@ -126,7 +131,7 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 3600,
+            "enemyHealth": 3700,
             "enemyRewardMoney": 60,
             "enemySpeed": 8
         },
@@ -146,9 +151,9 @@
             "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Golem",
-            "enemyHealth": 7800,
+            "enemyHealth": 8000,
             "enemyRewardMoney": 70,
-            "enemySpeed": 4
+            "enemySpeed": 5
         },
         {
             "index": 14,
@@ -166,7 +171,7 @@
             "enemyCount": 22,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 3800,
+            "enemyHealth": 4000,
             "enemyRewardMoney": 80,
             "enemySpeed": 10
         },
@@ -176,7 +181,7 @@
             "enemyCount": 28,
             "enemyLevel": "Normal",
             "enemyType": "Bat",
-            "enemyHealth": 8900,
+            "enemyHealth": 8400,
             "enemyRewardMoney": 90,
             "enemySpeed": 4
         },
@@ -186,7 +191,7 @@
             "enemyCount": 25,
             "enemyLevel": "Normal",
             "enemyType": "Golem",
-            "enemyHealth": 8900,
+            "enemyHealth": 8500,
             "enemyRewardMoney": 70,
             "enemySpeed": 6
         },
@@ -196,7 +201,7 @@
             "enemyCount": 30,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 9900,
+            "enemyHealth": 10100,
             "enemyRewardMoney": 100,
             "enemySpeed": 4
         },

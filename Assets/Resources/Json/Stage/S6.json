@@ -15,8 +15,13 @@
         },
         {
             "missionName": "Score",
-            "missionCondition": "18000",
-            "missionContent": "The Score is over 18000"
+            "missionCondition": "15000",
+            "missionContent": "The Score is over 15000"
+        },
+        {
+            "missionName": "TowerCount",
+            "missionCondition": "18",
+            "missionContent": "Total tower count is over 18"
         }
     ],
     "roundInfo": [

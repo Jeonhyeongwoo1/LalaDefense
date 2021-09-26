@@ -15,8 +15,13 @@
         },
         {
             "missionName": "Score",
-            "missionCondition": "17000",
-            "missionContent": "The Score is over 17000"
+            "missionCondition": "15000",
+            "missionContent": "The Score is over 15000"
+        },
+        {
+            "missionName": "TowerCount",
+            "missionCondition": "25",
+            "missionContent": "Total tower count is over 20"
         }
     ],
     "roundInfo": [
@@ -136,17 +141,17 @@
             "enemyCount": 22,
             "enemyLevel": "Normal",
             "enemyType": "Bat",
-            "enemyHealth": 5600,
+            "enemyHealth": 5900,
             "enemyRewardMoney": 100,
             "enemySpeed": 4
         },
         {
             "index": 13,
             "score": 70,
-            "enemyCount": 18,
+            "enemyCount": 20,
             "enemyLevel": "Normal",
             "enemyType": "Golem",
-            "enemyHealth": 7100,
+            "enemyHealth": 7150,
             "enemyRewardMoney": 70,
             "enemySpeed": 6
         },
@@ -156,7 +161,7 @@
             "enemyCount": 22,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 8700,
+            "enemyHealth": 9000,
             "enemyRewardMoney": 100,
             "enemySpeed": 4
         },
@@ -166,7 +171,7 @@
             "enemyCount": 1,
             "enemyLevel": "Boss",
             "enemyType": "BOrc",
-            "enemyHealth": 65000,
+            "enemyHealth": 68000,
             "enemyRewardMoney": 0,
             "enemySpeed": 3
         }

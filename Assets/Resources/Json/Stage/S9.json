@@ -10,13 +10,18 @@
         },
         {
             "missionName": "Heart",
-            "missionCondition": "5",
-            "missionContent": "The heart is over 5"
+            "missionCondition": "4",
+            "missionContent": "The heart is over 4"
         },
         {
             "missionName": "Score",
-            "missionCondition": "5000",
-            "missionContent": "The Score is over 5000"
+            "missionCondition": "27000",
+            "missionContent": "The Score is over 27000"
+        },
+        {
+            "missionName": "TowerCount",
+            "missionCondition": "45",
+            "missionContent": "Total tower count is over 45"
         }
     ],
     "roundInfo": [
@@ -186,7 +191,7 @@
             "enemyCount": 18,
             "enemyLevel": "Normal",
             "enemyType": "Golem",
-            "enemyHealth": 9000,
+            "enemyHealth": 9300,
             "enemyRewardMoney": 100,
             "enemySpeed": 6
         },
@@ -196,7 +201,7 @@
             "enemyCount": 22,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 11000,
+            "enemyHealth": 11500,
             "enemyRewardMoney": 100,
             "enemySpeed": 4
         },
@@ -206,9 +211,9 @@
             "enemyCount": 25,
             "enemyLevel": "Normal",
             "enemyType": "Golem",
-            "enemyHealth": 13000,
+            "enemyHealth": 13500,
             "enemyRewardMoney": 70,
-            "enemySpeed": 6
+            "enemySpeed": 5
         },
         {
             "index": 20,
@@ -216,7 +221,7 @@
             "enemyCount": 30,
             "enemyLevel": "Normal",
             "enemyType": "Dragon",
-            "enemyHealth": 14800,
+            "enemyHealth": 14000,
             "enemyRewardMoney": 100,
             "enemySpeed": 5
         },
@@ -226,7 +231,7 @@
             "enemyCount": 1,
             "enemyLevel": "Boss",
             "enemyType": "BOrc",
-            "enemyHealth": 85000,
+            "enemyHealth": 88000,
             "enemyRewardMoney": 0,
             "enemySpeed": 3
         }
