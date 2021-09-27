@@ -24,8 +24,8 @@ public class XState : States, IState
         }
     }
 
-    float m_TowerCount;
-    public float towerCount
+    int m_TowerCount;
+    public int towerCount
     {
         get => m_TowerCount;
         set { m_TowerCount = value; Set(nameof(towerCount), value); }
@@ -88,7 +88,6 @@ public class XState : States, IState
         get => m_AudioName;
         set { m_AudioName = value; Set(nameof(audioName), value); }
     }
-
 
     void SlientSet()
     {

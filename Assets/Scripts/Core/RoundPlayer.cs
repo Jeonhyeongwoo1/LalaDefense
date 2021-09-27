@@ -38,6 +38,7 @@ public class RoundPlayer : MonoBehaviour
         }
     }
 
+    public EnemyManager enemyManager;
     public enum RoundState { None, Ready, Play, Done }
 
     [SerializeField] RoundState m_RoundState = RoundState.None;
@@ -46,8 +47,7 @@ public class RoundPlayer : MonoBehaviour
     [SerializeField] int m_RoundCurIndex = 0;
 
     EnemyInfo m_CurEnemyInfo;
-    EnemyManager m_EnemyManager;
-
+    
     public void SetState(RoundState roundState) => this.m_RoundState = roundState;
     public RoundState GetState() => m_RoundState;
     public EnemyInfo GetCurEnemyInfo() => m_CurEnemyInfo;
@@ -60,28 +60,20 @@ public class RoundPlayer : MonoBehaviour
     public void GameOverRound()
     {
         StopAllCoroutines();
-        m_EnemyManager.StopAllCoroutines();
         m_RoundState = RoundState.Done;
     }
 
     public void RestartReadyRound()
     {
         StopAllCoroutines();
-
-        if (m_EnemyManager)
-        {
-            m_EnemyManager.StopAllCoroutines();
-        }
-
         m_RoundState = RoundState.Ready;
     }
 
-    public void ReadyRound(EnemyManager enemyManager, List<Round> roundInfo)
+    public void ReadyRound(List<Round> roundInfo)
     {
         Log("Ready Round");
         m_RoundState = RoundState.Ready;
         m_Rounds = roundInfo;
-        m_EnemyManager = enemyManager;
     }
 
     public void PlayRound(UnityAction done)
@@ -107,6 +99,11 @@ public class RoundPlayer : MonoBehaviour
         {
             theme.Open<RoundInfoUI>();
         }
+
+        if(!theme.IsOpenedTheme<SpeedUI>())
+        {
+            theme.Open<SpeedUI>();
+        }
        
         EnemyInfo enemyInfo = new EnemyInfo();
         RoundInfoUI roundInfoUI = theme.GetTheme<RoundInfoUI>();
@@ -125,7 +122,7 @@ public class RoundPlayer : MonoBehaviour
             enemyInfo.health = m_Rounds[i].enemyHealth;
             enemyInfo.rewardMoney = m_Rounds[i].enemyRewardMoney;
             enemyInfo.speed = m_Rounds[i].enemySpeed;
-            m_EnemyManager.EnemySpawn(enemyInfo, m_Rounds[i].enemyCount);
+            enemyManager.EnemySpawn(enemyInfo, m_Rounds[i].enemyCount);
 
             while (m_RoundState != RoundState.Done) { yield return null; }
         }

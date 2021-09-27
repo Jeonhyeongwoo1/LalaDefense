@@ -48,8 +48,6 @@ public class StagePlayer : MonoBehaviour
     [SerializeField] Stage m_Stage;
     [SerializeField] StageState m_StageState = StageState.None;
 
-    EnemyManager m_EnemyManager = null;
-    TowerManager m_TowerManager = null;
     UnityAction m_DoneEvent = null;
 
     void Log(string content)
@@ -66,17 +64,12 @@ public class StagePlayer : MonoBehaviour
     public void GameOverStage()
     {
         m_StageState = StageState.Done;
-        m_EnemyManager.DestroyEnemy();
-        m_TowerManager.DestroyImmediateAllTower();
         roundPlayer.GameOverRound();
     }
 
     public void OnRestartStage()
     {
-        m_EnemyManager.DestroyEnemy();
-        m_TowerManager.DestroyImmediateAllTower();
         roundPlayer.RestartReadyRound();
-
         OnPlayStage();
     }
 
@@ -84,51 +77,25 @@ public class StagePlayer : MonoBehaviour
     {
         Log("Next Stage Ready");
 
-        m_Stage = stage;
-        Theme theme = Core.plugs.GetPlugable<Theme>();
-        Core.state.heart = m_Stage.userHeart;
-        Core.state.money = m_Stage.userMoney;
-        Core.state.score = 0;
-
+        m_Stage = stage;  
         List<Round> round = new List<Round>();
         round.AddRange(m_Stage.roundInfo);
-        roundPlayer.ReadyRound(m_EnemyManager, round);
         roundPlayer.GameOverRound();
-
-        Terrain terrain = Core.models.GetModel<Terrain>();
-        terrain.nodes.ActiveAllNodes(true);
-
-        m_EnemyManager.DestroyEnemy();
-        m_TowerManager.DestroyImmediateAllTower();
-
-        TowerStore towerStore = theme.GetTheme<TowerStore>();
-        if (!towerStore.isOpenCircleBtn) { towerStore.OnCloseTowerStore(); }
-        Core.plugs.GetPlugable<Popup>()?.CloseOpenedPopups();
+        roundPlayer.ReadyRound(round);
 
         OnPlayStage();
     }
 
-    public void OnReadyStage(EnemyManager enemyManager, TowerManager towerManager, UnityAction done)
+    public void OnReadyStage(EnemyManager enemyManager, TowerManager towerManager, Stage stage, UnityAction done)
     {
         Log("Ready Stage");
-
+        m_Stage = stage;
         m_StageState = StageState.Ready;
         m_DoneEvent = done;
-        m_EnemyManager = enemyManager;
-        m_TowerManager = towerManager;
-
-        Theme theme = Core.plugs.GetPlugable<Theme>();
-        theme.Open<TowerStore>();
-        UserInfoUI userInfo = theme.GetTheme<UserInfoUI>();
-        Core.state.heart = m_Stage.userHeart;
-        Core.state.money = m_Stage.userMoney;
-        Core.state.score = 0;
-        theme.Open<UserInfoUI>();
-        theme.Open<Menu>();
-
         List<Round> round = new List<Round>();
         round.AddRange(m_Stage.roundInfo);
-        roundPlayer.ReadyRound(enemyManager, round);
+        roundPlayer.ReadyRound(round);
+        roundPlayer.enemyManager = enemyManager;
 
         OnPlayStage();
     }

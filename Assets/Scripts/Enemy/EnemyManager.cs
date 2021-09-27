@@ -31,6 +31,7 @@ public class EnemyManager : MonoBehaviour
         if (aliveEnemies == null) { return; }
         if (aliveEnemies.Count == 0) { return; }
 
+        StopAllCoroutines();
         aliveEnemies.ForEach((v) => Destroy(v.gameObject));
         aliveEnemies.Clear();
         Core.state.aliveEnemyCount = 0;
@@ -110,11 +111,13 @@ public class EnemyManager : MonoBehaviour
 
         e.SetAnimator("Taunting", false);
         yield return CameraTransistion(m_BossCamera, m_MainCam);
-
+        
+        //roll back
         theme.Open<TowerStore>();
         theme.Open<UserInfoUI>();
         theme.Open<Menu>();
         theme.Open<RoundInfoUI>();
+        theme.Open<SpeedUI>();
         e.ShowHideHealthBar(true);
         e.SetAnimator("WalkFWD", true);
         m_PointLight.SetActive(false);

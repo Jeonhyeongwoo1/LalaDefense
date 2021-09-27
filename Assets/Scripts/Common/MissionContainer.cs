@@ -11,61 +11,50 @@ public class MissionContainer : MonoBehaviour
     [SerializeField] Text m_ContentValue;
     [SerializeField] Color m_MissionCler;
 
-    public string missionCondition;
-    public string missionName;
-    public bool missionComplete = false;
+    string m_MissionCondition;
+    string m_MissionName;
 
-
-    public void Set(Mission mission)
+    public void Init(Mission mission)
     {
         m_Content.text = mission.missionContent;
-        missionName = mission.missionName;
-        missionCondition = mission.missionCondition;
+        m_MissionCondition = mission.missionCondition;
+        m_MissionName = mission.missionName;
+
+        float value = 0;
         switch (mission.missionName)
         {
             case "TowerCount":
-                SetContentValue(mission.missionName, Core.state.towerCount.ToString());
+                value = Core.state.towerCount;
                 break;
             case "Heart":
-                SetContentValue(mission.missionName, Core.state.heart.ToString());
+                value = Core.state.heart;
                 break;
             case "Score":
-                SetContentValue(mission.missionName, Core.state.score.ToString());
+                value = Core.state.score;
                 break;
         }
+
+        SetData(mission.missionName, value);
     }
 
-    public void SetContentValue(string name, string value)
+    public void SetData(string missionName, float value)
     {
-        switch (name)
-        {
-            case "TowerCount":
-                m_ContentValue.text = "(" + value + " / " + missionCondition + ")";
-                break;
-            case "Heart":
-                m_ContentValue.text = "(" + value + " / " + Core.gameManager.stagePlayer.GetStage().userHeart + ")";
-                break;
-            case "Score":
-                m_ContentValue.text = "(" + value + " / " + missionCondition + ")";
-                break;
-        }
-
+        if (missionName != m_MissionName) { return; }
+        
         try
         {
-            float v = int.Parse(value);
-            float condition = int.Parse(missionCondition);
+            float condition = int.Parse(m_MissionCondition);
+            m_ContentValue.text = "(" + value + " / " + condition + ")";
 
-            if (v >= condition)
+            if (value >= condition)
             {
                 m_CheckBox.SetActive(true);
                 m_ContentValue.color = m_MissionCler;
-                missionComplete = true;
             }
             else
             {
                 m_CheckBox.SetActive(false);
                 m_ContentValue.color = Color.white;
-                missionComplete = false;
             }
         }
         catch (Exception e)
@@ -74,6 +63,48 @@ public class MissionContainer : MonoBehaviour
             m_CheckBox.SetActive(false);
             m_ContentValue.color = Color.white;
         }
+    }
+
+    void OnValueChanged(string key, object o)
+    {
+        float value = 0;
+        try
+        {
+            value = float.Parse(o.ToString());
+        }
+        catch (Exception e)
+        {
+            value = 0;
+        }
+
+        switch (key)
+        {
+            case nameof(Core.state.towerCount):
+                SetData("TowerCount", value);
+                break;
+            case nameof(Core.state.score):
+                SetData("Score", value);
+                break;
+            case nameof(Core.state.heart):
+                SetData("Heart", value);
+                break;
+        }
+    }
+
+
+    void OnEnable()
+    {
+        Core.state.Listen(nameof(Core.state.towerCount), OnValueChanged);
+        Core.state.Listen(nameof(Core.state.score), OnValueChanged);
+        Core.state.Listen(nameof(Core.state.heart), OnValueChanged);
+    }
+
+    void OnDisable()
+    {
+        if (Core.state == null) { return; }
+        Core.state.Remove(nameof(Core.state.towerCount), OnValueChanged);
+        Core.state.Remove(nameof(Core.state.score), OnValueChanged);
+        Core.state.Remove(nameof(Core.state.heart), OnValueChanged);
     }
 
 }

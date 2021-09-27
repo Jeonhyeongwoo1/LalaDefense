@@ -35,9 +35,9 @@ public class CompletePopup : BasePopup
 
     void SetStar()
     {
-        Popup popup = Core.plugs.GetPlugable<Popup>();
-        int missionCompleteCount = popup.GetPopup<MissionPopup>().GetMissionCompleteCount();
+        int missionCompleteCount = Core.gameManager.GetMissionCompleteCount();
         int count = 0;
+
         if (missionCompleteCount == Core.gameManager.stagePlayer.missionCount - 1)
         {
             count = 3;

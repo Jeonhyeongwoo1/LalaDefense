@@ -21,6 +21,8 @@ public class ScenarioPlay : MonoBehaviour, IScenario
 
     public void ScenarioPrepare(UnityAction done)
     {
+        Core.models.GetModel<HomeModel>()?.Close(null);
+        Core.models.GetModel<Terrain>()?.Open(null);
         QualitySettings.SetQualityLevel(0);
         Core.models.DefaultLoadModels();
         LalaStarter.GetBlockSkybox()?.SetAlpha(0);
@@ -36,15 +38,15 @@ public class ScenarioPlay : MonoBehaviour, IScenario
     public void ScenarioStart(UnityAction done)
     {
         m_AudioSource.RandomChoice();
-        Core.models.GetModel<HomeModel>()?.Close(null);
-        Core.models.GetModel<Terrain>()?.Open(null);
-        if (Core.gameManager.stagePlayer.GetStage() == null)
+
+        Stage stage = Core.gameManager.stagePlayer.GetStage();
+        if (stage == null)
         {
-            Stage stage = StagePlayer.Load(stageIndex);
+            stage = StagePlayer.Load(stageIndex);
             Core.gameManager.stagePlayer.SetStage(stage);
         }
 
-        Core.gameManager.stagePlayer.OnReadyStage(enemyManager, towerManager, null);
+        Core.gameManager.OnGameStart(enemyManager, towerManager, stage, null);
         done?.Invoke();
     }
 

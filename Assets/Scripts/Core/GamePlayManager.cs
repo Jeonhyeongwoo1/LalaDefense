@@ -1,28 +1,76 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using System;
 
 public class GamePlayManager : MonoBehaviour
 {
-    public StagePlayer stagePlayer;
-    public RoundPlayer roundPlayer => stagePlayer?.roundPlayer;
-
     public bool bossAppearAniPlaying
     {
         get;
         set;
     }
 
+    public StagePlayer stagePlayer;
+    public RoundPlayer roundPlayer => stagePlayer?.roundPlayer;
+    [Range(0, 2)] public float gameSpeed = 1; //0 ~ 3
+    EnemyManager m_EnemyManager = null;
+    TowerManager m_TowerManager = null;
+
     public void Log(string content)
     {
         Debug.Log(content);
+    }
+
+    public void OnGameStart(EnemyManager enemyManager, TowerManager towerManager, Stage stage, UnityAction done)
+    {
+        if (stage == null)
+        {
+            Log("Not Select Stage : ");
+            
+            return;
+        }
+
+        m_EnemyManager = enemyManager;
+        m_TowerManager = towerManager;
+
+        Theme theme = Core.plugs.GetPlugable<Theme>();
+        theme.Open<TowerStore>();
+        UserInfoUI userInfo = theme.GetTheme<UserInfoUI>();
+        Core.state.heart = stage.userHeart;
+        Core.state.money = stage.userMoney;
+        Core.state.score = 0;
+        theme.Open<UserInfoUI>();
+        theme.Open<Menu>();
+
+        stagePlayer.OnReadyStage(enemyManager, towerManager, stage, done);
+
     }
 
     public void StartSelectedGame(Stage stage)
     {
         Log("Start Seleced Game" + stage.stageNum);
 
+        ResetGame(stage.userHeart, stage.userMoney);
         stagePlayer.OnNextStageReady(stage);
+    }
+
+    void ResetGame(float userHeart, float money)
+    {
+        Theme theme = Core.plugs.GetPlugable<Theme>();
+        Core.state.heart = userHeart;
+        Core.state.money = money;
+        Core.state.score = 0;
+
+        TowerStore towerStore = theme.GetTheme<TowerStore>();
+        if (!towerStore.isOpenCircleBtn) { towerStore.OnCloseTowerStore(); }
+        Core.plugs.GetPlugable<Popup>()?.CloseOpenedPopups();
+
+        Terrain terrain = Core.models.GetModel<Terrain>();
+        terrain.nodes.ActiveAllNodes(true);
+
+        DestoryTowerAndEnemy();
     }
 
     public void OnNextGame()
@@ -42,6 +90,7 @@ public class GamePlayManager : MonoBehaviour
 
         Log("Next Stage Play");
 
+        ResetGame(stage.userHeart, stage.userMoney);
         stagePlayer.OnNextStageReady(stage);
     }
 
@@ -49,6 +98,7 @@ public class GamePlayManager : MonoBehaviour
     {
         Log("Game over");
 
+        DestoryTowerAndEnemy();
         stagePlayer.GameOverStage();
 
         Terrain terrain = Core.models.GetModel<Terrain>();
@@ -60,12 +110,11 @@ public class GamePlayManager : MonoBehaviour
 
         Popup popup = Core.plugs.GetPlugable<Popup>();
         popup.CloseOpenedPopups(() => popup.Open<LosePopup>());
-        
     }
 
     public void GamePause(bool isPause)
     {
-        Time.timeScale = isPause ? 0 : 1;
+        Time.timeScale = isPause ? 0 : gameSpeed;
     }
 
     public void GameRestart()
@@ -83,14 +132,21 @@ public class GamePlayManager : MonoBehaviour
         Theme theme = Core.plugs.GetPlugable<Theme>();
         TowerStore towerStore = theme.GetTheme<TowerStore>();
         towerStore.OnCloseTowerStore();
+        DestoryTowerAndEnemy();
 
         stagePlayer.OnRestartStage();
     }
 
+    public void DestoryTowerAndEnemy()
+    {
+        m_EnemyManager.DestroyEnemy();
+        m_TowerManager.DestroyImmediateAllTower();
+    }
+
     public void GameComplete()
     {
+        DestoryTowerAndEnemy();
         stagePlayer.GameOverStage();
-
         Terrain terrain = Core.models.GetModel<Terrain>();
         terrain.nodes.ActiveAllNodes(true);
     }
@@ -107,6 +163,33 @@ public class GamePlayManager : MonoBehaviour
         Core.models.GetModel<HomeModel>()?.Open(null);
         Core.models.GetModel<Terrain>()?.Close(null);
         Core.scenario.OnLoadSceneAsync(nameof(ScenarioHome));
+    }
+
+    public int GetMissionCompleteCount()
+    {
+        Stage stage = stagePlayer.GetStage();
+        Mission[] missions = stage.mission;
+        int count = 0, condition = 0;
+
+        foreach (Mission mission in missions)
+        {
+            if (mission.missionName == "Default") { continue; }
+
+            try
+            {
+                condition = int.Parse(mission.missionCondition);
+            }
+            catch (Exception e)
+            {
+                Debug.Log("Error : " + e);
+                condition = 0;
+                return 0;
+            }
+
+            if (Core.state.towerCount >= condition) { count++; }
+        }
+
+        return count;
     }
 
     /// <summary>
@@ -138,22 +221,5 @@ public class GamePlayManager : MonoBehaviour
         }
     }
 
-    [ContextMenu("Gameover")]
-    public void Test1()
-    {
-        GameOver();
-    }
-
-    [ContextMenu("Gohome")]
-    public void Test2()
-    {
-        GoHome();
-    }
-
-    [ContextMenu("gamerestart")]
-    public void Test3()
-    {
-        GameRestart();
-    }
 
 }
