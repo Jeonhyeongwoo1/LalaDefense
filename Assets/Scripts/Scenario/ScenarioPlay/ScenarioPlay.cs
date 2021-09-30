@@ -21,10 +21,9 @@ public class ScenarioPlay : MonoBehaviour, IScenario
 
     public void ScenarioPrepare(UnityAction done)
     {
-        Core.models.GetModel<HomeModel>()?.Close(null);
-        Core.models.GetModel<Terrain>()?.Open(null);
         QualitySettings.SetQualityLevel(0);
         Core.models.DefaultLoadModels();
+        Core.plugs.DefaultLoadPlugs();
         LalaStarter.GetBlockSkybox()?.SetAlpha(0);
         enemyManager.SetMainCam(mainCam);
         done?.Invoke();
@@ -37,6 +36,8 @@ public class ScenarioPlay : MonoBehaviour, IScenario
 
     public void ScenarioStart(UnityAction done)
     {
+        Core.models.GetModel<HomeModel>()?.Close(null);
+        Core.models.GetModel<Terrain>()?.Open(null);
         m_AudioSource.RandomChoice();
 
         Stage stage = Core.gameManager.stagePlayer.GetStage();

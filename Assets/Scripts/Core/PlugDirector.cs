@@ -34,4 +34,10 @@ public class PlugDirector : SceneDirector<IPlugable>
         plugables.Add(plugable);
     }
 
+    public void DefaultLoadPlugs()
+    {
+        Ensure<Popup>();
+        Ensure<Theme>();
+    }
+
 }

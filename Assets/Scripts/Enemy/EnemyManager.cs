@@ -96,12 +96,12 @@ public class EnemyManager : MonoBehaviour
 
         Theme theme = Core.plugs.GetPlugable<Theme>();
         theme.CloseOpenedThemes();
+        Core.plugs.GetPlugable<Popup>()?.CloseOpenedPopups();
         e.ShowHideHealthBar(false);
         m_BossCamera.LookAt = e.transform;
         m_PointLight.SetActive(true);
         yield return CameraTransistion(m_MainCam, m_BossCamera);
-        m_SmoothPath.gameObject.SetActive(true);
-        m_DollyCart.gameObject.SetActive(true);
+        m_DollyCart.enabled = true;
 
         while (m_DollyCart.m_Position != m_SmoothPath.PathLength)
         {
@@ -111,7 +111,7 @@ public class EnemyManager : MonoBehaviour
 
         e.SetAnimator("Taunting", false);
         yield return CameraTransistion(m_BossCamera, m_MainCam);
-        
+
         //roll back
         theme.Open<TowerStore>();
         theme.Open<UserInfoUI>();
@@ -121,10 +121,14 @@ public class EnemyManager : MonoBehaviour
         e.ShowHideHealthBar(true);
         e.SetAnimator("WalkFWD", true);
         m_PointLight.SetActive(false);
-        m_SmoothPath.gameObject.SetActive(false);
-        m_DollyCart.gameObject.SetActive(false);
-        m_DollyCart.m_Position = 0;
 
+        m_DollyCart.m_Position = 0;
+        yield return null;
+        
+        m_DollyCart.enabled = false;
+        m_BossCamera.enabled = true;
+        m_BossCamera.LookAt = null;
+        
         Core.gameManager.bossAppearAniPlaying = false;
     }
 

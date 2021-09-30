@@ -27,10 +27,18 @@ public class CompletePopup : BasePopup
 
     public override void Close(UnityAction done)
     {
-        Popup p = Core.plugs.GetPlugable<Popup>();
-        p.RemoveOpenedPopup(this);
+        Core.plugs.GetPlugable<Popup>().RemoveOpenedPopup(this);
+        ActiveStars(false, 3);
         done?.Invoke();
         gameObject.SetActive(false);
+    }
+
+    void ActiveStars(bool isOn, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            m_Stars[i].SetActive(isOn);
+        }
     }
 
     void SetStar()
@@ -51,11 +59,10 @@ public class CompletePopup : BasePopup
             count = 1;
         }
 
-        for (int i = 0; i < count; i++)
-        {
-            m_Stars[i].SetActive(true);
-        }
-
+        ActiveStars(true, count);
+        print("Stage : " + Core.gameManager.stagePlayer.missionCount);
+        print("MissionCount : " + missionCompleteCount);
+        print("Count : " + count);
         Core.state.missionCompleteCount = count;
     }
 

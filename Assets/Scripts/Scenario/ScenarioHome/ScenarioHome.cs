@@ -16,9 +16,10 @@ public class ScenarioHome : MonoBehaviour, IScenario
 
     public void ScenarioPrepare(UnityAction done)
     {
-        m_BgmOnOff.ChangeImage(!Core.state.mute ? true : false);
         QualitySettings.SetQualityLevel(0);
         Core.models.DefaultLoadModels();
+        m_BgmOnOff.ChangeImage(!Core.state.mute ? true : false);
+        Core.models.GetModel<HomeModel>()?.Open(null); 
         m_Start.onClick.AddListener(OnGameStart);
         done?.Invoke();
     }

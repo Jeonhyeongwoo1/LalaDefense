@@ -89,6 +89,13 @@ public class XState : States, IState
         set { m_AudioName = value; Set(nameof(audioName), value); }
     }
 
+    bool m_FullScreen = true;
+    public bool fullScreen
+    {
+        get => m_FullScreen;
+        set { m_FullScreen = value; Set(nameof(fullScreen), value); }
+    }
+
     void SlientSet()
     {
         //        Listen(nameof(enemyCount), Notify);

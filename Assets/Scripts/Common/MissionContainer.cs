@@ -74,6 +74,7 @@ public class MissionContainer : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.Log("Error : " + e);
             value = 0;
         }
 

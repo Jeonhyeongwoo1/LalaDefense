@@ -25,6 +25,7 @@ public class ScenarioIntro : MonoBehaviour, IScenario
         m_MainCamera = Camera.main;
         m_MainCamera.gameObject.SetActive(false);
         Core.models.GetModel<Terrain>()?.Close(null);
+        Core.models.GetModel<HomeModel>()?.Close(null);
         m_Skip.onClick.AddListener(OnSkipIntro);
         done?.Invoke();
     }

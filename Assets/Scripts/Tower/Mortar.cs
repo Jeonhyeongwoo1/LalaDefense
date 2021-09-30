@@ -16,12 +16,12 @@ public class Mortar : Tower
     public override void Standby()
     {
 
-        float x = TransformUtils.GetInspectorRotation(turret).x;
+        // float x = TransformUtils.GetInspectorRotation(turret).x;
 
-        if (x > m_axisXPlusMoving) { arrow = false; }
-        if (x < m_axisXMinusMoving) { arrow = true; }
+        // if (x > m_axisXPlusMoving) { arrow = false; }
+        // if (x < m_axisXMinusMoving) { arrow = true; }
 
-        turret.Rotate((arrow ? Vector3.right : -Vector3.right) * Time.deltaTime * m_Speed);
+        //turret.Rotate((arrow ? Vector3.right : -Vector3.right) * Time.deltaTime * m_Speed);
     }
 
     bool isFire = false;

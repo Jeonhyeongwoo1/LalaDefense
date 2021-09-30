@@ -28,7 +28,7 @@ public class GamePlayManager : MonoBehaviour
         if (stage == null)
         {
             Log("Not Select Stage : ");
-            
+
             return;
         }
 
@@ -149,6 +149,12 @@ public class GamePlayManager : MonoBehaviour
         stagePlayer.GameOverStage();
         Terrain terrain = Core.models.GetModel<Terrain>();
         terrain.nodes.ActiveAllNodes(true);
+
+        if (Core.gameManager.gameSpeed != 1)
+        {
+            Core.gameManager.gameSpeed = 1; //Default
+            Time.timeScale = 1;
+        }
     }
 
     public void GoHome()
@@ -186,7 +192,19 @@ public class GamePlayManager : MonoBehaviour
                 return 0;
             }
 
-            if (Core.state.towerCount >= condition) { count++; }
+            switch (mission.missionName)
+            {
+                case "TowerCount":
+                    if (Core.state.towerCount >= condition) { count++; }
+                    break;
+                case "Heart":
+                    if (Core.state.heart >= condition) { count++; }
+                    break;
+                case "Score":
+                    if (Core.state.score >= condition) { count++; }
+                    break;
+            }
+
         }
 
         return count;
