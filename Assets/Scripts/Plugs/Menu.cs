@@ -16,7 +16,7 @@ public class Menu : BaseTheme
     }
 
     [SerializeField] Menus[] m_Menus;
-    [SerializeField, Range(0, 1)] float m_OpeningMenu;
+    [SerializeField, Range(0, 1)] float m_OpeningMenu = 0.3f;
     [SerializeField] AnimationCurve m_Curve;
 
     public override void Open(UnityAction done)
@@ -49,7 +49,7 @@ public class Menu : BaseTheme
     {
         foreach (var m in m_Menus)
         {
-            yield return CoUtilize.VLerp((v) => m.menu.localScale = v, Vector3.zero, Vector3.one, 0.5f, null, m_Curve);
+            yield return CoUtilize.VLerp((v) => m.menu.localScale = v, Vector3.zero, Vector3.one, m_OpeningMenu, null, m_Curve);
         }
 
         done?.Invoke();

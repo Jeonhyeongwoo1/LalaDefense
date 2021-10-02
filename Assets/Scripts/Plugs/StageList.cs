@@ -13,8 +13,4 @@ public class StageList : MonoBehaviour
         stageItems.ForEach((v) => v.InitStageItem(stageType, starCount));
     }
 
-    void Start()
-    {
-    }
-
 }

@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AliveDuration: 1.5
-  m_BombSpeed: 1
+  m_BombSpeed: 1.8
   m_HitEffect: {fileID: 5409947589562709396, guid: c7c22fb4585fa76489bb47212357ff07, type: 3}
 --- !u!54 &212878131922750891
 Rigidbody:

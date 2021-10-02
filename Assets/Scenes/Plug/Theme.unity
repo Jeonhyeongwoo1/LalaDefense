@@ -6548,6 +6548,7 @@ GameObject:
   - component: {fileID: 1418885134}
   - component: {fileID: 1418885133}
   - component: {fileID: 1418885132}
+  - component: {fileID: 1418885135}
   m_Layer: 5
   m_Name: Slow
   m_TagString: Untagged
@@ -6656,6 +6657,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1418885130}
   m_CullTransparentMesh: 1
+--- !u!114 &1418885135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1418885130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9102d960b39185439787b4fdda8a318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsOn: 1
+  m_Hover: {x: 1.1, y: 1.1, z: 1}
+  m_Duration: 0.2
+  m_Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Target: {fileID: 0}
 --- !u!1 &1429838931
 GameObject:
   m_ObjectHideFlags: 0
@@ -8211,6 +8252,7 @@ GameObject:
   - component: {fileID: 2038820917}
   - component: {fileID: 2038820916}
   - component: {fileID: 2038820915}
+  - component: {fileID: 2038820918}
   m_Layer: 5
   m_Name: Fast
   m_TagString: Untagged
@@ -8319,6 +8361,46 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2038820913}
   m_CullTransparentMesh: 1
+--- !u!114 &2038820918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038820913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9102d960b39185439787b4fdda8a318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsOn: 1
+  m_Hover: {x: 1.1, y: 1.1, z: 1}
+  m_Duration: 0.2
+  m_Curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_Target: {fileID: 0}
 --- !u!1 &2044810168
 GameObject:
   m_ObjectHideFlags: 0

@@ -60,9 +60,6 @@ public class CompletePopup : BasePopup
         }
 
         ActiveStars(true, count);
-        print("Stage : " + Core.gameManager.stagePlayer.missionCount);
-        print("MissionCount : " + missionCompleteCount);
-        print("Count : " + count);
         Core.state.missionCompleteCount = count;
     }
 

@@ -10,6 +10,8 @@ public class SpeedUI : BaseTheme
     [SerializeField] Button m_Fast;
     [SerializeField] Text m_SpeedInfo;
     [SerializeField, Range(0, 1)] float m_SpeedRange = 0.5f;
+    [SerializeField] float m_Max = 2f;
+    [SerializeField] float m_Min = 0.5f;
 
     public override void Open(UnityAction done)
     {
@@ -27,7 +29,7 @@ public class SpeedUI : BaseTheme
 
     void ControlGameSpeed(bool isFast)
     {
-        if ((isFast && Core.gameManager.gameSpeed == 2) || (!isFast && Core.gameManager.gameSpeed == 0.5f))
+        if ((isFast && Core.gameManager.gameSpeed == m_Max) || (!isFast && Core.gameManager.gameSpeed == m_Min))
         {
             Debug.Log("Can not Change Speed");
             return;
