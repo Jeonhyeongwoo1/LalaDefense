@@ -9,11 +9,11 @@
 
 Unity, c#
 
-## Unity Version 
+## Unity version 
 
 UnityVersion : 2020.3.11f1
 
-## Used Asset package
+## Used asset package
 
  * GUI Kit - the Stone / Version : 2.0.1
  * RPG Monster Wave PBR / Version : 1.2
