@@ -18,7 +18,7 @@ public class LalaStarter : MonoBehaviour
     
     void LoadScenarioLoading()
     {
-//        Core.scenario.OnLoadSceneAsync(nameof(ScenarioLoading));
+        Core.scenario.OnLoadSceneAsync(nameof(ScenarioLoading));
     }
 
 }

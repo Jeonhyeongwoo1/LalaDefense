@@ -497,6 +497,8 @@ MonoBehaviour:
   m_Fast: {fileID: 2038820915}
   m_SpeedInfo: {fileID: 1126574628}
   m_SpeedRange: 0.5
+  m_Max: 2
+  m_Min: 0.5
 --- !u!1 &117008911
 GameObject:
   m_ObjectHideFlags: 0
@@ -11419,7 +11421,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1280, y: -90}
+  m_AnchoredPosition: {x: -1280, y: -136}
   m_SizeDelta: {x: 380, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5116106382205453897

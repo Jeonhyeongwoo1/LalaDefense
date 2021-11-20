@@ -5,16 +5,16 @@ using UnityEngine.UI;
 
 public class Resolution : MonoBehaviour
 {
-    public enum Type { R1280x1024, R1600x1200, R1920x1080 }
+    public enum Type { R1280x720, R1600x900, R1920x1080 }
     public Type curResoultion = Type.R1920x1080;
 
-    public Toggle R1280x1024;
-    public Toggle R1600x1200;
+    public Toggle R1280x720;
+    public Toggle R1600x900;
     public Toggle R1920x1080;
     public Toggle FullScreen;
 
-    public TextHandler R1280x1024Txt;
-    public TextHandler R1600x1200Txt;
+    public TextHandler R1280x720Txt;
+    public TextHandler R1600x900Txt;
     public TextHandler R1920x1080Txt;
     public TextHandler FullScreenTxt;
 
@@ -32,13 +32,13 @@ public class Resolution : MonoBehaviour
         Core.state.fullScreen = Screen.fullScreen ? true : false;
         FullScreen.isOn = Screen.fullScreen ? true : false;
 
-        R1280x1024.onValueChanged.AddListener((v) => Set(Type.R1280x1024, R1280x1024, v));
-        R1600x1200.onValueChanged.AddListener((v) => Set(Type.R1600x1200, R1600x1200, v));
+        R1280x720.onValueChanged.AddListener((v) => Set(Type.R1280x720, R1280x720, v));
+        R1600x900.onValueChanged.AddListener((v) => Set(Type.R1600x900, R1600x900, v));
         R1920x1080.onValueChanged.AddListener((v) => Set(Type.R1920x1080, R1920x1080, v));
         FullScreen.onValueChanged.AddListener((v) => SetFullScreen(v));
 
-        R1280x1024Txt.onClickEvent.AddListener(() => R1280x1024.isOn = true);
-        R1600x1200Txt.onClickEvent.AddListener(() => R1600x1200.isOn = true);
+        R1280x720Txt.onClickEvent.AddListener(() => R1280x720.isOn = true);
+        R1600x900Txt.onClickEvent.AddListener(() => R1600x900.isOn = true);
         R1920x1080Txt.onClickEvent.AddListener(() => R1920x1080.isOn = true);
         FullScreenTxt.onClickEvent.AddListener(() => FullScreen.isOn = !Core.state.fullScreen);
     }
@@ -63,11 +63,11 @@ public class Resolution : MonoBehaviour
 
         switch (type)
         {
-            case Type.R1280x1024:
-                Screen.SetResolution(1280, 1024, isFullScreen);
+            case Type.R1280x720:
+                Screen.SetResolution(1280, 720, isFullScreen);
                 break;
-            case Type.R1600x1200:
-                Screen.SetResolution(1600, 1200, isFullScreen);
+            case Type.R1600x900:
+                Screen.SetResolution(1600, 900, isFullScreen);
                 break;
             case Type.R1920x1080:
                 Screen.SetResolution(1920, 1080, isFullScreen);
