@@ -29,8 +29,8 @@ Tower Defense and MOBA / Version : 1.3
 ## Play image
 
 ![image](https://user-images.githubusercontent.com/50667930/142716392-a8e504f7-8d1a-4e03-bcd3-347b3fb18002.png)
+![image](https://user-images.githubusercontent.com/50667930/142716638-d49c4bd7-0071-4528-a322-7e3785e7430a.png)
 
-![image](https://user-images.githubusercontent.com/50667930/142716524-7aa2adbf-9d37-4126-801d-7eee0221d23f.png)
 
 
 
