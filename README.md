@@ -1,1 +1,36 @@
 # LalaDefense
+
+라라디펜스는 디펜스의 한 종류로 맵에 공격 타워를 다수 건설하여 길을 따라 오는 적들을 저지하는 Pc 게임입니다.
+
+## Platform & Langauage
+
+Unity, c#
+
+## Version 
+
+UnityVersion : 2020.3.11f1
+
+## paid package
+
+GUI Kit - the Stone / Version : 2.0.1
+RPG Monster Wave PBR / Version : 1.2
+Tower Defense and MOBA / Version : 1.3
+
+## Get Started
+
+ * Build Settings
+    * Platform -> PC
+![image](https://user-images.githubusercontent.com/50667930/142716067-91d86b3a-5f35-4b97-adcc-8ede4afee0bc.png)
+
+ * Inspector
+![image](https://user-images.githubusercontent.com/50667930/142716011-d178a553-29b0-4c18-97d8-e55f7601f552.png)
+
+
+## Play image
+
+![image](https://user-images.githubusercontent.com/50667930/142716392-a8e504f7-8d1a-4e03-bcd3-347b3fb18002.png)
+
+![image](https://user-images.githubusercontent.com/50667930/142716524-7aa2adbf-9d37-4126-801d-7eee0221d23f.png)
+
+
+
