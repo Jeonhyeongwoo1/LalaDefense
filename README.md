@@ -26,9 +26,12 @@ UnityVersion : 2020.3.11f1
 
  * Build Settings
     * Platform -> PC
+    
 ![image](https://user-images.githubusercontent.com/50667930/142716067-91d86b3a-5f35-4b97-adcc-8ede4afee0bc.png)
 
  * Inspector
+
+
 ![image](https://user-images.githubusercontent.com/50667930/142716011-d178a553-29b0-4c18-97d8-e55f7601f552.png)
 
 
