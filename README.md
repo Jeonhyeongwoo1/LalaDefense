@@ -13,7 +13,7 @@ Unity, c#
 
 UnityVersion : 2020.3.11f1
 
-## paid package
+## Used Asset package
 
  * GUI Kit - the Stone / Version : 2.0.1
  * RPG Monster Wave PBR / Version : 1.2
