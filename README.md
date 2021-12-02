@@ -13,6 +13,10 @@ Unity, c#
 
 UnityVersion : 2020.3.11f1
 
+## WebGL version
+
+https://jeonhyeongwoo1.github.io/LalaDefenseWebGL/
+
 ## Used asset package
 
  * GUI Kit - the Stone / Version : 2.0.1
