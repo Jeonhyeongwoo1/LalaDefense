@@ -15,7 +15,8 @@ UnityVersion : 2020.3.11f1
 
 ## WebGL version
 
-https://jeonhyeongwoo1.github.io/LalaDefenseWebGL/
+https://hyeongwoojeon.itch.io/laladefense
+(최적화작업 진행중)
 
 ## Used asset package
 
